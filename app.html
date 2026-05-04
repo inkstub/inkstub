@@ -1167,6 +1167,203 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 .ticket.festival .t-barcode span { background: #e87820; }
 .ticket.festival .ticket-stub-col { background: rgba(232,120,32,0.06); }
 
+
+/* ── CATEGORY PICKER ── */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.category-card {
+  border: 2px solid var(--border);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(245,240,232,0.03);
+}
+.category-card:hover { border-color: rgba(196,134,42,0.5); background: rgba(196,134,42,0.05); }
+.category-card.active { border-color: var(--gold); background: rgba(196,134,42,0.1); }
+
+.category-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+.category-name { font-family: var(--font-stamp); font-size: 12px; color: var(--cream); letter-spacing: 1px; display: block; margin-bottom: 3px; }
+.category-desc { font-size: 10px; color: var(--text-muted); display: block; }
+
+.style-divider {
+  text-align: center;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #604030;
+  margin-bottom: 16px;
+}
+
+.style-group { display: none; }
+.style-group.active { display: block; }
+
+/* ── STYLE CARD PREVIEWS — new layout ── */
+.style-preview {
+  height: 80px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  position: relative;
+}
+
+.sp-edge {
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.sp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  gap: 2px;
+}
+
+.sp-type {
+  font-family: var(--font-stamp);
+  font-size: 7px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #7a5020;
+}
+
+.sp-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sp-detail {
+  font-family: var(--font-stamp);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #9a7040;
+}
+
+/* new style preview backgrounds */
+.gridiron-preview  { background: linear-gradient(135deg, #1a0e04, #2a1a08); }
+.jazzclub-preview  { background: linear-gradient(135deg, #0c0c04, #1a1808); }
+.psychedelic-preview { background: linear-gradient(135deg, #1a0428, #041a28); }
+.cinema-preview    { background: linear-gradient(135deg, #1a0404, #0a0808); }
+
+/* ── GRIDIRON TICKET ── */
+.ticket.gridiron {
+  background: linear-gradient(160deg, #fffaee 0%, #f5e8c8 50%, #ede0b0 100%);
+  border: 1px solid #8B4500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.ticket.gridiron .ticket-body     { border-right-color: #8B4500; border-right-style: dashed; }
+.ticket.gridiron .ticket-body::before { background: linear-gradient(90deg, #8B4500, #c86000); }
+.ticket.gridiron .t-details       { border-bottom-color: #c8a050; }
+.ticket.gridiron .t-type          { color: #5a2a00; border-bottom-color: #8B4500; }
+.ticket.gridiron .t-title         { color: #1a0800; }
+.ticket.gridiron .t-venue         { color: #7a4a10; }
+.ticket.gridiron .t-detail-lbl   { color: #8B4500; }
+.ticket.gridiron .t-detail-val   { color: #1a0800; }
+.ticket.gridiron .t-price-box    { border-color: #8B4500; border-radius: 2px; }
+.ticket.gridiron .t-price-lbl    { color: #8B4500; }
+.ticket.gridiron .t-price-val    { color: #8B4500; }
+.ticket.gridiron .t-stamp        { border-color: #1a4a1a; }
+.ticket.gridiron .t-stamp-text   { color: #1a4a1a; }
+.ticket.gridiron .t-stub-label   { color: #1a0800; }
+.ticket.gridiron .t-stub-num     { color: #8B4500; }
+.ticket.gridiron .t-barcode span { background: #1a0800; }
+.ticket.gridiron .ticket-stub-col { background: rgba(139,69,0,0.1); }
+
+/* ── JAZZ CLUB TICKET ── */
+.ticket.jazzclub {
+  background: linear-gradient(160deg, #0c0c04 0%, #181808 60%, #100c04 100%);
+  border: 1px solid #c8a020;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(200,160,32,0.06);
+}
+.ticket.jazzclub .ticket-body     { border-right-color: #c8a020; border-right-style: double; border-right-width: 3px; }
+.ticket.jazzclub .ticket-body::before { background: linear-gradient(90deg, #c8a020, #e8c040); height: 3px; }
+.ticket.jazzclub .t-details       { border-bottom-color: rgba(200,160,32,0.2); }
+.ticket.jazzclub .t-type          { color: #c8a020; border-bottom-color: rgba(200,160,32,0.3); font-style: italic; }
+.ticket.jazzclub .t-title         { color: #f0e8d0; font-style: italic; }
+.ticket.jazzclub .t-venue         { color: #806840; }
+.ticket.jazzclub .t-detail-lbl   { color: #806840; }
+.ticket.jazzclub .t-detail-val   { color: #e8d890; }
+.ticket.jazzclub .t-price-box    { border-color: #c8a020; border-style: double; }
+.ticket.jazzclub .t-price-lbl    { color: #c8a020; }
+.ticket.jazzclub .t-price-val    { color: #f0d840; }
+.ticket.jazzclub .t-stamp        { border-color: #c8a020; border-style: double; border-width: 3px; }
+.ticket.jazzclub .t-stamp-text   { color: #c8a020; }
+.ticket.jazzclub .t-stub-label   { color: #f0e8d0; font-style: italic; }
+.ticket.jazzclub .t-stub-num     { color: #806840; }
+.ticket.jazzclub .t-barcode span { background: #c8a020; }
+.ticket.jazzclub .ticket-stub-col { background: rgba(200,160,32,0.05); }
+
+/* ── PSYCHEDELIC TICKET ── */
+.ticket.psychedelic {
+  background: linear-gradient(160deg, #0c0420 0%, #200428 60%, #040c20 100%);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #e820c8, #20e8c8, #e8c820) 1;
+  box-shadow: 0 4px 24px rgba(200,0,200,0.3);
+}
+.ticket.psychedelic .ticket-body     { border-right: 2px dashed #e820c8; }
+.ticket.psychedelic .ticket-body::before { background: linear-gradient(90deg, #e820c8, #20e8c8, #e8c820); }
+.ticket.psychedelic .t-details       { border-bottom-color: rgba(232,32,200,0.2); }
+.ticket.psychedelic .t-type          { color: #e820c8; border-bottom-color: rgba(232,32,200,0.3); letter-spacing: 4px; }
+.ticket.psychedelic .t-title         { color: #fff; text-shadow: 0 0 12px #e820c8; }
+.ticket.psychedelic .t-venue         { color: #a060c0; }
+.ticket.psychedelic .t-detail-lbl   { color: #a060c0; }
+.ticket.psychedelic .t-detail-val   { color: #e8c8ff; }
+.ticket.psychedelic .t-price-box    { border-color: #20e8c8; }
+.ticket.psychedelic .t-price-lbl    { color: #20e8c8; }
+.ticket.psychedelic .t-price-val    { color: #20e8c8; text-shadow: 0 0 8px #20e8c8; }
+.ticket.psychedelic .t-stamp        { border-color: #e8c820; }
+.ticket.psychedelic .t-stamp-text   { color: #e8c820; }
+.ticket.psychedelic .t-stub-label   { color: #e8c8ff; }
+.ticket.psychedelic .t-stub-num     { color: #a060c0; }
+.ticket.psychedelic .t-barcode span { background: #e820c8; }
+.ticket.psychedelic .ticket-stub-col { background: rgba(232,32,200,0.06); }
+
+/* ── CINEMA TICKET ── */
+.ticket.cinema {
+  background: linear-gradient(160deg, #1a0808 0%, #100404 60%, #0c0404 100%);
+  border: 1px solid #c82020;
+  box-shadow: 0 4px 20px rgba(200,0,0,0.2), 0 4px 24px rgba(0,0,0,0.8);
+}
+.ticket.cinema .ticket-body     { border-right-color: #c82020; border-right-style: dashed; }
+.ticket.cinema .ticket-body::before { background: linear-gradient(90deg, #c82020, #e84040); }
+.ticket.cinema .t-details       { border-bottom-color: rgba(200,32,32,0.2); }
+.ticket.cinema .t-type          { color: #c82020; border-bottom-color: rgba(200,32,32,0.3); letter-spacing: 5px; }
+.ticket.cinema .t-title         { color: #f5f0e8; letter-spacing: 1px; }
+.ticket.cinema .t-venue         { color: #806050; }
+.ticket.cinema .t-detail-lbl   { color: #806050; }
+.ticket.cinema .t-detail-val   { color: #e8e0d0; }
+.ticket.cinema .t-price-box    { border-color: #f5f0e8; }
+.ticket.cinema .t-price-lbl    { color: #c0b090; }
+.ticket.cinema .t-price-val    { color: #f5f0e8; }
+.ticket.cinema .t-stamp        { border-color: #c82020; }
+.ticket.cinema .t-stamp-text   { color: #c82020; }
+.ticket.cinema .t-stub-label   { color: #f5f0e8; }
+.ticket.cinema .t-stub-num     { color: #806050; }
+.ticket.cinema .t-barcode span { background: #c82020; }
+.ticket.cinema .ticket-stub-col { background: rgba(200,32,32,0.08); }
+
+/* glow for new styles */
+.ticket-wrap-outer.glow-gridiron::before    { background: rgba(139,69,0,0.35); }
+.ticket-wrap-outer.glow-jazzclub::before    { background: rgba(200,160,32,0.25); }
+.ticket-wrap-outer.glow-psychedelic::before { background: rgba(232,32,200,0.25); }
+.ticket-wrap-outer.glow-cinema::before      { background: rgba(200,32,32,0.3); }
+
+@media (max-width: 600px) {
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 </style>
 </head>
 <body>
@@ -1292,64 +1489,239 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
       <!-- STEP 3: STYLE -->
       <div class="card" id="card-style">
         <div class="step-label">Step 3 — Choose Your Style</div>
-        <div class="style-grid" id="stylePicker">
-          <div class="style-card selected" data-style="classic">
-            <div class="style-preview classic-preview">
-              <div class="mini-ticket-title">THE EVENT</div>
-              <div class="mini-ticket-detail">GOLDEN AGE</div>
-            </div>
-            <div class="style-name">Classic</div>
-            <div class="style-era">1920s – 1960s</div>
+
+        <!-- CATEGORY PICKER -->
+        <div class="category-grid" id="categoryPicker">
+          <div class="category-card active" data-category="sports">
+            <div class="category-icon">🏟</div>
+            <div class="category-name">Sports</div>
+            <div class="category-desc">Baseball, Arena, Football</div>
           </div>
-          <div class="style-card" data-style="sport">
-            <div class="style-preview sport-preview">
-              <div class="mini-ticket-title">THE EVENT</div>
-              <div class="mini-ticket-detail">ARENA NIGHTS</div>
-            </div>
-            <div class="style-name">Gameday</div>
-            <div class="style-era">1970s – 1990s</div>
+          <div class="category-card" data-category="concerts">
+            <div class="category-icon">🎸</div>
+            <div class="category-name">Concerts</div>
+            <div class="category-desc">Rock, Festival, Jazz</div>
           </div>
-          <div class="style-card" data-style="concert">
-            <div class="style-preview concert-preview">
-              <div class="mini-ticket-title">THE EVENT</div>
-              <div class="mini-ticket-detail">VELVET ROPE</div>
-            </div>
-            <div class="style-name">Rock &amp; Roll</div>
-            <div class="style-era">1960s – 1980s</div>
+          <div class="category-card" data-category="theatre">
+            <div class="category-icon">🎭</div>
+            <div class="category-name">Theatre</div>
+            <div class="category-desc">Broadway, Cinema, Opera</div>
           </div>
-          <div class="style-card" data-style="baseball">
-            <div class="style-preview baseball-preview">
-              <div class="mini-ticket-title">THE GAME</div>
-              <div class="mini-ticket-detail">OLD BALL GAME</div>
-            </div>
-            <div class="style-name">Baseball</div>
-            <div class="style-era">1940s – 1960s</div>
-          </div>
-          <div class="style-card" data-style="neon">
-            <div class="style-preview neon-preview">
-              <div class="mini-ticket-title">THE GAME</div>
-              <div class="mini-ticket-detail">NEON NIGHTS</div>
-            </div>
-            <div class="style-name">Neon Arena</div>
-            <div class="style-era">1980s – 1990s</div>
-          </div>
-          <div class="style-card" data-style="broadway">
-            <div class="style-preview broadway-preview">
-              <div class="mini-ticket-title">THE SHOW</div>
-              <div class="mini-ticket-detail">CURTAIN CALL</div>
-            </div>
-            <div class="style-name">Broadway</div>
-            <div class="style-era">1950s – 1970s</div>
-          </div>
-          <div class="style-card" data-style="festival">
-            <div class="style-preview festival-preview">
-              <div class="mini-ticket-title">THE FEST</div>
-              <div class="mini-ticket-detail">FREE SPIRIT</div>
-            </div>
-            <div class="style-name">Festival</div>
-            <div class="style-era">1960s – 1970s</div>
+          <div class="category-card" data-category="other">
+            <div class="category-icon">✦</div>
+            <div class="category-name">Other</div>
+            <div class="category-desc">Neon, Modern, Custom</div>
           </div>
         </div>
+
+        <div class="style-divider">— Select a style below —</div>
+
+        <!-- SPORTS STYLES -->
+        <div class="style-group active" id="group-sports">
+          <div class="style-grid" id="stylePicker">
+            <div class="style-card selected" data-style="baseball">
+              <div class="style-preview baseball-preview">
+                <div class="sp-edge sp-edge-left" style="background:#1a4a1a"></div>
+                <div class="sp-main">
+                  <div class="sp-type">BASEBALL</div>
+                  <div class="sp-title">ADMIT ONE</div>
+                  <div class="sp-detail">FIELD BOX · ROW A</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#1a4a1a"></div>
+              </div>
+              <div class="style-name">Old Ball Game</div>
+              <div class="style-era">1940s – 1960s</div>
+            </div>
+            <div class="style-card" data-style="sport">
+              <div class="style-preview sport-preview">
+                <div class="sp-edge sp-edge-left" style="background:#8B1A1A"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#e8b870">ARENA</div>
+                  <div class="sp-title" style="color:#F5EDD8">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#8a7060">SEC 104 · ROW H</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#8B1A1A"></div>
+              </div>
+              <div class="style-name">Gameday</div>
+              <div class="style-era">1970s – 1990s</div>
+            </div>
+            <div class="style-card" data-style="gridiron">
+              <div class="style-preview gridiron-preview">
+                <div class="sp-edge sp-edge-left" style="background:#8B4500"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#e8c878">FOOTBALL</div>
+                  <div class="sp-title" style="color:#fff8e8">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#a08858">END ZONE · ROW 1</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#8B4500"></div>
+              </div>
+              <div class="style-name">Gridiron</div>
+              <div class="style-era">1960s – 1980s</div>
+            </div>
+            <div class="style-card" data-style="neon">
+              <div class="style-preview neon-preview">
+                <div class="sp-edge sp-edge-left" style="background:#00d4ff;opacity:0.8"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#00d4ff">ARENA</div>
+                  <div class="sp-title" style="color:#fff;text-shadow:0 0 8px #00d4ff">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#6080a0">SEC 112 · ROW C</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#ff006e;opacity:0.8"></div>
+              </div>
+              <div class="style-name">Neon Lights</div>
+              <div class="style-era">1980s – 1990s</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONCERT STYLES -->
+        <div class="style-group" id="group-concerts">
+          <div class="style-grid">
+            <div class="style-card" data-style="concert">
+              <div class="style-preview concert-preview">
+                <div class="sp-edge sp-edge-left" style="background:#6a3a8a"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#c090e8">CONCERT</div>
+                  <div class="sp-title" style="color:#f5e8ff">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#8060a0">FLOOR GA</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#6a3a8a"></div>
+              </div>
+              <div class="style-name">Rock &amp; Roll</div>
+              <div class="style-era">1960s – 1980s</div>
+            </div>
+            <div class="style-card" data-style="festival">
+              <div class="style-preview festival-preview">
+                <div class="sp-edge sp-edge-left" style="background:#e87820"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#e87820">FESTIVAL</div>
+                  <div class="sp-title" style="color:#f8e8c0">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#a07840">GENERAL ADMISSION</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#20b840"></div>
+              </div>
+              <div class="style-name">Festival</div>
+              <div class="style-era">1960s – 1970s</div>
+            </div>
+            <div class="style-card" data-style="jazzclub">
+              <div class="style-preview jazzclub-preview">
+                <div class="sp-edge sp-edge-left" style="background:#c8a020"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#c8a020">JAZZ</div>
+                  <div class="sp-title" style="color:#f0e8d0">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#806840">TABLE 12 · SHOW 9PM</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#c8a020"></div>
+              </div>
+              <div class="style-name">Jazz Club</div>
+              <div class="style-era">1940s – 1960s</div>
+            </div>
+            <div class="style-card" data-style="psychedelic">
+              <div class="style-preview psychedelic-preview">
+                <div class="sp-edge sp-edge-left" style="background:linear-gradient(#e820c8,#20e8c8)"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#e820c8">HAPPENING</div>
+                  <div class="sp-title" style="color:#fff">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#a060c0">FLOOR · GA</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:linear-gradient(#20e8c8,#e820c8)"></div>
+              </div>
+              <div class="style-name">Psychedelic</div>
+              <div class="style-era">Late 1960s</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THEATRE STYLES -->
+        <div class="style-group" id="group-theatre">
+          <div class="style-grid">
+            <div class="style-card" data-style="broadway">
+              <div class="style-preview broadway-preview">
+                <div class="sp-edge sp-edge-left" style="background:#c8a820"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#c8a820">BROADWAY</div>
+                  <div class="sp-title" style="color:#f5e8c0;font-style:italic">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#806840">ORCHESTRA · ROW D</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#c8a820"></div>
+              </div>
+              <div class="style-name">Broadway</div>
+              <div class="style-era">1950s – 1970s</div>
+            </div>
+            <div class="style-card" data-style="cinema">
+              <div class="style-preview cinema-preview">
+                <div class="sp-edge sp-edge-left" style="background:#c82020"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#c82020">CINEMA</div>
+                  <div class="sp-title" style="color:#f5f0e8">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#806050">BALCONY · ROW G</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#c82020"></div>
+              </div>
+              <div class="style-name">Cinema</div>
+              <div class="style-era">1940s – 1960s</div>
+            </div>
+            <div class="style-card" data-style="classic">
+              <div class="style-preview classic-preview">
+                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#7a5020">THEATRE</div>
+                  <div class="sp-title" style="color:#1a0a04">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#9a7040">MEZZANINE · F12</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
+              </div>
+              <div class="style-name">Golden Age</div>
+              <div class="style-era">1920s – 1950s</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OTHER STYLES -->
+        <div class="style-group" id="group-other">
+          <div class="style-grid">
+            <div class="style-card" data-style="neon">
+              <div class="style-preview neon-preview">
+                <div class="sp-edge sp-edge-left" style="background:#00d4ff;opacity:0.8"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#00d4ff">MODERN</div>
+                  <div class="sp-title" style="color:#fff;text-shadow:0 0 8px #00d4ff">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#6080a0">FLOOR · GA</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#ff006e;opacity:0.8"></div>
+              </div>
+              <div class="style-name">Neon Lights</div>
+              <div class="style-era">1980s – 1990s</div>
+            </div>
+            <div class="style-card" data-style="classic">
+              <div class="style-preview classic-preview">
+                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#7a5020">GENERAL</div>
+                  <div class="sp-title" style="color:#1a0a04">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#9a7040">GENERAL ADMISSION</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
+              </div>
+              <div class="style-name">Classic</div>
+              <div class="style-era">1920s – 1960s</div>
+            </div>
+            <div class="style-card" data-style="festival">
+              <div class="style-preview festival-preview">
+                <div class="sp-edge sp-edge-left" style="background:#e87820"></div>
+                <div class="sp-main">
+                  <div class="sp-type" style="color:#e87820">EVENT</div>
+                  <div class="sp-title" style="color:#f8e8c0">ADMIT ONE</div>
+                  <div class="sp-detail" style="color:#a07840">GENERAL ADMISSION</div>
+                </div>
+                <div class="sp-edge sp-edge-right" style="background:#20b840"></div>
+              </div>
+              <div class="style-name">Festival</div>
+              <div class="style-era">1960s – 1970s</div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- STEP 3: PREVIEW -->
@@ -1496,9 +1868,10 @@ function buildTicketHTML(data) {
     ? `<div style="display:flex;align-items:center;margin-bottom:4px;gap:10px">${logoHtml.left}<div class="t-title">${name}</div></div>`
     : `<div class="t-title">${name}</div>`;
 
+  const safeStyle = style || 'classic';
   return `
-    <div class="ticket-wrap-outer glow-${style}">
-      <div class="ticket ${style}">
+    <div class="ticket-wrap-outer glow-${safeStyle}">
+      <div class="ticket ${safeStyle}">
         <div class="ticket-grain"></div>
         <div class="ticket-notch-bottom"></div>
         ${logoHtml.watermark}
@@ -1732,15 +2105,38 @@ function prefillForm(name, type, venue, date, seat, price) {
    STYLE PICKER
 ════════════════════════════════════════ */
 function initStylePicker() {
-  document.querySelectorAll('.style-card').forEach(card => {
-    card.addEventListener('click', () => {
-      selectedStyle = card.dataset.style;
-      document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      // Live-update preview if already generated
-      if (currentTicket) {
-        currentTicket.style = selectedStyle;
-        renderTicketPreview();
+  // Style cards — delegate to handle dynamically
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.style-card');
+    if (!card) return;
+    selectedStyle = card.dataset.style;
+    document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    if (currentTicket) {
+      currentTicket.style = selectedStyle;
+      renderTicketPreview();
+    }
+  });
+
+  // Category picker
+  document.querySelectorAll('.category-card').forEach(cat => {
+    cat.addEventListener('click', () => {
+      const category = cat.dataset.category;
+      // Update active category
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      cat.classList.add('active');
+      // Show correct style group
+      document.querySelectorAll('.style-group').forEach(g => g.classList.remove('active'));
+      const group = document.getElementById('group-' + category);
+      if (group) {
+        group.classList.add('active');
+        // Auto-select first style card in group
+        const firstCard = group.querySelector('.style-card');
+        if (firstCard) {
+          document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+          firstCard.classList.add('selected');
+          selectedStyle = firstCard.dataset.style;
+        }
       }
     });
   });
