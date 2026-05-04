@@ -1954,7 +1954,7 @@ async function searchLogos() {
         div.className = 'logo-result-item';
         div.title = team.name + (idx > 0 ? ' (alternate)' : '') + ' — ' + team.league;
         div.innerHTML = `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.style.display='none'">`;
-        div.addEventListener('click', () => selectLogo(logoUrl, team.name));
+        div.addEventListener('click', (e) => selectLogo(e, logoUrl, team.name));
         grid.appendChild(div);
       });
     });
@@ -1965,22 +1965,23 @@ async function searchLogos() {
   }
 }
 
-function selectLogo(url, name) {
+function selectLogo(e, url, name) {
   selectedLogo = url;
   document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
+  e.currentTarget.classList.add('selected');
 
   document.getElementById('logoSelectedImg').src = url;
   document.getElementById('logoSelectedName').textContent = name;
   document.getElementById('logoSelected').style.display = 'block';
 
+  // Update preview if it exists, otherwise store for when they generate it
   if (currentTicket) {
     currentTicket.logo = url;
     currentTicket.logoPlacement = selectedPlacement;
     renderTicketPreview();
   }
 
-  showToast('Logo selected!');
+  showToast('Logo selected! Click Generate Preview to see it on your ticket.');
 }
 
 function removeLogo() {
