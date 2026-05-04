@@ -1476,20 +1476,37 @@ function buildBarcode() {
   return heights.map(h => `<span style="height:${h}px"></span>`).join('');
 }
 
+function buildLogoHTML(logo, placement) {
+  if (!logo) return { top: '', left: '', watermark: '' };
+  return {
+    top:       placement === 'top'       ? `<img class="t-logo-top" src="${logo}" alt="Team logo">` : '',
+    left:      placement === 'left'      ? `<img class="t-logo-left" src="${logo}" alt="Team logo">` : '',
+    watermark: placement === 'watermark' ? `<img class="t-logo-watermark" src="${logo}" alt="Team logo">` : '',
+  };
+}
+
 function buildTicketHTML(data) {
-  const { name, type, venue, date, seat, price, style } = data;
+  const { name, type, venue, date, seat, price, style, logo, logoPlacement } = data;
+  const placement = logoPlacement || 'left';
   const shortName = name.length > 20 ? name.substring(0, 18) + '…' : name;
   const stubNum = 'No. ' + String(Math.floor(Math.random() * 90000) + 10000);
+  const logoHtml = buildLogoHTML(logo, placement);
+
+  const titleRow = logoHtml.left
+    ? `<div style="display:flex;align-items:center;margin-bottom:4px;gap:10px">${logoHtml.left}<div class="t-title">${name}</div></div>`
+    : `<div class="t-title">${name}</div>`;
 
   return `
     <div class="ticket-wrap-outer glow-${style}">
       <div class="ticket ${style}">
         <div class="ticket-grain"></div>
         <div class="ticket-notch-bottom"></div>
+        ${logoHtml.watermark}
 
         <div class="ticket-body">
+          ${logoHtml.top}
           <div class="t-type">${type}</div>
-          <div class="t-title">${name}</div>
+          ${titleRow}
           <div class="t-venue">${venue}</div>
           <div class="t-details">
             <div>
