@@ -1933,53 +1933,26 @@ async function searchLogos() {
   grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">Searching...</div>';
   results.style.display = 'block';
 
-  // ESPN API — search across all sports
-  const leagues = [
-    { name: 'nfl',  url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams' },
-    { name: 'nba',  url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams' },
-    { name: 'mlb',  url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams' },
-    { name: 'nhl',  url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams' },
-    { name: 'mls',  url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams' },
-  ];
-
-  let allTeams = [];
-
   try {
-    const responses = await Promise.all(leagues.map(l => fetch(l.url).then(r => r.json()).catch(() => null)));
-    responses.forEach((data, i) => {
-      if (!data) return;
-      const teams = data.sports?.[0]?.leagues?.[0]?.teams || data.teams || [];
-      teams.forEach(t => {
-        const team = t.team || t;
-        allTeams.push({
-          name: team.displayName || team.name,
-          abbr: team.abbreviation,
-          logo: team.logos?.[0]?.href || `https://a.espncdn.com/i/teamlogos/${leagues[i].name}/500/${team.abbreviation?.toLowerCase()}.png`,
-          logos: team.logos?.map(l => l.href) || [],
-          league: leagues[i].name.toUpperCase(),
-        });
-      });
-    });
+    const res = await fetch(`/.netlify/functions/search-logos?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
 
-    const q = query.toLowerCase();
-    const matches = allTeams.filter(t =>
-      t.name?.toLowerCase().includes(q) ||
-      t.abbr?.toLowerCase().includes(q)
-    ).slice(0, 16);
+    if (!res.ok || !data.teams) throw new Error(data.error || 'Search failed');
+
+    const matches = data.teams;
 
     if (matches.length === 0) {
-      grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">No teams found. Try a different search.</div>';
+      grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">No teams found. Try a different name.</div>';
       return;
     }
 
     grid.innerHTML = '';
     matches.forEach(team => {
-      // Show multiple logo variants if available
-      const logos = team.logos.length > 0 ? team.logos.slice(0, 3) : [team.logo];
+      const logos = team.logos.slice(0, 3);
       logos.forEach((logoUrl, idx) => {
         const div = document.createElement('div');
         div.className = 'logo-result-item';
-        div.title = team.name + (idx > 0 ? ' (alternate)' : '');
+        div.title = team.name + (idx > 0 ? ' (alternate)' : '') + ' — ' + team.league;
         div.innerHTML = `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.style.display='none'">`;
         div.addEventListener('click', () => selectLogo(logoUrl, team.name));
         grid.appendChild(div);
@@ -1988,6 +1961,7 @@ async function searchLogos() {
 
   } catch(err) {
     grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;">Search failed. Try again.</div>';
+    console.error(err);
   }
 }
 
