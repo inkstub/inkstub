@@ -453,9 +453,13 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
   border-radius: 4px;
   opacity: 0.5;
 }
-.ticket-wrap-outer.glow-classic::before { background: rgba(196,134,42,0.4); }
-.ticket-wrap-outer.glow-sport::before   { background: rgba(139,26,26,0.5); }
-.ticket-wrap-outer.glow-concert::before { background: rgba(106,58,138,0.5); }
+.ticket-wrap-outer.glow-classic::before  { background: rgba(196,134,42,0.4); }
+.ticket-wrap-outer.glow-sport::before    { background: rgba(139,26,26,0.5); }
+.ticket-wrap-outer.glow-concert::before  { background: rgba(106,58,138,0.5); }
+.ticket-wrap-outer.glow-baseball::before { background: rgba(139,105,20,0.4); }
+.ticket-wrap-outer.glow-neon::before     { background: rgba(0,212,255,0.2); }
+.ticket-wrap-outer.glow-broadway::before { background: rgba(200,168,32,0.3); }
+.ticket-wrap-outer.glow-festival::before { background: rgba(232,120,32,0.3); }
 
 .ticket {
   display: flex;
@@ -889,7 +893,281 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
   .action-row { flex-direction: column; }
 }
 
-  </style>
+  
+/* ── LOGO SEARCH ── */
+.logo-search-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.btn-search {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  height: 42px;
+}
+.btn-search:hover { background: var(--gold-lt); }
+
+.logo-results { margin-bottom: 16px; }
+
+.logo-results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.logo-result-item {
+  width: 72px;
+  height: 72px;
+  border: 2px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 6px;
+}
+.logo-result-item:hover { border-color: var(--gold); background: rgba(196,134,42,0.08); }
+.logo-result-item.selected { border-color: var(--gold); background: rgba(196,134,42,0.15); }
+.logo-result-item img { width: 100%; height: 100%; object-fit: contain; }
+
+.logo-selected {
+  background: rgba(196,134,42,0.06);
+  border: 1px solid rgba(196,134,42,0.2);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.logo-selected-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-selected-inner img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+}
+
+.logo-selected-name {
+  font-family: var(--font-stamp);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.logo-placement-label {
+  font-family: var(--font-stamp);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.logo-placement-opts {
+  display: flex;
+  gap: 6px;
+}
+
+.placement-btn {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.placement-btn.active, .placement-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-remove-logo {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(139,26,26,0.4);
+  color: #c84040;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-remove-logo:hover { border-color: var(--red); }
+
+.logo-skip {
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ── NEW STYLE PREVIEWS ── */
+.baseball-preview { background: linear-gradient(135deg, #F5EDD8, #D4C090); }
+.neon-preview     { background: linear-gradient(135deg, #080820, #101040); }
+.broadway-preview { background: linear-gradient(135deg, #0a0a08, #1a1808); }
+.festival-preview { background: linear-gradient(135deg, #2a1a08, #1a2808); }
+
+/* ── LOGO ON TICKET ── */
+.t-logo-left {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.t-logo-top {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.t-logo-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── BASEBALL STYLE ── */
+.ticket.baseball {
+  background: linear-gradient(160deg, #F8F0DC 0%, #EDE0C0 50%, #E4D4A8 100%);
+  border: 2px solid #8B6914;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.ticket.baseball .ticket-body     { border-right-color: #8B6914; border-right-style: dashed; }
+.ticket.baseball .ticket-body::before { background: linear-gradient(90deg, #1a4a1a, #2a7a2a); }
+.ticket.baseball .t-details       { border-bottom-color: #C8A850; }
+.ticket.baseball .t-type          { color: #5a3a10; border-bottom-color: #8B6914; }
+.ticket.baseball .t-title         { color: #1a0a04; font-size: 24px; }
+.ticket.baseball .t-venue         { color: #6B4C2A; }
+.ticket.baseball .t-detail-lbl   { color: #8B6914; }
+.ticket.baseball .t-detail-val   { color: #1a0a04; }
+.ticket.baseball .t-price-box    { border-color: #1a4a1a; border-radius: 50px; }
+.ticket.baseball .t-price-lbl    { color: #1a4a1a; }
+.ticket.baseball .t-price-val    { color: #1a4a1a; }
+.ticket.baseball .t-stamp        { border-color: #8B1A1A; border-radius: 4px; }
+.ticket.baseball .t-stamp-text   { color: #8B1A1A; }
+.ticket.baseball .t-stub-label   { color: #1a0a04; }
+.ticket.baseball .t-stub-num     { color: #8B6914; }
+.ticket.baseball .t-barcode span { background: #1a0a04; }
+.ticket.baseball .ticket-stub-col { background: rgba(139,105,20,0.1); }
+
+/* ── NEON ARENA STYLE ── */
+.ticket.neon {
+  background: linear-gradient(160deg, #06061a 0%, #080820 60%, #0a0618 100%);
+  border: 1px solid #00d4ff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2), 0 4px 24px rgba(0,0,0,0.8);
+}
+.ticket.neon .ticket-body     { border-right-color: #ff006e; }
+.ticket.neon .ticket-body::before { background: linear-gradient(90deg, #00d4ff, #ff006e); }
+.ticket.neon .t-details       { border-bottom-color: rgba(0,212,255,0.2); }
+.ticket.neon .t-type          { color: #00d4ff; border-bottom-color: rgba(0,212,255,0.3); }
+.ticket.neon .t-title         { color: #ffffff; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+.ticket.neon .t-venue         { color: #6080a0; }
+.ticket.neon .t-detail-lbl   { color: #6080a0; }
+.ticket.neon .t-detail-val   { color: #e0f0ff; }
+.ticket.neon .t-price-box    { border-color: #ff006e; box-shadow: 0 0 8px rgba(255,0,110,0.3); }
+.ticket.neon .t-price-lbl    { color: #ff006e; }
+.ticket.neon .t-price-val    { color: #ff006e; text-shadow: 0 0 8px rgba(255,0,110,0.5); }
+.ticket.neon .t-stamp        { border-color: #00d4ff; box-shadow: 0 0 6px rgba(0,212,255,0.3); }
+.ticket.neon .t-stamp-text   { color: #00d4ff; }
+.ticket.neon .t-stub-label   { color: #e0f0ff; }
+.ticket.neon .t-stub-num     { color: #6080a0; }
+.ticket.neon .t-barcode span { background: #00d4ff; }
+.ticket.neon .ticket-stub-col { background: rgba(0,212,255,0.05); }
+
+/* ── BROADWAY STYLE ── */
+.ticket.broadway {
+  background: linear-gradient(160deg, #0c0c08 0%, #141408 60%, #0c0c04 100%);
+  border: 1px solid #c8a820;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.9), inset 0 0 40px rgba(200,168,32,0.04);
+}
+.ticket.broadway .ticket-body     { border-right-color: #c8a820; border-right-style: double; border-right-width: 3px; }
+.ticket.broadway .ticket-body::before { background: linear-gradient(90deg, #c8a820, #e8c840); }
+.ticket.broadway .t-details       { border-bottom-color: rgba(200,168,32,0.25); }
+.ticket.broadway .t-type          { color: #c8a820; border-bottom-color: rgba(200,168,32,0.3); letter-spacing: 5px; }
+.ticket.broadway .t-title         { color: #f5e8c0; font-style: italic; }
+.ticket.broadway .t-venue         { color: #806840; }
+.ticket.broadway .t-detail-lbl   { color: #806840; }
+.ticket.broadway .t-detail-val   { color: #e8d890; }
+.ticket.broadway .t-price-box    { border-color: #c8a820; border-width: 1px; }
+.ticket.broadway .t-price-lbl    { color: #c8a820; }
+.ticket.broadway .t-price-val    { color: #f0d860; }
+.ticket.broadway .t-stamp        { border-color: #c8a820; border-style: double; border-width: 3px; }
+.ticket.broadway .t-stamp-text   { color: #c8a820; }
+.ticket.broadway .t-stub-label   { color: #f5e8c0; font-style: italic; }
+.ticket.broadway .t-stub-num     { color: #806840; }
+.ticket.broadway .t-barcode span { background: #c8a820; }
+.ticket.broadway .ticket-stub-col { background: rgba(200,168,32,0.06); border-left: 1px solid rgba(200,168,32,0.2); }
+
+/* ── FESTIVAL STYLE ── */
+.ticket.festival {
+  background: linear-gradient(160deg, #1a0e04 0%, #0e1a04 40%, #04100e 100%);
+  border: 1px solid #e87820;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.7);
+}
+.ticket.festival .ticket-body     { border-right-color: #e87820; border-right-style: dashed; }
+.ticket.festival .ticket-body::before { background: linear-gradient(90deg, #e87820, #20b840, #2080e8); }
+.ticket.festival .t-details       { border-bottom-color: rgba(232,120,32,0.25); }
+.ticket.festival .t-type          { color: #e87820; border-bottom-color: rgba(232,120,32,0.3); }
+.ticket.festival .t-title         { color: #f8e8c0; }
+.ticket.festival .t-venue         { color: #a07840; }
+.ticket.festival .t-detail-lbl   { color: #a07840; }
+.ticket.festival .t-detail-val   { color: #f0d890; }
+.ticket.festival .t-price-box    { border-color: #20b840; }
+.ticket.festival .t-price-lbl    { color: #20b840; }
+.ticket.festival .t-price-val    { color: #40d860; }
+.ticket.festival .t-stamp        { border-color: #2080e8; }
+.ticket.festival .t-stamp-text   { color: #60a0f0; }
+.ticket.festival .t-stub-label   { color: #f8e8c0; }
+.ticket.festival .t-stub-num     { color: #a07840; }
+.ticket.festival .t-barcode span { background: #e87820; }
+.ticket.festival .ticket-stub-col { background: rgba(232,120,32,0.06); }
+
+</style>
 </head>
 <body>
 
@@ -980,9 +1258,40 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
         </div>
       </div>
 
-      <!-- STEP 2: STYLE -->
+      <!-- STEP 2: LOGO -->
+      <div class="card" id="card-logo">
+        <div class="step-label">Step 2 — Add a Team Logo (Optional)</div>
+        <div class="logo-search-row">
+          <div class="field" style="flex:1">
+            <label class="field-label" for="logoSearch">Search for a sports team</label>
+            <input class="field-input" id="logoSearch" type="text" placeholder="e.g. Chicago Bulls, New York Yankees...">
+          </div>
+          <button class="btn-search" id="btnLogoSearch">Search</button>
+        </div>
+        <div class="logo-results" id="logoResults" style="display:none">
+          <div class="logo-results-grid" id="logoResultsGrid"></div>
+        </div>
+        <div class="logo-selected" id="logoSelected" style="display:none">
+          <div class="logo-selected-inner">
+            <img id="logoSelectedImg" src="" alt="Selected logo">
+            <div>
+              <div class="logo-selected-name" id="logoSelectedName"></div>
+              <div class="logo-placement-label">Logo placement</div>
+              <div class="logo-placement-opts">
+                <button class="placement-btn active" data-placement="left">◧ Left</button>
+                <button class="placement-btn" data-placement="watermark">⬡ Watermark</button>
+                <button class="placement-btn" data-placement="top">⬆ Top center</button>
+              </div>
+            </div>
+            <button class="btn-remove-logo" id="btnRemoveLogo">✕ Remove</button>
+          </div>
+        </div>
+        <div class="logo-skip">No logo? That's fine — <button class="btn-text" id="btnSkipLogo">skip this step</button></div>
+      </div>
+
+      <!-- STEP 3: STYLE -->
       <div class="card" id="card-style">
-        <div class="step-label">Step 2 — Choose Your Style</div>
+        <div class="step-label">Step 3 — Choose Your Style</div>
         <div class="style-grid" id="stylePicker">
           <div class="style-card selected" data-style="classic">
             <div class="style-preview classic-preview">
@@ -1008,12 +1317,44 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
             <div class="style-name">Rock &amp; Roll</div>
             <div class="style-era">1960s – 1980s</div>
           </div>
+          <div class="style-card" data-style="baseball">
+            <div class="style-preview baseball-preview">
+              <div class="mini-ticket-title">THE GAME</div>
+              <div class="mini-ticket-detail">OLD BALL GAME</div>
+            </div>
+            <div class="style-name">Baseball</div>
+            <div class="style-era">1940s – 1960s</div>
+          </div>
+          <div class="style-card" data-style="neon">
+            <div class="style-preview neon-preview">
+              <div class="mini-ticket-title">THE GAME</div>
+              <div class="mini-ticket-detail">NEON NIGHTS</div>
+            </div>
+            <div class="style-name">Neon Arena</div>
+            <div class="style-era">1980s – 1990s</div>
+          </div>
+          <div class="style-card" data-style="broadway">
+            <div class="style-preview broadway-preview">
+              <div class="mini-ticket-title">THE SHOW</div>
+              <div class="mini-ticket-detail">CURTAIN CALL</div>
+            </div>
+            <div class="style-name">Broadway</div>
+            <div class="style-era">1950s – 1970s</div>
+          </div>
+          <div class="style-card" data-style="festival">
+            <div class="style-preview festival-preview">
+              <div class="mini-ticket-title">THE FEST</div>
+              <div class="mini-ticket-detail">FREE SPIRIT</div>
+            </div>
+            <div class="style-name">Festival</div>
+            <div class="style-era">1960s – 1970s</div>
+          </div>
         </div>
       </div>
 
       <!-- STEP 3: PREVIEW -->
       <div class="card" id="card-preview">
-        <div class="step-label">Step 3 — Preview &amp; Order</div>
+        <div class="step-label">Step 4 — Preview &amp; Order</div>
         <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
 
         <div class="ticket-wrap" id="ticketWrap" style="display:none">
@@ -1410,6 +1751,8 @@ function getFormData() {
     seat:  document.getElementById('seatInfo').value.trim()   || 'GA',
     price: document.getElementById('ticketPrice').value.trim() || '$0.00',
     style: selectedStyle,
+    logo:  selectedLogo || null,
+    logoPlacement: selectedPlacement || 'left',
   };
 }
 
@@ -1552,6 +1895,131 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ════════════════════════════════════════
+   LOGO SEARCH
+════════════════════════════════════════ */
+let selectedLogo = null;
+let selectedPlacement = 'left';
+
+document.getElementById('btnLogoSearch')?.addEventListener('click', searchLogos);
+document.getElementById('logoSearch')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchLogos();
+});
+document.getElementById('btnRemoveLogo')?.addEventListener('click', removeLogo);
+document.getElementById('btnSkipLogo')?.addEventListener('click', () => {
+  document.getElementById('card-style').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+document.querySelectorAll('.placement-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.placement-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedPlacement = btn.dataset.placement;
+    if (currentTicket) {
+      currentTicket.logoPlacement = selectedPlacement;
+      renderTicketPreview();
+    }
+  });
+});
+
+async function searchLogos() {
+  const query = document.getElementById('logoSearch').value.trim();
+  if (!query) return;
+
+  const grid = document.getElementById('logoResultsGrid');
+  const results = document.getElementById('logoResults');
+  grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">Searching...</div>';
+  results.style.display = 'block';
+
+  // ESPN API — search across all sports
+  const leagues = [
+    { name: 'nfl',  url: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams' },
+    { name: 'nba',  url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams' },
+    { name: 'mlb',  url: 'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams' },
+    { name: 'nhl',  url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams' },
+    { name: 'mls',  url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/teams' },
+  ];
+
+  let allTeams = [];
+
+  try {
+    const responses = await Promise.all(leagues.map(l => fetch(l.url).then(r => r.json()).catch(() => null)));
+    responses.forEach((data, i) => {
+      if (!data) return;
+      const teams = data.sports?.[0]?.leagues?.[0]?.teams || data.teams || [];
+      teams.forEach(t => {
+        const team = t.team || t;
+        allTeams.push({
+          name: team.displayName || team.name,
+          abbr: team.abbreviation,
+          logo: team.logos?.[0]?.href || `https://a.espncdn.com/i/teamlogos/${leagues[i].name}/500/${team.abbreviation?.toLowerCase()}.png`,
+          logos: team.logos?.map(l => l.href) || [],
+          league: leagues[i].name.toUpperCase(),
+        });
+      });
+    });
+
+    const q = query.toLowerCase();
+    const matches = allTeams.filter(t =>
+      t.name?.toLowerCase().includes(q) ||
+      t.abbr?.toLowerCase().includes(q)
+    ).slice(0, 16);
+
+    if (matches.length === 0) {
+      grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">No teams found. Try a different search.</div>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    matches.forEach(team => {
+      // Show multiple logo variants if available
+      const logos = team.logos.length > 0 ? team.logos.slice(0, 3) : [team.logo];
+      logos.forEach((logoUrl, idx) => {
+        const div = document.createElement('div');
+        div.className = 'logo-result-item';
+        div.title = team.name + (idx > 0 ? ' (alternate)' : '');
+        div.innerHTML = `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.style.display='none'">`;
+        div.addEventListener('click', () => selectLogo(logoUrl, team.name));
+        grid.appendChild(div);
+      });
+    });
+
+  } catch(err) {
+    grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;">Search failed. Try again.</div>';
+  }
+}
+
+function selectLogo(url, name) {
+  selectedLogo = url;
+  document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  document.getElementById('logoSelectedImg').src = url;
+  document.getElementById('logoSelectedName').textContent = name;
+  document.getElementById('logoSelected').style.display = 'block';
+
+  if (currentTicket) {
+    currentTicket.logo = url;
+    currentTicket.logoPlacement = selectedPlacement;
+    renderTicketPreview();
+  }
+
+  showToast('Logo selected!');
+}
+
+function removeLogo() {
+  selectedLogo = null;
+  document.getElementById('logoSelected').style.display = 'none';
+  document.getElementById('logoResultsGrid').innerHTML = '';
+  document.getElementById('logoResults').style.display = 'none';
+  document.getElementById('logoSearch').value = '';
+  document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
+  if (currentTicket) {
+    currentTicket.logo = null;
+    renderTicketPreview();
+  }
 }
 
   </script>
