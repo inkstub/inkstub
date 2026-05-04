@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inkstub — Your Memories, Printed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:   #0A0A0A;
+      --off-black: #111111;
+      --surface: #161616;
+      --border:  #242424;
+      --border-lt: #2e2e2e;
+      --text:    #F0EDE8;
+      --text-muted: #888880;
+      --text-dim: #444440;
+      --gold:    #C8922A;
+      --gold-lt: #E0A840;
+      --gold-dim: rgba(200,146,42,0.12);
+      --cream:   #F5F0E8;
+      --red:     #C42828;
+      --green:   #2A6820;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--black) !important;
+      font-weight: 600 !important;
+      padding: 9px 20px;
+      font-size: 14px !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-lt) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* background grid */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+    }
+
+    /* radial glow */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(200,146,42,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(200,146,42,0.3);
+      padding: 6px 16px;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--text);
+      max-width: 900px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 24px auto 40px;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .btn-hero-primary {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 32px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-hero-primary:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+    .btn-hero-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-lt);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      padding: 14px 32px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-hero-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* ticket float showcase */
+    .hero-tickets {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 72px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .hero-ticket {
+      width: 300px;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+      transition: transform 0.4s ease;
+      flex-shrink: 0;
+    }
+    .hero-ticket:hover { transform: translateY(-8px) rotate(-1deg); }
+    .hero-ticket:nth-child(1) { transform: rotate(-3deg) translateY(16px); }
+    .hero-ticket:nth-child(1):hover { transform: rotate(-2deg) translateY(6px); }
+    .hero-ticket:nth-child(2) { transform: rotate(0deg) translateY(-8px); z-index: 2; }
+    .hero-ticket:nth-child(2):hover { transform: rotate(0deg) translateY(-18px); }
+    .hero-ticket:nth-child(3) { transform: rotate(3deg) translateY(16px); }
+    .hero-ticket:nth-child(3):hover { transform: rotate(2deg) translateY(6px); }
+
+    .ht-classic { background: linear-gradient(160deg, #F0E8D0, #DCCFA8); }
+    .ht-sport   { background: linear-gradient(160deg, #0a1828, #0d1f3c); }
+    .ht-concert { background: linear-gradient(160deg, #080812, #0d0d20); }
+
+    .ht-body { padding: 16px 18px; display: flex; justify-content: space-between; }
+    .ht-main { flex: 1; }
+    .ht-type { font-size: 7px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3px; font-family: 'DM Sans', sans-serif; }
+    .ht-title { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; line-height: 1.1; text-transform: uppercase; margin-bottom: 4px; }
+    .ht-venue { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Sans', sans-serif; margin-bottom: 10px; }
+    .ht-detail { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; font-family: 'DM Sans', sans-serif; }
+    .ht-stub { width: 52px; border-left: 1px dashed; padding-left: 10px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+    .ht-stub-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 8px; font-family: 'DM Serif Display', serif; text-transform: uppercase; letter-spacing: 1px; }
+    .ht-barcode { display: flex; gap: 1px; align-items: flex-end; }
+    .ht-barcode span { display: block; width: 1.5px; }
+
+    /* classic colors */
+    .ht-classic .ht-type  { color: #7a5020; }
+    .ht-classic .ht-title { color: #1a0a04; }
+    .ht-classic .ht-venue { color: #6B4C2A; }
+    .ht-classic .ht-detail { color: #9a7040; }
+    .ht-classic .ht-stub  { border-left-color: #B8A060; }
+    .ht-classic .ht-stub-text { color: #1a0a04; }
+    .ht-classic .ht-barcode span { background: #2C1A0E; }
+
+    /* sport colors */
+    .ht-sport .ht-type   { color: #e8b870; }
+    .ht-sport .ht-title  { color: #F5EDD8; }
+    .ht-sport .ht-venue  { color: #8a7060; }
+    .ht-sport .ht-detail { color: #8a7060; }
+    .ht-sport .ht-stub   { border-left-color: #8B1A1A; }
+    .ht-sport .ht-stub-text { color: #E8DFC8; }
+    .ht-sport .ht-barcode span { background: #c8a878; }
+
+    /* concert colors */
+    .ht-concert .ht-type   { color: #c090e8; }
+    .ht-concert .ht-title  { color: #f5e8ff; }
+    .ht-concert .ht-venue  { color: #8060a0; }
+    .ht-concert .ht-detail { color: #8060a0; }
+    .ht-concert .ht-stub   { border-left-color: #6a3a8a; }
+    .ht-concert .ht-stub-text { color: #e8d0ff; }
+    .ht-concert .ht-barcode span { background: #b080d8; }
+
+    /* ── SHARED SECTION STYLES ── */
+    section { padding: 120px 24px; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 400;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { background: var(--off-black); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .how-header { margin-bottom: 72px; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .step-card {
+      background: var(--surface);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .step-card:hover { background: #1c1c1c; }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .step-card:hover::before { opacity: 1; }
+
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--border-lt);
+      line-height: 1;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .step-card:hover .step-num { color: var(--gold-dim); }
+
+    .step-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .step-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── STYLES SHOWCASE ── */
+    .styles-section { }
+
+    .styles-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 56px;
+    }
+
+    .styles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .style-showcase-card {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .style-showcase-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+
+    .style-showcase-preview {
+      height: 160px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ssp-classic { background: linear-gradient(160deg, #F0E8D0, #DCCFA8); }
+    .ssp-sport   { background: linear-gradient(160deg, #0a1828, #0d1f3c); }
+    .ssp-concert { background: linear-gradient(160deg, #080812, #100818); }
+
+    .style-showcase-mini {
+      width: 100%;
+      max-width: 260px;
+      display: flex;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .ssm-body { flex: 1; padding: 10px 12px; }
+    .ssm-type { font-size: 6px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; font-family: 'DM Sans', sans-serif; }
+    .ssm-title { font-family: 'DM Serif Display', serif; font-size: 13px; text-transform: uppercase; margin-bottom: 2px; }
+    .ssm-detail { font-size: 7px; letter-spacing: 1px; font-family: 'DM Sans', sans-serif; }
+    .ssm-stub { width: 36px; border-left: 1px dashed; display: flex; align-items: center; justify-content: center; }
+    .ssm-stub-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 7px; font-family: 'DM Serif Display', serif; text-transform: uppercase; }
+
+    .ssp-classic .ssm-type   { color: #7a5020; }
+    .ssp-classic .ssm-title  { color: #1a0a04; }
+    .ssp-classic .ssm-detail { color: #9a7040; }
+    .ssp-classic .ssm-stub   { border-left-color: #B8A060; }
+    .ssp-classic .ssm-stub-text { color: #1a0a04; }
+
+    .ssp-sport .ssm-type   { color: #e8b870; }
+    .ssp-sport .ssm-title  { color: #F5EDD8; }
+    .ssp-sport .ssm-detail { color: #8a7060; }
+    .ssp-sport .ssm-stub   { border-left-color: #8B1A1A; }
+    .ssp-sport .ssm-stub-text { color: #E8DFC8; }
+
+    .ssp-concert .ssm-type   { color: #c090e8; }
+    .ssp-concert .ssm-title  { color: #f5e8ff; }
+    .ssp-concert .ssm-detail { color: #8060a0; }
+    .ssp-concert .ssm-stub   { border-left-color: #6a3a8a; }
+    .ssp-concert .ssm-stub-text { color: #e8d0ff; }
+
+    .style-showcase-info {
+      padding: 20px 24px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .ssi-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .ssi-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── PROOF / STATS ── */
+    .proof-section {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 24px;
+    }
+
+    .proof-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .proof-item {
+      background: var(--surface);
+      padding: 36px 28px;
+      text-align: center;
+    }
+
+    .proof-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 44px;
+      font-weight: 400;
+      color: var(--gold);
+      display: block;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .proof-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section { }
+
+    .pricing-header { text-align: center; margin-bottom: 56px; }
+    .pricing-header .section-sub { margin: 0 auto; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      padding: 40px 32px;
+      position: relative;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .pricing-card:hover { border-color: var(--border-lt); }
+
+    .pricing-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(160deg, #1a1408, var(--surface));
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -1px; right: 24px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+    }
+
+    .pricing-name {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .pricing-price {
+      font-family: 'DM Serif Display', serif;
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .pricing-price span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-muted);
+      vertical-align: super;
+      font-size: 16px;
+    }
+
+    .pricing-per {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features li {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 300;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .btn-pricing {
+      width: 100%;
+      padding: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      transition: all 0.2s;
+      border: 1px solid var(--border-lt);
+      background: transparent;
+      color: var(--text);
+    }
+    .btn-pricing:hover { border-color: var(--text-muted); }
+    .btn-pricing.featured-btn { background: var(--gold); color: var(--black); border-color: var(--gold); }
+    .btn-pricing.featured-btn:hover { background: var(--gold-lt); }
+
+    /* ── FAQ ── */
+    .faq-section {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-header { text-align: center; margin-bottom: 56px; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 24px 0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--gold); }
+
+    .faq-arrow {
+      color: var(--text-muted);
+      font-size: 20px;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--gold); }
+
+    .faq-answer {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 24px;
+    }
+
+    /* ── CTA BAND ── */
+    .cta-section {
+      text-align: center;
+      padding: 120px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(200,146,42,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 400;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .cta-section p {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--gold);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-muted); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-tickets { display: none; }
+      .steps-grid,
+      .styles-grid,
+      .pricing-grid { grid-template-columns: 1fr; gap: 12px; }
+      .proof-grid { grid-template-columns: repeat(2, 1fr); }
+      .styles-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+      footer { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="landing.html" class="nav-logo">inkstub</a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#styles">Styles</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="index.html" class="nav-cta">Create Your Stub →</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Collectible Ticket Keepsakes</div>
+    <h1>Your digital tickets<br>deserve to <em>last forever</em></h1>
+    <p class="hero-sub">Upload any e-ticket — concert, game, show. We print a beautiful vintage-style collectible stub on archival cardstock and mail it to your door.</p>
+    <div class="hero-actions">
+      <a href="index.html" class="btn-hero-primary">Create Your Stub — $14.99</a>
+      <a href="#how" class="btn-hero-secondary">See how it works</a>
+    </div>
+
+    <div class="hero-tickets">
+      <!-- Classic ticket -->
+      <div class="hero-ticket ht-classic">
+        <div class="ht-body">
+          <div class="ht-main">
+            <div class="ht-type">Concert</div>
+            <div class="ht-title">The Rolling<br>Stones</div>
+            <div class="ht-venue">MSG, New York</div>
+            <div class="ht-detail">Jul 14, 1972 &bull; Floor GA</div>
+          </div>
+          <div class="ht-stub" style="border-left-color:#B8A060">
+            <div class="ht-stub-text" style="color:#1a0a04">Rolling Stones</div>
+            <div class="ht-barcode">
+              <span style="height:14px;background:#2C1A0E"></span><span style="height:18px;background:#2C1A0E"></span><span style="height:10px;background:#2C1A0E"></span><span style="height:16px;background:#2C1A0E"></span><span style="height:20px;background:#2C1A0E"></span><span style="height:12px;background:#2C1A0E"></span><span style="height:18px;background:#2C1A0E"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sport ticket -->
+      <div class="hero-ticket ht-sport">
+        <div class="ht-body">
+          <div class="ht-main">
+            <div class="ht-type" style="color:#e8b870">Sports</div>
+            <div class="ht-title" style="color:#F5EDD8">Chicago<br>Bulls</div>
+            <div class="ht-venue" style="color:#8a7060">United Center, Chicago</div>
+            <div class="ht-detail" style="color:#8a7060">Jun 16, 1996 &bull; Sec 112</div>
+          </div>
+          <div class="ht-stub" style="border-left-color:#8B1A1A">
+            <div class="ht-stub-text" style="color:#E8DFC8">Chicago Bulls</div>
+            <div class="ht-barcode">
+              <span style="height:14px;background:#c8a878"></span><span style="height:20px;background:#c8a878"></span><span style="height:10px;background:#c8a878"></span><span style="height:18px;background:#c8a878"></span><span style="height:14px;background:#c8a878"></span><span style="height:22px;background:#c8a878"></span><span style="height:16px;background:#c8a878"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concert ticket -->
+      <div class="hero-ticket ht-concert">
+        <div class="ht-body">
+          <div class="ht-main">
+            <div class="ht-type" style="color:#c090e8">Concert</div>
+            <div class="ht-title" style="color:#f5e8ff">David<br>Bowie</div>
+            <div class="ht-venue" style="color:#8060a0">Hammersmith Odeon</div>
+            <div class="ht-detail" style="color:#8060a0">Jul 3, 1973 &bull; Row D</div>
+          </div>
+          <div class="ht-stub" style="border-left-color:#6a3a8a">
+            <div class="ht-stub-text" style="color:#e8d0ff">David Bowie</div>
+            <div class="ht-barcode">
+              <span style="height:18px;background:#b080d8"></span><span style="height:12px;background:#b080d8"></span><span style="height:20px;background:#b080d8"></span><span style="height:14px;background:#b080d8"></span><span style="height:18px;background:#b080d8"></span><span style="height:10px;background:#b080d8"></span><span style="height:16px;background:#b080d8"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="section-inner">
+      <div class="how-header reveal">
+        <span class="section-label">How it works</span>
+        <h2 class="section-title">Three steps to a keepsake</h2>
+        <p class="section-sub">From your phone to your wall in under a week.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <div class="step-num">01</div>
+          <span class="step-icon">📤</span>
+          <div class="step-title">Upload your ticket</div>
+          <p class="step-desc">Screenshot, PDF, or photo of your e-ticket. We read the details automatically — or you can fill them in yourself.</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:0.1s">
+          <div class="step-num">02</div>
+          <span class="step-icon">🎨</span>
+          <div class="step-title">Choose your style</div>
+          <p class="step-desc">Pick from Classic Golden Age, Gameday, or Rock & Roll. Preview exactly what your printed stub will look like.</p>
+        </div>
+        <div class="step-card reveal" style="transition-delay:0.2s">
+          <div class="step-num">03</div>
+          <span class="step-icon">📬</span>
+          <div class="step-title">We print & ship it</div>
+          <p class="step-desc">Printed on archival cardstock with UV gloss coating. Arrives in 3–5 days, ready to frame, collect, or gift.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STYLES SHOWCASE -->
+  <section class="styles-section" id="styles">
+    <div class="section-inner">
+      <div class="styles-header">
+        <div class="reveal">
+          <span class="section-label">Ticket styles</span>
+          <h2 class="section-title">Three eras.<br>One memory.</h2>
+        </div>
+        <a href="index.html" class="btn-hero-secondary reveal" style="transition-delay:0.1s">Start creating →</a>
+      </div>
+
+      <div class="styles-grid">
+        <div class="style-showcase-card reveal">
+          <div class="style-showcase-preview ssp-classic">
+            <div class="style-showcase-mini">
+              <div class="ssm-body">
+                <div class="ssm-type" style="color:#7a5020">Concert</div>
+                <div class="ssm-title" style="color:#1a0a04">The Event</div>
+                <div class="ssm-detail" style="color:#9a7040">Grand Venue &bull; Row A</div>
+              </div>
+              <div class="ssm-stub" style="border-left-color:#B8A060">
+                <div class="ssm-stub-text" style="color:#1a0a04">The Event</div>
+              </div>
+            </div>
+          </div>
+          <div class="style-showcase-info">
+            <div class="ssi-name">Classic</div>
+            <div class="ssi-desc">Aged cream paper, warm gold tones. Inspired by 1920s–60s show tickets.</div>
+          </div>
+        </div>
+
+        <div class="style-showcase-card reveal" style="transition-delay:0.1s">
+          <div class="style-showcase-preview ssp-sport">
+            <div class="style-showcase-mini">
+              <div class="ssm-body">
+                <div class="ssm-type" style="color:#e8b870">Sports</div>
+                <div class="ssm-title" style="color:#F5EDD8">The Game</div>
+                <div class="ssm-detail" style="color:#8a7060">The Arena &bull; Sec 104</div>
+              </div>
+              <div class="ssm-stub" style="border-left-color:#8B1A1A">
+                <div class="ssm-stub-text" style="color:#E8DFC8">The Game</div>
+              </div>
+            </div>
+          </div>
+          <div class="style-showcase-info">
+            <div class="ssi-name">Gameday</div>
+            <div class="ssi-desc">Deep navy and crimson. Captures the energy of 1970s–90s arena sports.</div>
+          </div>
+        </div>
+
+        <div class="style-showcase-card reveal" style="transition-delay:0.2s">
+          <div class="style-showcase-preview ssp-concert">
+            <div class="style-showcase-mini">
+              <div class="ssm-body">
+                <div class="ssm-type" style="color:#c090e8">Concert</div>
+                <div class="ssm-title" style="color:#f5e8ff">The Show</div>
+                <div class="ssm-detail" style="color:#8060a0">The Venue &bull; Floor GA</div>
+              </div>
+              <div class="ssm-stub" style="border-left-color:#6a3a8a">
+                <div class="ssm-stub-text" style="color:#e8d0ff">The Show</div>
+              </div>
+            </div>
+          </div>
+          <div class="style-showcase-info">
+            <div class="ssi-name">Rock &amp; Roll</div>
+            <div class="ssi-desc">Dark velvet with purple accents. The spirit of 1960s–80s concert tickets.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="proof-section">
+    <div class="proof-grid">
+      <div class="proof-item reveal">
+        <span class="proof-num">5.5"</span>
+        <span class="proof-label">Standard ticket size</span>
+      </div>
+      <div class="proof-item reveal" style="transition-delay:0.1s">
+        <span class="proof-num">UV</span>
+        <span class="proof-label">Gloss coated finish</span>
+      </div>
+      <div class="proof-item reveal" style="transition-delay:0.2s">
+        <span class="proof-num">3–5</span>
+        <span class="proof-label">Day delivery</span>
+      </div>
+      <div class="proof-item reveal" style="transition-delay:0.3s">
+        <span class="proof-num">∞</span>
+        <span class="proof-label">Archival lifespan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-inner">
+      <div class="pricing-header reveal">
+        <span class="section-label">Pricing</span>
+        <h2 class="section-title">Simple, flat pricing</h2>
+        <p class="section-sub">No subscriptions. Pay per stub. The more you order, the less each one costs.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card reveal">
+          <div class="pricing-name">Single</div>
+          <div class="pricing-price"><span>$</span>14.99</div>
+          <div class="pricing-per">per stub</div>
+          <ul class="pricing-features">
+            <li>One collectible ticket stub</li>
+            <li>Choice of 3 styles</li>
+            <li>Archival cardstock + UV gloss</li>
+            <li>Tracked shipping (3–5 days)</li>
+          </ul>
+          <a href="index.html" class="btn-pricing">Order one stub</a>
+        </div>
+
+        <div class="pricing-card featured reveal" style="transition-delay:0.1s">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-name">3-Pack</div>
+          <div class="pricing-price"><span>$</span>11.99</div>
+          <div class="pricing-per">per stub — save $9</div>
+          <ul class="pricing-features">
+            <li>Three collectible stubs</li>
+            <li>Mix any styles</li>
+            <li>Archival cardstock + UV gloss</li>
+            <li>Tracked shipping (3–5 days)</li>
+            <li>Perfect for gifting</li>
+          </ul>
+          <a href="index.html" class="btn-pricing featured-btn">Order 3 stubs</a>
+        </div>
+
+        <div class="pricing-card reveal" style="transition-delay:0.2s">
+          <div class="pricing-name">5-Pack</div>
+          <div class="pricing-price"><span>$</span>9.99</div>
+          <div class="pricing-per">per stub — save $25</div>
+          <ul class="pricing-features">
+            <li>Five collectible stubs</li>
+            <li>Mix any styles</li>
+            <li>Archival cardstock + UV gloss</li>
+            <li>Tracked shipping (3–5 days)</li>
+            <li>Best value for collectors</li>
+          </ul>
+          <a href="index.html" class="btn-pricing">Order 5 stubs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="faq-inner">
+      <div class="faq-header reveal">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Common questions</h2>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What kind of tickets can I upload?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">Any event ticket — concerts, sports games, theatre, comedy shows, festivals. If you can screenshot it or save it as a PDF, we can turn it into a stub. You can also just fill in the details manually if you don't have the original file.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What is the stub actually printed on?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">We print on thick archival cardstock (the same weight used for professional event tickets) with a UV gloss coating on the front. It feels and looks exactly like a real ticket stub — not like something printed at home.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How long does shipping take?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">We print and ship within 1–2 business days. Delivery typically takes 3–5 business days via tracked first-class mail. You'll receive a tracking number by email once your order ships.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I order stubs for old events?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">Absolutely — that's one of the best use cases. Dug up an old email confirmation from a concert ten years ago? Enter the details and we'll make you the stub you never got to keep.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I give a stub as a gift?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">Yes! Just enter the recipient's address at checkout. Stubs make a perfect, personal gift — especially for someone who went to a meaningful event but never had a physical ticket to remember it by.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="reveal">Don't let the memory<br>live only on your phone</h2>
+    <p class="reveal" style="transition-delay:0.1s">Turn any digital ticket into something you can hold, frame, and keep forever.</p>
+    <div class="reveal" style="transition-delay:0.2s">
+      <a href="index.html" class="btn-hero-primary">Create Your First Stub →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">inkstub</div>
+    <ul class="footer-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="index.html">Create a Stub</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 Inkstub</div>
+  </footer>
+
+  <script>
+    // FAQ toggle
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
