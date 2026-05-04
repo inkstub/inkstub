@@ -1300,27 +1300,69 @@ function handleFile(file) {
   const success = document.getElementById('uploadSuccess');
   const nameEl = document.getElementById('uploadFileName');
 
+  // Show uploaded state
   zone.classList.add('has-file');
   inner.style.display = 'none';
   success.style.display = 'block';
-  nameEl.textContent = file.name;
+  nameEl.textContent = '✦ Reading your ticket...';
 
-  showToast('Ticket uploaded! Fill in details below.');
+  showToast('Reading your ticket with AI...');
 
-  // In production: send to OCR/AI endpoint to extract fields
-  // For now: hint with a demo autofill if name looks like a known event
-  const lower = file.name.toLowerCase();
-  if (lower.includes('swift') || lower.includes('taylor')) {
-    prefillForm('Taylor Swift: Eras Tour', 'Concert', 'Wrigley Field, Chicago, IL', 'June 2, 2024', 'Sec 205, Row C, Seat 14', '$189.50');
-  }
+  // Read file as base64 and send to Claude
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const dataUrl = e.target.result;
+    const base64 = dataUrl.split(',')[1];
+    const mediaType = file.type || 'image/jpeg';
+
+    try {
+      const res = await fetch('/.netlify/functions/read-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageData: base64, mediaType }),
+      });
+
+      if (!res.ok) throw new Error('Function error: ' + res.status);
+
+      const data = await res.json();
+
+      if (data.error) throw new Error(data.error);
+
+      // Autofill the form
+      prefillForm(
+        data.name  || '',
+        data.type  || 'Concert',
+        data.venue || '',
+        data.date  || '',
+        data.seat  || '',
+        data.price || ''
+      );
+
+      nameEl.textContent = file.name;
+      showToast('✦ Ticket details filled in automatically!');
+
+    } catch (err) {
+      console.error('Autofill error:', err);
+      nameEl.textContent = file.name;
+      showToast('Uploaded! Fill in the details below.');
+    }
+  };
+
+  reader.onerror = () => {
+    nameEl.textContent = file.name;
+    showToast('Uploaded! Fill in the details below.');
+  };
+
+  // Read as data URL (base64)
+  reader.readAsDataURL(file);
 }
 
 function prefillForm(name, type, venue, date, seat, price) {
-  document.getElementById('eventName').value  = name;
-  document.getElementById('venue').value      = venue;
-  document.getElementById('eventDate').value  = date;
-  document.getElementById('seatInfo').value   = seat;
-  document.getElementById('ticketPrice').value = price;
+  if (name)  document.getElementById('eventName').value   = name;
+  if (venue) document.getElementById('venue').value       = venue;
+  if (date)  document.getElementById('eventDate').value   = date;
+  if (seat)  document.getElementById('seatInfo').value    = seat;
+  if (price) document.getElementById('ticketPrice').value = price;
 
   const select = document.getElementById('eventType');
   for (let i = 0; i < select.options.length; i++) {
