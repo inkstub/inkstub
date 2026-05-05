@@ -105,12 +105,29 @@ function initAuth(onUserChange) {
 }
 
 function openSignIn() {
-  if (!clerkInstance) { alert('Auth is still loading, please try again in a moment.'); return; }
+  if (!clerkInstance) {
+    // Wait up to 5s for Clerk to load
+    var attempts = 0;
+    var wait = setInterval(function() {
+      attempts++;
+      if (clerkInstance) { clearInterval(wait); clerkInstance.openSignIn(); }
+      else if (attempts > 10) { clearInterval(wait); alert('Sign in unavailable. Please refresh the page.'); }
+    }, 500);
+    return;
+  }
   clerkInstance.openSignIn();
 }
 
 function openSignUp() {
-  if (!clerkInstance) { alert('Auth is still loading, please try again in a moment.'); return; }
+  if (!clerkInstance) {
+    var attempts = 0;
+    var wait = setInterval(function() {
+      attempts++;
+      if (clerkInstance) { clearInterval(wait); clerkInstance.openSignUp(); }
+      else if (attempts > 10) { clearInterval(wait); alert('Sign up unavailable. Please refresh the page.'); }
+    }, 500);
+    return;
+  }
   clerkInstance.openSignUp();
 }
 
