@@ -1301,18 +1301,12 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // ── LOCAL COLLECTION (fallback when not logged in) ──
-    let localCollection = JSON.parse(localStorage.getItem('stub_collection') || '[]');
     let cloudCollection = [];
-
-    function getCollection() {
-      return cloudCollection.length ? cloudCollection : localCollection;
-    }
 
     // ── AUTH STATE ──
     function onUserChange(user) {
       const navAuth = document.getElementById('navAuth');
       const addBtn  = document.getElementById('btnAddEvent');
-      const prompt  = document.getElementById('collectionAuthPrompt');
 
       if (user) {
         const initials = (getUserName()||'U').charAt(0).toUpperCase();
@@ -1323,60 +1317,60 @@
             <button class="btn-signout" onclick="signOut()">Sign out</button>
           </div>`;
         if (addBtn) addBtn.style.display = 'inline-block';
-        if (prompt) prompt.style.display = 'none';
         loadAndRenderCollection();
       } else {
         navAuth.innerHTML = `
           <button class="btn-signin" onclick="openSignIn()">Sign in</button>
           <button class="btn-signup" onclick="openSignUp()">Get Started</button>`;
         if (addBtn) addBtn.style.display = 'none';
-        if (prompt) prompt.style.display = 'block';
         cloudCollection = [];
         renderCollection();
       }
     }
 
     async function loadAndRenderCollection() {
+      const grid = document.getElementById('collectionGrid');
+      grid.innerHTML = '<div style="color:#888;font-family:DM Sans,sans-serif;font-size:13px;padding:40px;text-align:center">Loading your collection...</div>';
       const data = await loadCollectionFromCloud();
-      if (data) {
-        cloudCollection = data.map(rowToItem);
-      } else {
-        cloudCollection = localCollection;
-      }
+      if (data) cloudCollection = data.map(rowToItem);
       renderCollection();
     }
 
     function renderCollection() {
       const grid = document.getElementById('collectionGrid');
-      const items = getCollection();
 
+      // Not signed in — show auth prompt
       if (!currentUser) {
-        grid.innerHTML = `<div class="auth-prompt" id="collectionAuthPrompt">
-          <div class="auth-prompt-icon">🎟</div>
-          <div class="auth-prompt-title">Sign in to see your collection</div>
-          <div class="auth-prompt-sub">Create an account to save your tickets and access them from any device.</div>
-          <div class="auth-prompt-btns">
-            <button class="btn-signup" onclick="openSignIn()">Sign In</button>
-            <button class="btn-signin" onclick="openSignUp()">Create Account</button>
-          </div>
-        </div>`;
+        grid.innerHTML = `
+          <div class="auth-prompt">
+            <div class="auth-prompt-icon">🎟</div>
+            <div class="auth-prompt-title">Your memories, saved forever</div>
+            <div class="auth-prompt-sub">Sign in to see your collection and access it from any device. Every event you've ever been to, in one place.</div>
+            <div class="auth-prompt-btns">
+              <button class="btn-signup" onclick="openSignIn()">Sign In</button>
+              <button class="btn-signin" onclick="openSignUp()">Get Started — It's Free</button>
+            </div>
+          </div>`;
         return;
       }
 
-      if (!items || items.length === 0) {
-        grid.innerHTML = `<div class="collection-empty">
-          <div class="collection-empty-icon">🎟</div>
-          <div class="collection-empty-title">No events yet</div>
-          <div class="collection-empty-sub">Create a stub or log an event to start your collection.</div>
-          <div style="display:flex;gap:10px;justify-content:center">
-            <button class="btn-signup" onclick="openAddEvent()">Log an Event</button>
-            <a href="app.html" class="btn-signin" style="display:inline-block;line-height:normal">Create a Stub</a>
-          </div>
-        </div>`;
+      // Signed in but empty
+      if (!cloudCollection || cloudCollection.length === 0) {
+        grid.innerHTML = `
+          <div class="collection-empty">
+            <div class="collection-empty-icon">🎟</div>
+            <div class="collection-empty-title">No events yet</div>
+            <div class="collection-empty-sub">Start building your collection — log any event or create a printed stub.</div>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+              <button class="btn-signup" onclick="openAddEvent()">+ Log an Event</button>
+              <a href="app.html" class="btn-signin" style="display:inline-block;line-height:2">Create a Stub</a>
+            </div>
+          </div>`;
         return;
       }
 
-      grid.innerHTML = items.map(item => {
+      // Signed in with items
+      grid.innerHTML = cloudCollection.map(item => {
         const statusClass = {saved:'status-saved',printing:'status-printing',shipped:'status-shipped'}[item.status?.toLowerCase()] || 'status-saved';
         return `<div class="collection-card">
           <span class="cc-status ${statusClass}">${item.status||'Saved'}</span>
@@ -1384,9 +1378,9 @@
           <div class="cc-name">${item.name}</div>
           <div class="cc-venue">${item.venue||''}</div>
           <div class="cc-meta">
-            ${item.date ? `<span>📅 ${item.date}</span>` : ''}
-            ${item.seat ? `<span>💺 ${item.seat}</span>` : ''}
-            ${item.price ? `<span>💰 ${item.price}</span>` : ''}
+            ${item.date ? '<span>📅 ' + item.date + '</span>' : ''}
+            ${item.seat ? '<span>💺 ' + item.seat + '</span>' : ''}
+            ${item.price ? '<span>💰 ' + item.price + '</span>' : ''}
           </div>
           <div class="cc-actions">
             <a href="app.html" class="cc-btn cc-btn-primary">Make a Stub</a>
@@ -1398,13 +1392,8 @@
 
     async function deleteItem(id) {
       if (!confirm('Remove this from your collection?')) return;
-      if (currentUser) {
-        await deleteItemFromCloud(id);
-        cloudCollection = cloudCollection.filter(i => i.id !== id);
-      } else {
-        localCollection = localCollection.filter(i => i.id !== id);
-        localStorage.setItem('stub_collection', JSON.stringify(localCollection));
-      }
+      await deleteItemFromCloud(id);
+      cloudCollection = cloudCollection.filter(i => i.id !== id);
       renderCollection();
     }
 
@@ -1431,14 +1420,13 @@
         id:        Date.now().toString(),
       };
 
-      if (currentUser) {
-        await saveItemToCloud(item);
-        await loadAndRenderCollection();
-      } else {
-        localCollection.unshift(item);
-        localStorage.setItem('stub_collection', JSON.stringify(localCollection));
-        renderCollection();
+      if (!currentUser) {
+        closeAddEvent();
+        openSignIn();
+        return;
       }
+      await saveItemToCloud(item);
+      await loadAndRenderCollection();
 
       // Clear form
       ['ae-name','ae-date','ae-venue','ae-seat','ae-price'].forEach(id => {
