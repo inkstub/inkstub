@@ -1733,7 +1733,7 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 
 function buildBarcode(color, vertical) {
   const c = color || '#333';
-  const h = [18,11,20,9,15,22,13,17,9,21,13,18,11,22,15,11,19,9,16,22,14,18];
+  const h = [16,10,18,8,13,20,11,15,8,19,11,16,10,20,13,10,17,8,14,19,12,16];
   if (vertical) {
     return h.map(v => `<span style="display:block;height:2px;width:${v}px;background:${c};margin-bottom:1.5px;border-radius:1px"></span>`).join('');
   }
@@ -1749,199 +1749,169 @@ function buildTicketHTML(data) {
   const gate = ['A','B','C','D','E','F'][rnd(0,5)];
   const pl = logoPlacement || 'left';
 
-  const nm  = name.length  > 32 ? name.substring(0,30)+'…'  : (name||'Event Name');
-  const vn  = venue.length > 38 ? venue.substring(0,36)+'…' : (venue||'Venue');
-  const dt  = (date||'TBD');
-  const st  = (seat||'GA');
-  const pr  = (price||'$0.00');
-  const tp  = (type||'Event');
-  const sn8 = nm.length > 9 ? nm.substring(0,8)+'…' : nm;
+  // Truncate safely
+  const nm = (name||'Event Name').substring(0,28);
+  const vn = (venue||'Venue').substring(0,34);
+  const dt = (date||'TBD');
+  const st = (seat||'GA');
+  const pr = (price||'$0.00');
+  const tp = (type||'Event');
 
+  // Logo placeholder shown when no logo uploaded
   const logoBlock = logo
-    ? `<img src="${logo}" style="width:100%;height:100%;object-fit:contain;display:block;padding:6px;box-sizing:border-box" alt="">`
-    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div style="font-size:9px;font-family:'Special Elite',cursive;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;text-align:center">YOUR<br>LOGO</div></div>`;
+    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
+    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
+  const logoBlockDk = logo
+    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
+    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(0,0,0,0.15);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
 
-  const logoBlockDark = logo
-    ? `<img src="${logo}" style="width:100%;height:100%;object-fit:contain;display:block;padding:6px;box-sizing:border-box" alt="">`
-    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div style="font-size:9px;font-family:'Special Elite',cursive;color:rgba(0,0,0,0.2);letter-spacing:2px;text-transform:uppercase;text-align:center">YOUR<br>LOGO</div></div>`;
-
+  // Fixed ticket dimensions — 528x192
   const W = '528px'; const H = '192px';
-  const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0`;
-  const FLEX  = `display:flex;width:100%;height:100%;overflow:hidden`;
+  const OUTER = `position:relative;display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0`;
 
-  // Shared detail row builder — always shows ALL fields
-  function detailRow(fields, borderTop, labelColor, valColor, dividerColor) {
-    const cells = fields.map((f,i) => {
-      const border = i < fields.length-1 ? `border-right:1px solid ${dividerColor};padding-right:8px;margin-right:8px;` : '';
-      return `<div style="${border}overflow:hidden;flex-shrink:0"><div style="font-size:6px;letter-spacing:1.5px;text-transform:uppercase;color:${labelColor};white-space:nowrap">${f.label}</div><div style="font-size:${f.big?'13px':'10px'};font-weight:700;color:${valColor};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${f.maxW||'90px'}">${f.val}</div></div>`;
-    });
-    return `<div style="display:flex;align-items:flex-start;gap:0;border-top:1px solid ${borderTop};padding-top:5px;flex-shrink:0;overflow:hidden">${cells.join('')}</div>`;
-  }
+  // Reusable detail cell
+  const dc = (label, val, lc, vc, maxW) =>
+    `<div style="overflow:hidden;min-width:0"><div style="font-size:6px;letter-spacing:1.5px;text-transform:uppercase;color:${lc};line-height:1">${label}</div><div style="font-size:10px;font-weight:700;color:${vc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${maxW||'120px'};line-height:1.3">${val}</div></div>`;
 
-  // Shared stub
-  function stub(bg, borderStyle, textColor, barColor, showPrice) {
-    return `<div style="width:64px;height:100%;background:${bg};${borderStyle};display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${textColor};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:90px;white-space:nowrap">${sn8}</div>
-      ${showPrice ? `<div style="font-size:11px;font-weight:700;color:${textColor};font-family:'Playfair Display',serif;white-space:nowrap">${pr}</div>` : `<div style="font-size:7px;color:${textColor};opacity:0.6;font-family:'Courier New',monospace;white-space:nowrap;letter-spacing:1px">${sn}</div>`}
-      <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(barColor, true)}</div>
+  /* ══ THEATRE GOLD ══ */
+  if (s === 'theatre') {
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:100%;height:100%;background:#c8920a;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="flex:1;display:flex;flex-direction:column;padding:12px 18px 10px;overflow:hidden;box-sizing:border-box;gap:6px">
+          <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(26,10,0,0.7);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.6);text-align:center;flex-shrink:0">${tp}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;border-top:1px solid rgba(26,10,0,0.25);padding-top:6px;flex-shrink:0">
+            <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00">DATE: </span><span style="font-size:8px;color:#1a0a00">${dt}</span></div>
+            <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00">GATE: </span><span style="font-size:8px;color:#1a0a00">${gate}</span></div>
+            <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00">SEAT: </span><span style="font-size:8px;color:#1a0a00">${st}</span></div>
+            <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00">PRICE: </span><span style="font-size:8px;color:#1a0a00">${pr}</span></div>
+          </div>
+        </div>
+        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#fffdf5;border-left:2px dashed #1a0a00;padding:10px 7px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:19px;font-weight:900;color:#1a0a00;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-height:100px">ADMIT ONE</div>
+          <div style="background:#c8920a;width:100%;padding:3px 0;text-align:center;flex-shrink:0">
+            <div style="font-size:6px;color:#1a0a00;letter-spacing:1px;text-transform:uppercase">TICKET NO</div>
+            <div style="font-size:8px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace">${sn}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0">${buildBarcode('#1a0a00', true)}</div>
+        </div>
+      </div>
     </div>`;
   }
 
-  /* ══════════════════════════════════════════
-     THEATRE GOLD — Image 1 reference
-  ══════════════════════════════════════════ */
-  if (s === 'theatre') {
-    return `<div style="${OUTER}">
-    <div style="${FLEX};background:#c8920a;font-family:'Special Elite',cursive">
-      <div style="flex:1;height:100%;padding:10px 18px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box;position:relative">
-        <div style="position:absolute;bottom:0;left:0;right:0;height:50px;opacity:0.1;background:repeating-linear-gradient(90deg,transparent 0,transparent 14px,#1a0a00 14px,#1a0a00 15px),linear-gradient(transparent 0,#1a0a00 100%)"></div>
-        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#1a0a00;text-align:center;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>
-        <div style="text-align:center;flex-shrink:0;overflow:hidden">
-          <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.7);margin-bottom:2px">${tp}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#1a0a00;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 20px;border-top:1px solid rgba(26,10,0,0.3);padding-top:6px;flex-shrink:0">
-          <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">DATE: </span><span style="font-size:8px;color:#1a0a00">${dt}</span></div>
-          <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">GATE: </span><span style="font-size:8px;color:#1a0a00">${gate}</span></div>
-          <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">SEAT: </span><span style="font-size:8px;color:#1a0a00">${st}</span></div>
-          <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">PRICE: </span><span style="font-size:8px;color:#1a0a00">${pr}</span></div>
-        </div>
-      </div>
-      <div style="width:100px;height:100%;background:#fff;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#1a0a00;text-transform:uppercase;letter-spacing:3px;overflow:hidden;max-height:110px;white-space:nowrap">ADMIT ONE</div>
-        <div style="background:#c8920a;padding:4px 6px;width:100%;box-sizing:border-box">
-          <div style="font-size:6px;color:#1a0a00;letter-spacing:1px;text-transform:uppercase;text-align:center">TICKET NO:</div>
-          <div style="font-size:8px;font-weight:700;color:#1a0a00;text-align:center;font-family:'Courier New',monospace">${sn}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#333', true)}</div>
-      </div>
-    </div></div>`;
-  }
-
-  /* ══════════════════════════════════════════
-     CINEMA RED — Image 2 reference
-  ══════════════════════════════════════════ */
+  /* ══ CINEMA RED ══ */
   if (s === 'cinema') {
     const parts = st.split(/[,·\s]+/).filter(Boolean);
-    const rowNum  = st.match(/row[\s:]*([^\s,]+)/i)?.[1] || parts[parts.length-2] || '—';
+    const rowNum  = st.match(/row[\s:]*([^\s,]+)/i)?.[1] || parts[Math.max(0,parts.length-2)] || '—';
     const seatNum = st.match(/seat[\s:]*([^\s,]+)/i)?.[1] || parts[parts.length-1] || '—';
     return `<div style="${OUTER}">
-    <div style="${FLEX};background:#dd1a1a;border:3px solid #f0e0c8;font-family:'Special Elite',cursive;box-sizing:border-box">
-      <div style="width:120px;height:100%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box">
-        ${logoBlock}
-      </div>
-      <div style="flex:1;height:100%;padding:10px 14px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;overflow:hidden">
-          <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7);white-space:nowrap">${tp}</span>
-          <span style="font-size:8px;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px">${vn}</span>
+      <div style="display:flex;width:100%;height:100%;background:#dd1a1a;border:3px solid #f0e0c8;font-family:'Special Elite',cursive;overflow:hidden;box-sizing:border-box">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:rgba(0,0,0,0.25);padding:10px;box-sizing:border-box">
+          ${logoBlock}
         </div>
-        <div style="display:flex;gap:4px;overflow:hidden;flex-shrink:0">${Array(22).fill(0).map(()=>'<span style="width:4px;height:4px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
-        <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
-        <div style="display:flex;gap:4px;overflow:hidden;flex-shrink:0">${Array(22).fill(0).map(()=>'<span style="width:4px;height:4px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
-        <div style="display:flex;gap:14px;flex-shrink:0;overflow:hidden">
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px">${dt}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">${gate}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">${pr}</div></div>
-        </div>
-      </div>
-      <div style="width:110px;height:100%;background:#111;border-left:2px dashed rgba(255,255,255,0.2);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 7px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="width:100%;text-align:center;overflow:hidden">
-          <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">ROW</div>
-          <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;padding:2px 0;white-space:nowrap;overflow:hidden">${rowNum}</div>
-        </div>
-        <div style="width:100%;text-align:center;overflow:hidden">
-          <div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">SEAT</div>
-          <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;padding:2px 0;white-space:nowrap;overflow:hidden">${seatNum}</div>
-        </div>
-        <div style="font-size:6px;color:#666;font-family:'Courier New',monospace;white-space:nowrap">No.${sn}</div>
-        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#dd1a1a', true)}</div>
-      </div>
-    </div></div>`;
-  }
-
-  /* ══════════════════════════════════════════
-     BALLPARK — Image 3 reference
-  ══════════════════════════════════════════ */
-  if (s === 'ballpark') {
-    return `<div style="${OUTER}">
-    <div style="${FLEX};background:#1a3a6a;font-family:'Special Elite',cursive">
-      <div style="width:120px;height:100%;background:linear-gradient(135deg,#0d2040,#1a3a6a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
-        ${logoBlock}
-      </div>
-      <div style="flex:1;height:100%;padding:10px 14px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;overflow:hidden">
-          <div style="color:#e05050;font-size:10px;flex-shrink:0">★</div>
-          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp} · ${vn}</div>
-          <div style="color:#e05050;font-size:10px;flex-shrink:0">★</div>
-        </div>
-        <div style="flex-shrink:0;overflow:hidden">
-          <div style="font-family:'Playfair Display',serif;font-size:10px;font-style:italic;color:#e05050;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">— Presents —</div>
-          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 10px;border-top:1px solid rgba(255,255,255,0.15);padding-top:5px;flex-shrink:0">
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:9px;font-weight:700;color:#fff;white-space:nowrap">${gate}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:9px;font-weight:700;color:#e8d090;white-space:nowrap">${pr}</div></div>
-          <div style="overflow:hidden;grid-column:span 2"><div style="font-size:6px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px">Ticket No.</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.7);white-space:nowrap;font-family:'Courier New',monospace">${sn}</div></div>
-        </div>
-      </div>
-      <div style="width:110px;height:100%;background:#f5f0e0;border-left:2px dashed #8B6000;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 10px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:#e05050;text-align:center;white-space:nowrap">Admit One</div>
-        <div style="width:100%;overflow:hidden">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 8px">
-            <div style="overflow:hidden"><div style="font-size:6px;color:#8B6000;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:14px;font-weight:700;color:#1a3a6a;font-family:'Playfair Display',serif;line-height:1">${gate}</div></div>
-            <div style="overflow:hidden"><div style="font-size:6px;color:#8B6000;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:11px;font-weight:700;color:#1a3a6a;font-family:'Playfair Display',serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pr}</div></div>
-            <div style="overflow:hidden;grid-column:span 2"><div style="font-size:6px;color:#8B6000;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:10px;font-weight:700;color:#1a3a6a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 12px;gap:5px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
+            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7);white-space:nowrap">${tp}</span>
+            <span style="font-size:8px;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px">${vn}</span>
+          </div>
+          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
+          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
+            ${dc('Date', dt, 'rgba(255,255,255,0.6)', '#fff', '110px')}
+            ${dc('Gate', gate, 'rgba(255,255,255,0.6)', '#fff', '40px')}
+            ${dc('Price', pr, 'rgba(255,255,255,0.6)', '#fff', '70px')}
           </div>
         </div>
-        <div style="display:flex;gap:1.5px">${buildBarcode('#1a3a6a')}</div>
+        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#111;border-left:2px dashed rgba(255,255,255,0.2);padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">ROW</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${rowNum}</div></div>
+          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">SEAT</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${seatNum}</div></div>
+          <div style="font-size:6px;color:#555;font-family:'Courier New',monospace;white-space:nowrap">No.${sn}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#dd1a1a', true)}</div>
+        </div>
       </div>
-    </div></div>`;
+    </div>`;
   }
 
-  /* ══════════════════════════════════════════
-     FESTIVAL / MODERN — Image 4 reference
-  ══════════════════════════════════════════ */
+  /* ══ BALLPARK ══ */
+  if (s === 'ballpark') {
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:100%;height:100%;background:#1a3a6a;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,#0d2040,#1a3a6a);padding:10px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
+          ${logoBlock}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:5px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;overflow:hidden">
+            <span style="color:#e05050;flex-shrink:0">★</span>
+            <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp} · ${vn}</span>
+            <span style="color:#e05050;flex-shrink:0">★</span>
+          </div>
+          <div style="flex-shrink:0;overflow:hidden">
+            <div style="font-family:'Playfair Display',serif;font-size:10px;font-style:italic;color:#e05050;white-space:nowrap;overflow:hidden">— Presents —</div>
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px 8px;border-top:1px solid rgba(255,255,255,0.15);padding-top:5px;flex-shrink:0">
+            ${dc('Date', dt, 'rgba(255,255,255,0.5)', '#fff', '100px')}
+            ${dc('Seat', st, 'rgba(255,255,255,0.5)', '#fff', '100px')}
+            ${dc('Gate', gate, 'rgba(255,255,255,0.5)', '#fff', '40px')}
+            ${dc('Price', pr, '#e8d090', '#e8d090', '80px')}
+            ${dc('Ticket No.', sn, 'rgba(255,255,255,0.4)', 'rgba(255,255,255,0.7)', '100px')}
+          </div>
+        </div>
+        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f5f0e0;border-left:2px dashed #8B6000;padding:10px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:#e05050;text-align:center;white-space:nowrap;flex-shrink:0">Admit One</div>
+          <div style="width:100%;overflow:hidden;flex-shrink:0">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 6px">
+              ${dc('Gate', gate, '#8B6000', '#1a3a6a', '40px')}
+              ${dc('Price', pr, '#8B6000', '#1a3a6a', '50px')}
+              <div style="grid-column:span 2;overflow:hidden">${dc('Seat', st, '#8B6000', '#1a3a6a', '90px')}</div>
+            </div>
+          </div>
+          <div style="font-size:6px;color:#8B6000;font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0">${sn}</div>
+          <div style="display:flex;gap:1.5px;flex-shrink:0">${buildBarcode('#1a3a6a')}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ══ FESTIVAL / MODERN ══ */
   if (s === 'festival') {
     return `<div style="${OUTER}">
-    <div style="${FLEX};background:#f0ece4;font-family:'Special Elite',cursive">
-      <div style="width:120px;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
-        ${logoBlock}
+      <div style="display:flex;width:100%;height:100%;background:#f0ece4;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#1a1a1a;padding:10px;box-sizing:border-box;overflow:hidden">
+          ${logoBlock}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:6px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
+            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#888;white-space:nowrap">${tp}</span>
+            <span style="font-size:8px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${vn}</span>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+          <div style="display:flex;gap:6px;flex-wrap:nowrap;flex-shrink:0;overflow:hidden">
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${dt}</span></div>
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">Gate ${gate}</span></div>
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${pr}</span></div>
+          </div>
+          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
+            ${dc('Seat', st, '#888', '#111', '110px')}
+            ${dc('Ticket No.', sn, '#888', '#555', '80px')}
+          </div>
+        </div>
+        <div style="width:84px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f0ece4;border-left:2px dashed #999;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;overflow:hidden;flex-shrink:0">
+            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/).pop()||'GA'}</div></div>
+            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Row</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/)[0]||'GA'}</div></div>
+          </div>
+          <div style="writing-mode:vertical-rl;font-size:6px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;max-height:40px;flex-shrink:0">TICKET NUMBER:</div>
+          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0">${buildBarcode('#111', true)}</div>
+          <div style="text-align:center;overflow:hidden;flex-shrink:0"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1">${gate}</div></div>
+        </div>
       </div>
-      <div style="flex:1;height:100%;padding:10px 16px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;overflow:hidden">
-          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#888;white-space:nowrap">${tp}</div>
-          <div style="font-size:8px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px">${vn}</div>
-        </div>
-        <div style="flex-shrink:0;overflow:hidden">
-          <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:nowrap;flex-shrink:0;overflow:hidden;align-items:center">
-          <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;text-transform:uppercase">${dt}</span></div>
-          <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;text-transform:uppercase">Gate ${gate}</span></div>
-          <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;text-transform:uppercase">${pr}</span></div>
-        </div>
-        <div style="display:flex;gap:10px;flex-shrink:0;overflow:hidden">
-          <div style="overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:9px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px">${st}</div></div>
-          <div style="overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Ticket No.</div><div style="font-size:9px;font-weight:700;color:#555;white-space:nowrap;font-family:'Courier New',monospace">${sn}</div></div>
-        </div>
-      </div>
-      <div style="width:90px;height:100%;background:#f0ece4;border-left:2px dashed #999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2px;overflow:hidden">
-          <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:18px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/).pop()||'GA'}</div></div>
-          <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Row</div><div style="font-size:18px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/)[0]||'GA'}</div></div>
-        </div>
-        <div style="writing-mode:vertical-rl;font-size:6px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;max-height:50px">TICKET NUMBER:</div>
-        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#111', true)}</div>
-        <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:18px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1">${gate}</div></div>
-      </div>
-    </div></div>`;
+    </div>`;
   }
 
-  /* ══════════════════════════════════════════
-     DEFAULT — classic / sport — ALL fields shown
-  ══════════════════════════════════════════ */
+  /* ══ DEFAULT: classic / sport ══ */
   const isLight = s !== 'sport';
   const bg2 = isLight ? 'linear-gradient(160deg,#F0E8D0,#DCCFA8)' : 'linear-gradient(160deg,#0a1828,#0d1f3c)';
   const bc  = isLight ? '#C8B078' : '#8B1A1A';
@@ -1951,30 +1921,33 @@ function buildTicketHTML(data) {
   const pc  = isLight ? '#8B1A1A' : '#e8a820';
   const sc2 = isLight ? 'rgba(180,150,80,0.2)' : 'rgba(139,26,26,0.15)';
   const bar = isLight ? '#2C1A0E' : '#c8a878';
-  const topBar2 = isLight ? `linear-gradient(90deg,${pc},#C4862A)` : `linear-gradient(90deg,${pc},#c84020)`;
-  const logoImg2 = logo && pl==='left' ? `<img src="${logo}" style="width:34px;height:34px;object-fit:contain;flex-shrink:0;display:inline-block;margin-right:6px" alt="">` : '';
+  const tp2 = isLight ? `linear-gradient(90deg,${pc},#C4862A)` : `linear-gradient(90deg,${pc},#c84020)`;
+  const logoImg2 = logo && pl==='left' ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;display:inline-block;margin-right:6px" alt="">` : '';
 
-  return `<div style="${OUTER}"><div style="${FLEX};background:${bg2};border:1px solid ${bc}">
-    <div style="flex:1;height:100%;padding:12px 16px;border-right:2px dashed ${bc};display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative;box-sizing:border-box">
-      <div style="height:3px;background:${topBar2};position:absolute;top:0;left:0;right:0;z-index:1"></div>
-      <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};border-bottom:1px solid ${bc};padding-bottom:3px;margin-top:3px;display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
-        <span style="white-space:nowrap">${tp}</span><span style="white-space:nowrap">Gate ${gate}</span><span style="white-space:nowrap">No.${sn}</span>
+  return `<div style="${OUTER}">
+    <div style="display:flex;width:100%;height:100%;background:${bg2};border:1px solid ${bc};overflow:hidden">
+      <div style="flex:1;display:flex;flex-direction:column;padding:12px 16px;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+        <div style="height:3px;background:${tp2};position:absolute;top:0;left:0;right:0"></div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid ${bc};padding-bottom:3px;flex-shrink:0;overflow:hidden;margin-top:2px">
+          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">${tp}</span>
+          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">Gate ${gate} · No.${sn}</span>
+        </div>
+        <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0">${logoImg2}<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
+        <div style="font-size:9px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted ${bc};padding-top:5px;flex-shrink:0">
+          <div style="border-right:1px solid ${bc};padding-right:8px;overflow:hidden">${dc('Date', dt, lc, tc, '100px')}</div>
+          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Seat', st, lc, tc, '80px')}</div>
+          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Gate', gate, lc, tc, '40px')}</div>
+          <div style="padding-left:8px;overflow:hidden">${dc('Price', pr, pc, pc, '70px')}</div>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0">${logoImg2}<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
-      <div style="font-size:9px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted ${bc};padding-top:5px;flex-shrink:0">
-        <div style="border-right:1px solid ${bc};padding-right:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Date</div><div style="font-size:9px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
-        <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Seat</div><div style="font-size:9px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
-        <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Gate</div><div style="font-size:9px;font-weight:700;color:${tc};white-space:nowrap">${gate}</div></div>
-        <div style="padding-left:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${pc};text-transform:uppercase">Price</div><div style="font-family:'Playfair Display',serif;font-size:11px;font-weight:900;color:${pc};white-space:nowrap">${pr}</div></div>
+      <div style="width:64px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${sc2};padding:10px 7px;overflow:hidden;box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:90px;white-space:nowrap">${nm.substring(0,10)}</div>
+        <div style="font-size:7px;color:${lc};font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
+        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(bar, true)}</div>
       </div>
     </div>
-    <div style="width:64px;height:100%;background:${sc2};padding:10px 7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box">
-      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:90px;white-space:nowrap">${sn8}</div>
-      <div style="font-size:7px;color:${lc};letter-spacing:1px;font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
-      <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(bar, true)}</div>
-    </div>
-  </div></div>`;
+  </div>`;
 }
 
 function buildCollectionEntryHTML(item) {
