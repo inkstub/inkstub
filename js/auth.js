@@ -22,12 +22,13 @@ function initAuth(onUserChange) {
     onUserChange(currentUser);
 
     // Listen for auth changes
-    _supabase.auth.onAuthStateChange((_event, session) => {
+    _supabase.auth.onAuthStateChange((event, session) => {
       currentUser = session?.user || null;
-      onUserChange(currentUser);
-      // Close modal if open
+      // Close modal on sign in
       const modal = document.getElementById('_authModal');
       if (modal && currentUser) modal.remove();
+      // Always notify - covers SIGNED_IN, SIGNED_OUT, TOKEN_REFRESHED
+      onUserChange(currentUser);
     });
   };
   script.onerror = function() {
