@@ -86,7 +86,10 @@ function initAuth(onUserChange) {
   script.onload = function() {
     clerkInstance = new window.Clerk(CLERK_KEY);
     console.log('Clerk script loaded, initializing...');
-    clerkInstance.load().then(function() {
+    clerkInstance.load({
+      routerPush: function(to) { window.location.href = to; },
+      routerReplace: function(to) { window.location.replace(to); }
+    }).then(function() {
       console.log('Clerk ready, user:', clerkInstance.user ? clerkInstance.user.id : 'none');
       currentUser = clerkInstance.user || null;
       onUserChange(currentUser);
@@ -111,7 +114,7 @@ function openSignIn() {
     clerkInstance.openSignIn();
   } else {
     // Fallback: redirect to Clerk hosted sign-in page
-    window.location.href = 'https://accounts.inkstub.com/sign-in';
+    window.location.href = 'https://funky-caribou-67.clerk.accounts.dev/sign-in?redirect_url=' + encodeURIComponent(window.location.href);
   }
 }
 
@@ -120,7 +123,7 @@ function openSignUp() {
     clerkInstance.openSignUp();
   } else {
     // Fallback: redirect to Clerk hosted sign-up page
-    window.location.href = 'https://accounts.inkstub.com/sign-up';
+    window.location.href = 'https://funky-caribou-67.clerk.accounts.dev/sign-up?redirect_url=' + encodeURIComponent(window.location.href);
   }
 }
 
