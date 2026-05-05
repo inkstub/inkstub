@@ -86,7 +86,10 @@ function initAuth(onUserChange) {
   script.onload = function() {
     clerkInstance = new window.Clerk(CLERK_KEY);
     console.log('Clerk script loaded, initializing...');
-    clerkInstance.load().then(function() {
+    clerkInstance.load({
+      routerPush: function(to) { window.location.href = to; },
+      routerReplace: function(to) { window.location.replace(to); }
+    }).then(function() {
       console.log('Clerk ready, user:', clerkInstance.user ? clerkInstance.user.id : 'none');
       currentUser = clerkInstance.user || null;
       onUserChange(currentUser);
