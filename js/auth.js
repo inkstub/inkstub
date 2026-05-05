@@ -86,7 +86,12 @@ function initAuth(onUserChange) {
   script.onload = function() {
     clerkInstance = new window.Clerk(CLERK_KEY);
     console.log('Clerk script loaded, initializing...');
-    clerkInstance.load().then(function() {
+    clerkInstance.load({
+      afterSignInUrl: 'https://inkstub.com',
+      afterSignUpUrl: 'https://inkstub.com',
+      signInUrl: 'https://accounts.inkstub.com/sign-in',
+      signUpUrl: 'https://accounts.inkstub.com/sign-up',
+    }).then(function() {
       console.log('Clerk ready, user:', clerkInstance.user ? clerkInstance.user.id : 'none');
       currentUser = clerkInstance.user || null;
       onUserChange(currentUser);
@@ -108,20 +113,34 @@ function initAuth(onUserChange) {
 
 function openSignIn() {
   if (clerkInstance) {
-    clerkInstance.openSignIn();
+    clerkInstance.openSignIn({ afterSignInUrl: window.location.href });
   } else {
-    // Fallback: redirect to Clerk hosted sign-in page
-    window.location.href = 'https://accounts.inkstub.com/sign-in';
+    showAuthModal('signin');
   }
 }
 
 function openSignUp() {
   if (clerkInstance) {
-    clerkInstance.openSignUp();
+    clerkInstance.openSignUp({ afterSignUpUrl: window.location.href });
   } else {
-    // Fallback: redirect to Clerk hosted sign-up page
-    window.location.href = 'https://accounts.inkstub.com/sign-up';
+    showAuthModal('signup');
   }
+}
+
+// Fallback simple auth modal if Clerk hasn't loaded
+function showAuthModal(mode) {
+  var existing = document.getElementById('_clerkFallbackModal');
+  if (existing) existing.remove();
+  
+  var modal = document.createElement('div');
+  modal.id = '_clerkFallbackModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML = '<div style="background:#161616;border:1px solid #333;padding:32px;max-width:400px;width:100%;font-family:DM Sans,sans-serif">' +
+    '<div style="font-size:22px;font-weight:700;color:#f0ede8;margin-bottom:8px">' + (mode === 'signin' ? 'Sign In' : 'Create Account') + '</div>' +
+    '<div style="font-size:13px;color:#888;margin-bottom:24px">Auth is still loading. Please wait a moment and try again, or refresh the page.</div>' +
+    '<button onclick="document.getElementById('_clerkFallbackModal').remove()" style="width:100%;padding:12px;background:#C4862A;border:none;color:#0a0a0a;font-size:14px;font-weight:600;cursor:pointer">Close & Try Again</button>' +
+    '</div>';
+  document.body.appendChild(modal);
 }
 
 function signOut() {
