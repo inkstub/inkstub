@@ -1556,7 +1556,7 @@ nav {
           </div>
           <div class="field">
             <label class="field-label" for="ticketPrice">Original Ticket Price</label>
-            <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. $85.00">
+            <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00 (no $ needed)">
           </div>
         </div>
       </div>
@@ -1795,7 +1795,8 @@ function buildTicketHTML(data) {
   const vn = (venue||'').substring(0,36);
   const dt = date||'';
   const st = seat||'';
-  const pr = (price && price !== '$0.00' && price !== '$0' && price.trim() !== '') ? price : '';
+  const rawPrice = (price||'').trim().replace(/^\$+/, '');
+  const pr = (rawPrice && rawPrice !== '0' && rawPrice !== '0.00') ? '$' + rawPrice : '';
   const tp = (type||'Event');
 
   // Detail line
