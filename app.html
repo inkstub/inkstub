@@ -1793,359 +1793,306 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 
 function buildBarcode(color) {
   const c = color || '#333';
-  const heights = [20,13,22,11,17,24,15,19,11,23,15,20,13,24,17,13,21,11,18,14,20];
-  return heights.map(h => `<span style="display:inline-block;width:2px;height:${h}px;background:${c};border-radius:1px;margin-right:1.5px"></span>`).join('');
+  const h = [16,11,18,9,14,20,12,16,9,19,12,16,11,20,14,11,17];
+  return h.map(v => `<span style="display:inline-block;width:2px;height:${v}px;background:${c};margin-right:1.5px;border-radius:1px;flex-shrink:0"></span>`).join('');
 }
 
-function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
 function buildTicketHTML(data) {
-  const { name, type, venue, date, seat, price, style, logo, logoPlacement } = data;
-  const safeStyle = style || 'classic';
+  const {name,type,venue,date,seat,price,style,logo,logoPlacement} = data;
+  const s = style || 'classic';
   const sn = String(rnd(10000,99999));
-  const gate = ['A','B','C','D','E','F','G'][rnd(0,6)];
-  const shortName = name.length > 10 ? name.substring(0,8)+'…' : name;
+  const gate = ['A','B','C','D','E','F'][rnd(0,5)];
   const pl = logoPlacement || 'left';
-  const logoImg = logo ? `<img src="${logo}" style="width:38px;height:38px;object-fit:contain;flex-shrink:0;display:block" alt="">` : '';
-  const wm = (logo && pl==='watermark') ? `<img src="${logo}" style="position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);width:120px;height:120px;object-fit:contain;opacity:0.07;pointer-events:none;z-index:0" alt="">` : '';
-  const priceParts = (price||'$0.00').replace('$','').split('.');
-  const priceDollars = '$'+priceParts[0];
+  const logoImg = logo ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;display:block" alt="">` : '';
+  const wm = (logo && pl==='watermark') ? `<img src="${logo}" style="position:absolute;top:50%;left:42%;transform:translate(-50%,-50%);width:90px;height:90px;object-fit:contain;opacity:0.07;pointer-events:none;z-index:0" alt="">` : '';
 
-  /* ══ 1. RAILROAD ══ */
-  if (safeStyle === 'railroad') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="display:flex;background:#f5f0e0;border:1px solid #8B6000;font-family:'Special Elite',cursive;overflow:hidden">
+  // Fixed dimensions for all tickets
+  const W = '100%';
+  const H = '108px';
+  const STUB_W = '58px';
+  const SIDE_W = '44px';
+
+  // Truncate all text fields to prevent overflow
+  const nm = name.length > 28 ? name.substring(0,26)+'…' : name;
+  const vn = venue.length > 32 ? venue.substring(0,30)+'…' : venue;
+  const dt = (date||'TBD').length > 16 ? (date||'TBD').substring(0,14)+'…' : (date||'TBD');
+  const st = (seat||'GA').length > 14 ? (seat||'GA').substring(0,12)+'…' : (seat||'GA');
+  const pr = price||'$0.00';
+  const sn8 = nm.length > 8 ? nm.substring(0,7)+'…' : nm;
+
+  const nameRow = logo && pl==='left'
+    ? `<div style="display:flex;align-items:center;gap:6px;min-width:0;margin-bottom:3px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:${'{tc}'};text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>`
+    : `<div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;text-transform:uppercase;line-height:1.1;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:${'{tc}'}">${nm}</div>`;
+
+  const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,0.5)`;
+  const FLEX = `display:flex;width:100%;height:100%;overflow:hidden`;
+
+  /* ── SHARED stub column builder ── */
+  function stub(bg, border, textColor, barColor) {
+    return `<div style="width:${STUB_W};height:100%;background:${bg};border-left:${border};display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${textColor};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:60px;white-space:nowrap;text-overflow:clip">${sn8}</div>
+      <div style="font-size:7px;color:${textColor};opacity:0.6;letter-spacing:1px;font-family:'Courier New',monospace">${sn}</div>
+      <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(barColor)}</div>
+    </div>`;
+  }
+
+  /* ── SHARED main body builder ── */
+  function body(bg, topBar, typeColor, nameColor, venueColor, labelColor, valColor, priceColor, borderRight) {
+    return `<div style="flex:1;height:100%;background:${bg};border-right:${borderRight};padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box;position:relative">
       ${wm}
-      <div style="width:52px;background:#4a2800;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:10px 4px;flex-shrink:0">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);color:#f0d090;font-size:8px;letter-spacing:3px;text-transform:uppercase">${type}</div>
-        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:26px;font-weight:900;line-height:1;text-align:center">${sn.slice(0,2)}</div>
-        <div style="color:#c8a060;font-size:7px;letter-spacing:2px;writing-mode:vertical-rl;transform:rotate(180deg)">ADMIT ONE</div>
+      <div style="height:3px;background:${topBar};margin:-8px -12px 6px;flex-shrink:0"></div>
+      <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:${typeColor};margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${type} · Gate ${gate} · No.${sn}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:${nameColor};text-transform:uppercase;line-height:1.1;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;display:flex;align-items:center;gap:6px">${logo&&pl==='left'?logoImg:''}${nm}</div>
+      <div style="font-size:8px;color:${venueColor};letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;flex-shrink:0">${vn}</div>
+      <div style="display:flex;gap:0;border-top:1px solid rgba(128,128,128,0.2);padding-top:5px;flex-shrink:0">
+        <div style="flex:1;border-right:1px solid rgba(128,128,128,0.15);padding-right:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${labelColor};text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:700;color:${valColor};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+        <div style="flex:1;border-right:1px solid rgba(128,128,128,0.15);padding:0 6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${labelColor};text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:700;color:${valColor};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+        <div style="flex:1;padding-left:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${priceColor};text-transform:uppercase">Price</div><div style="font-family:'Playfair Display',serif;font-size:12px;font-weight:900;color:${priceColor};white-space:nowrap">${pr}</div></div>
       </div>
-      <div style="flex:1;padding:10px 12px;border-left:4px double #8B6000;position:relative">
-        <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:#6B4000;border-bottom:1px solid #c8a050;padding-bottom:3px;margin-bottom:4px;display:flex;justify-content:space-between">
-          <span>Gate ${gate}</span><span>Section ${seat||'GA'}</span><span>Row A</span>
-        </div>
-        ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#1a0a00;text-transform:uppercase;line-height:1.1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#1a0a00;text-transform:uppercase;line-height:1.1;margin-bottom:3px">${name}</div>`}
-        <div style="font-size:8px;color:#5a3a00;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">${venue}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border-top:1px solid #c8a050;padding-top:5px">
-          <div style="border-right:1px solid #c8a050;padding-right:8px"><div style="font-size:6px;letter-spacing:2px;color:#8B6000;text-transform:uppercase">Date</div><div style="font-size:11px;font-weight:700;color:#1a0a00;font-family:'Playfair Display',serif">${date||'TBD'}</div></div>
-          <div style="padding:0 8px;border-right:1px solid #c8a050"><div style="font-size:6px;letter-spacing:2px;color:#8B6000;text-transform:uppercase">Seat</div><div style="font-size:11px;font-weight:700;color:#1a0a00;font-family:'Playfair Display',serif">${seat||'GA'}</div></div>
-          <div style="padding:0 8px;border-right:1px solid #c8a050"><div style="font-size:6px;letter-spacing:2px;color:#8B6000;text-transform:uppercase">Gate</div><div style="font-size:11px;font-weight:700;color:#1a0a00;font-family:'Playfair Display',serif">${gate}</div></div>
-          <div style="padding-left:8px"><div style="font-size:6px;letter-spacing:2px;color:#8B6000;text-transform:uppercase">Price</div><div style="font-size:11px;font-weight:700;color:#4a2800;font-family:'Playfair Display',serif">${price||'$0.00'}</div></div>
-        </div>
+    </div>`;
+  }
+
+  if (s === 'railroad') {
+    return `<div style="${OUTER}"><div style="${FLEX};background:#f5f0e0;border:1px solid #8B6000">
+      <div style="width:${SIDE_W};height:100%;background:#4a2800;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 4px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);color:#f0d090;font-size:7px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap">${type}</div>
+        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;line-height:1">${sn.slice(0,2)}</div>
+        <div style="color:#c8a060;font-size:7px;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap">ADMIT ONE</div>
       </div>
-      <div style="width:66px;background:#f0e8c0;border-left:2px dashed #a08040;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 6px;flex-shrink:0;overflow:hidden;max-height:110px;overflow:hidden;max-height:110px">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:#1a0a00;text-transform:uppercase;letter-spacing:1px">${shortName}</div>
-        <div style="background:#4a2800;color:#f0d090;padding:3px 6px;font-family:'Playfair Display',serif;font-size:16px;font-weight:900;text-align:center;width:100%">${sn.slice(-2)}</div>
-        <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#4a2800')}</div>
-      </div>
+      ${body('#f5f0e0','linear-gradient(90deg,#8B6000,#c8a050)','#6B4000','#1a0a00','#5a3a00','#8B6000','#1a0a00','#4a2800','4px double #8B6000')}
+      ${stub('#f0e8c0','2px dashed #a08040','#1a0a00','#4a2800')}
     </div></div>`;
   }
 
-  /* ══ 2. CARNIVAL ══ */
-  if (safeStyle === 'carnival') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="background:#ffee00;border:3px solid #cc0000;font-family:'Special Elite',cursive;overflow:hidden;position:relative">
-      <div style="height:9px;background:repeating-linear-gradient(90deg,#cc0000 0,#cc0000 14px,#ffee00 14px,#ffee00 28px)"></div>
-      <div style="display:flex">
-        <div style="flex:1;padding:8px 14px 8px">
-          <div style="font-size:7px;letter-spacing:5px;text-transform:uppercase;color:#660000;margin-bottom:2px">${type} · Admit One · Gate ${gate}</div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">${logoImg}<div style="font-size:20px;font-weight:900;color:#cc0000;text-transform:uppercase;font-family:'Playfair Display',serif;letter-spacing:-0.5px;line-height:1">${name}</div></div>`:`<div style="font-size:20px;font-weight:900;color:#cc0000;text-transform:uppercase;font-family:'Playfair Display',serif;letter-spacing:-0.5px;line-height:1;margin-bottom:2px">${name}</div>`}
-          <div style="font-size:8px;color:#660000;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">${venue}</div>
-          <div style="display:flex;gap:10px;background:#cc0000;padding:4px 8px;margin:0 -14px 0 -14px">
-            <span style="font-size:8px;color:#ffee00;letter-spacing:1px"><b>DATE:</b> ${date||'TBD'}</span>
-            <span style="font-size:8px;color:#ffee00;letter-spacing:1px"><b>SEAT:</b> ${seat||'GA'}</span>
-            <span style="font-size:8px;color:#ffee00;letter-spacing:1px;margin-left:auto"><b>PRICE:</b> ${price||'$0.00'}</span>
+  if (s === 'carnival') {
+    return `<div style="${OUTER}"><div style="display:flex;flex-direction:column;width:100%;height:100%;background:#ffee00;border:3px solid #cc0000;overflow:hidden;box-sizing:border-box">
+      <div style="height:8px;background:repeating-linear-gradient(90deg,#cc0000 0,#cc0000 12px,#ffee00 12px,#ffee00 24px);flex-shrink:0"></div>
+      <div style="display:flex;flex:1;min-height:0;overflow:hidden">
+        <div style="flex:1;padding:6px 12px;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between">
+          <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:#660000;white-space:nowrap;overflow:hidden;flex-shrink:0">${type} · Gate ${gate} · Admit One</div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#cc0000;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+          <div style="font-size:8px;color:#660000;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="background:#cc0000;padding:3px 8px;margin:0 -12px;display:flex;gap:12px;flex-shrink:0;overflow:hidden">
+            <span style="font-size:8px;color:#ffee00;white-space:nowrap"><b>DATE:</b> ${dt}</span>
+            <span style="font-size:8px;color:#ffee00;white-space:nowrap"><b>SEAT:</b> ${st}</span>
+            <span style="font-size:8px;color:#ffee00;margin-left:auto;white-space:nowrap"><b>${pr}</b></span>
           </div>
         </div>
-        <div style="width:60px;border-left:3px dashed #cc0000;background:#cc0000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 4px;flex-shrink:0;overflow:hidden;max-height:110px">
-          <div style="font-size:7px;color:#ffee00;letter-spacing:2px;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700">${shortName}</div>
-          <div style="font-size:22px;font-weight:900;color:#ffee00;font-family:'Playfair Display',serif">${priceDollars}</div>
-          <div style="font-size:7px;color:#ffaa00;letter-spacing:1px">No.${sn}</div>
+        <div style="width:${STUB_W};background:#cc0000;border-left:2px dashed #ff8888;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 4px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;color:#ffee00;font-weight:700;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;max-height:52px;overflow:hidden">${sn8}</div>
+          <div style="font-size:16px;font-weight:900;color:#ffee00;font-family:'Playfair Display',serif">${pr.replace('$','$')}</div>
+          <div style="font-size:7px;color:#ffaa00">${sn}</div>
         </div>
       </div>
-      <div style="height:9px;background:repeating-linear-gradient(90deg,#cc0000 0,#cc0000 14px,#ffee00 14px,#ffee00 28px)"></div>
+      <div style="height:8px;background:repeating-linear-gradient(90deg,#cc0000 0,#cc0000 12px,#ffee00 12px,#ffee00 24px);flex-shrink:0"></div>
     </div></div>`;
   }
 
-  /* ══ 3. FIGHT NIGHT ══ */
-  if (safeStyle === 'fightnight') {
-    const parts = name.split(' vs ');
-    const f1 = parts[0]||name; const f2 = parts[1]||'';
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6)">
-    <div style="background:#0a0a0a;border:2px solid #c8a000;font-family:'Special Elite',cursive;overflow:hidden">
-      <div style="height:3px;background:linear-gradient(90deg,#c8a000,#f0d040,#c8a000)"></div>
-      <div style="display:flex">
-        <div style="width:10px;background:#c8a000;flex-shrink:0"></div>
-        <div style="flex:1;padding:8px 12px">
-          <div style="font-size:7px;letter-spacing:5px;text-transform:uppercase;color:#c8a000;margin-bottom:5px">${type} · ${venue}</div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1">${name}</div></div>`
-          :f2?`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-            <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#fff;text-transform:uppercase">${f1}</span>
-            <span style="width:24px;height:24px;border:1.5px solid #c8a000;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:#c8a000;font-weight:700;flex-shrink:0">vs</span>
-            <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#fff;text-transform:uppercase">${f2}</span>
-          </div>`:`<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;margin-bottom:5px">${name}</div>`}
-          <div style="display:flex;gap:0;border-top:1px solid rgba(200,160,0,0.25);padding-top:6px">
-            <div style="flex:1;border-right:1px solid rgba(200,160,0,0.2);padding-right:8px"><div style="font-size:6px;letter-spacing:2px;color:#806000;text-transform:uppercase">Date</div><div style="font-size:11px;color:#e8d080;font-weight:700">${date||'TBD'}</div></div>
-            <div style="flex:1;border-right:1px solid rgba(200,160,0,0.2);padding:0 8px"><div style="font-size:6px;letter-spacing:2px;color:#806000;text-transform:uppercase">Seat</div><div style="font-size:11px;color:#e8d080;font-weight:700">${seat||'GA'}</div></div>
-            <div style="flex:1;border-right:1px solid rgba(200,160,0,0.2);padding:0 8px"><div style="font-size:6px;letter-spacing:2px;color:#806000;text-transform:uppercase">Gate</div><div style="font-size:11px;color:#e8d080;font-weight:700">${gate}</div></div>
-            <div style="flex:1;padding-left:8px"><div style="font-size:6px;letter-spacing:2px;color:#c8a000;text-transform:uppercase">Price</div><div style="font-size:11px;color:#c8a000;font-weight:700;font-family:'Playfair Display',serif">${price||'$0.00'}</div></div>
+  if (s === 'fightnight') {
+    return `<div style="${OUTER}"><div style="display:flex;flex-direction:column;width:100%;height:100%;background:#0a0a0a;border:2px solid #c8a000;overflow:hidden;box-sizing:border-box">
+      <div style="height:3px;background:linear-gradient(90deg,#c8a000,#f0d040,#c8a000);flex-shrink:0"></div>
+      <div style="display:flex;flex:1;min-height:0">
+        <div style="width:8px;background:#c8a000;flex-shrink:0"></div>
+        <div style="flex:1;padding:6px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+          <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:#c8a000;white-space:nowrap;overflow:hidden;flex-shrink:0">${type} · ${vn}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+          <div style="display:flex;gap:0;border-top:1px solid rgba(200,160,0,0.2);padding-top:4px;flex-shrink:0">
+            <div style="flex:1;border-right:1px solid rgba(200,160,0,0.15);padding-right:6px;overflow:hidden"><div style="font-size:6px;color:#806000;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:10px;color:#e8d080;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="flex:1;border-right:1px solid rgba(200,160,0,0.15);padding:0 6px;overflow:hidden"><div style="font-size:6px;color:#806000;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:10px;color:#e8d080;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="flex:1;padding-left:6px;overflow:hidden"><div style="font-size:6px;color:#c8a000;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:12px;color:#c8a000;font-weight:700;font-family:'Playfair Display',serif">${pr}</div></div>
           </div>
         </div>
-        <div style="width:10px;background:#c8a000;flex-shrink:0"></div>
-        <div style="width:60px;background:#111;border-left:2px dashed #c8a000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:8px 6px;flex-shrink:0;overflow:hidden;max-height:110px">
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:#e8d080;text-transform:uppercase">${shortName}</div>
-          <div style="font-size:18px;font-weight:700;color:#c8a000;font-family:'Playfair Display',serif">${priceDollars}</div>
-          <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#c8a000')}</div>
-        </div>
+        <div style="width:8px;background:#c8a000;flex-shrink:0"></div>
+        ${stub('#111','2px dashed #c8a000','#e8d080','#c8a000')}
       </div>
-      <div style="height:3px;background:linear-gradient(90deg,#c8a000,#f0d040,#c8a000)"></div>
+      <div style="height:3px;background:linear-gradient(90deg,#c8a000,#f0d040,#c8a000);flex-shrink:0"></div>
     </div></div>`;
   }
 
-  /* ══ 4. CIRCUS/VAUDEVILLE ══ */
-  if (safeStyle === 'circus') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="background:#fdf8ef;border:2px solid #8B1A00;font-family:'Special Elite',cursive;overflow:hidden;position:relative">
-      <div style="position:absolute;top:5px;left:5px;right:5px;bottom:5px;border:1px dashed rgba(139,26,0,0.3);pointer-events:none"></div>
-      <div style="display:flex">
-        <div style="width:54px;background:#8B1A00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:10px 4px;flex-shrink:0">
-          <div style="color:#ffd0c0;font-size:16px;line-height:1">✦</div>
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-size:8px;letter-spacing:3px;text-transform:uppercase;font-weight:700">${type}</div>
-          <div style="color:#ffd0c0;font-size:16px;line-height:1">✦</div>
-        </div>
-        <div style="flex:1;padding:10px 12px;text-align:center;position:relative">
-          <div style="font-size:7px;letter-spacing:5px;text-transform:uppercase;color:#8B1A00;margin-bottom:3px">✦ Presents ✦</div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:3px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1a0000;text-transform:uppercase;letter-spacing:1px;line-height:1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#1a0000;text-transform:uppercase;letter-spacing:1px;line-height:1;margin-bottom:3px">${name}</div>`}
-          <div style="font-size:8px;color:#6B3020;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px">${venue}</div>
-          <div style="display:flex;justify-content:center;gap:12px;border-top:1px dotted #c8a0a0;padding-top:5px;margin-top:2px">
-            <div><div style="font-size:6px;letter-spacing:2px;color:#8B1A00;text-transform:uppercase">Date</div><div style="font-size:11px;color:#1a0000;font-weight:700">${date||'TBD'}</div></div>
-            <div style="width:1px;background:rgba(139,26,0,0.2)"></div>
-            <div><div style="font-size:6px;letter-spacing:2px;color:#8B1A00;text-transform:uppercase">Seat</div><div style="font-size:11px;color:#1a0000;font-weight:700">${seat||'GA'}</div></div>
-            <div style="width:1px;background:rgba(139,26,0,0.2)"></div>
-            <div><div style="font-size:6px;letter-spacing:2px;color:#8B1A00;text-transform:uppercase">Gate</div><div style="font-size:11px;color:#1a0000;font-weight:700">${gate}</div></div>
-            <div style="width:1px;background:rgba(139,26,0,0.2)"></div>
-            <div><div style="font-size:6px;letter-spacing:2px;color:#8B1A00;text-transform:uppercase">Price</div><div style="font-size:11px;color:#8B1A00;font-weight:700;font-family:'Playfair Display',serif">${price||'$0.00'}</div></div>
-          </div>
-        </div>
-        <div style="width:54px;background:#8B1A00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:10px 4px;border-left:2px dashed #ffd0c0;flex-shrink:0">
-          <div style="color:#ffd0c0;font-size:16px;line-height:1">✦</div>
-          <div style="writing-mode:vertical-rl;transform:rotate(0deg);font-family:'Playfair Display',serif;font-size:9px;color:#fff;text-transform:uppercase;font-weight:900">${shortName}</div>
-          <div style="font-size:10px;color:#ffd0c0;font-weight:700">${sn.slice(-3)}</div>
+  if (s === 'circus') {
+    return `<div style="${OUTER}"><div style="${FLEX};background:#fdf8ef;border:2px solid #8B1A00">
+      <div style="width:${SIDE_W};height:100%;background:#8B1A00;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 4px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="color:#ffd0c0;font-size:14px">✦</div>
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font-size:7px;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-height:50px">${type}</div>
+        <div style="color:#ffd0c0;font-size:14px">✦</div>
+      </div>
+      <div style="flex:1;height:100%;padding:8px 10px;text-align:center;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+        <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:#8B1A00;flex-shrink:0">✦ Presents ✦</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#1a0000;text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+        <div style="font-size:8px;color:#6B3020;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+        <div style="display:flex;justify-content:center;gap:8px;border-top:1px dotted #c8a0a0;padding-top:4px;flex-shrink:0">
+          <div style="overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8B1A00;text-transform:uppercase">Date</div><div style="font-size:9px;color:#1a0000;font-weight:700;white-space:nowrap">${dt}</div></div>
+          <div style="overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8B1A00;text-transform:uppercase">Seat</div><div style="font-size:9px;color:#1a0000;font-weight:700;white-space:nowrap">${st}</div></div>
+          <div style="overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8B1A00;text-transform:uppercase">Gate</div><div style="font-size:9px;color:#1a0000;font-weight:700;white-space:nowrap">${gate}</div></div>
+          <div style="overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8B1A00;text-transform:uppercase">Price</div><div style="font-size:9px;color:#8B1A00;font-weight:700;font-family:'Playfair Display',serif;white-space:nowrap">${pr}</div></div>
         </div>
       </div>
+      ${stub('#fdf0e0','2px dashed #8B1A00','#1a0000','#8B1A00')}
     </div></div>`;
   }
 
-  /* ══ 5. TELETYPE ══ */
-  if (safeStyle === 'teletype') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.7)">
-    <div style="background:#0a1a0a;border:1px solid #00aa00;font-family:'Courier New',monospace;overflow:hidden;position:relative">
-      ${wm}
-      <div style="display:flex">
-        <div style="flex:1;padding:8px 12px">
-          <div style="font-size:7px;color:#006600;letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid #003300;padding-bottom:3px;margin-bottom:5px;display:flex;justify-content:space-between">
-            <span>// TICKET //</span><span>GATE ${gate}</span><span>NO.${sn}</span>
-          </div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${logoImg}<div style="font-size:16px;font-weight:700;color:#00cc00;text-transform:uppercase;letter-spacing:1px;line-height:1">${name}</div></div>`:`<div style="font-size:16px;font-weight:700;color:#00cc00;text-transform:uppercase;letter-spacing:1px;line-height:1;margin-bottom:4px">${name}</div>`}
-          <div style="font-size:9px;color:#008800;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">&gt; ${venue}</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border-top:1px solid #003300;padding-top:5px">
-            <div style="border-right:1px solid #003300;padding-right:8px"><div style="font-size:6px;color:#006600;text-transform:uppercase;letter-spacing:1px">TYPE:</div><div style="font-size:10px;color:#00aa00">${type}</div></div>
-            <div style="padding:0 8px;border-right:1px solid #003300"><div style="font-size:6px;color:#006600;text-transform:uppercase;letter-spacing:1px">DATE:</div><div style="font-size:10px;color:#00aa00">${date||'TBD'}</div></div>
-            <div style="padding:0 8px;border-right:1px solid #003300"><div style="font-size:6px;color:#006600;text-transform:uppercase;letter-spacing:1px">SEAT:</div><div style="font-size:10px;color:#00aa00">${seat||'GA'}</div></div>
-            <div style="padding-left:8px"><div style="font-size:6px;color:#00aa00;text-transform:uppercase;letter-spacing:1px">PRICE:</div><div style="font-size:10px;color:#00cc00;font-weight:700">${price||'$0.00'}</div></div>
-          </div>
+  if (s === 'teletype') {
+    return `<div style="${OUTER}"><div style="${FLEX};background:#0a1a0a;border:1px solid #00aa00">
+      <div style="flex:1;height:100%;padding:8px 10px;font-family:'Courier New',monospace;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+        <div style="font-size:7px;color:#006600;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #003300;padding-bottom:2px;display:flex;justify-content:space-between;flex-shrink:0">
+          <span style="white-space:nowrap">// TICKET //</span><span style="white-space:nowrap">GATE ${gate}</span><span style="white-space:nowrap">NO.${sn}</span>
         </div>
-        <div style="width:8px;background:repeating-linear-gradient(180deg,#00aa00 0,#00aa00 4px,#0a1a0a 4px,#0a1a0a 8px);flex-shrink:0"></div>
-        <div style="width:60px;background:#050f05;border-left:1px solid #00aa00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:8px 6px;flex-shrink:0;overflow:hidden;max-height:110px">
-          <div style="font-size:7px;color:#008800;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:2px;text-transform:uppercase">${shortName}</div>
-          <div style="font-size:14px;color:#00cc00;font-weight:700">${priceDollars}</div>
-          <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#00aa00')}</div>
+        <div style="font-size:15px;font-weight:700;color:#00cc00;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+        <div style="font-size:8px;color:#008800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">&gt; ${vn}</div>
+        <div style="display:flex;gap:0;border-top:1px solid #003300;padding-top:4px;flex-shrink:0">
+          <div style="flex:1;border-right:1px solid #003300;padding-right:6px;overflow:hidden"><div style="font-size:6px;color:#006600;text-transform:uppercase">TYPE:</div><div style="font-size:9px;color:#00aa00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${type}</div></div>
+          <div style="flex:1;border-right:1px solid #003300;padding:0 6px;overflow:hidden"><div style="font-size:6px;color:#006600;text-transform:uppercase">DATE:</div><div style="font-size:9px;color:#00aa00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+          <div style="flex:1;border-right:1px solid #003300;padding:0 6px;overflow:hidden"><div style="font-size:6px;color:#006600;text-transform:uppercase">SEAT:</div><div style="font-size:9px;color:#00aa00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+          <div style="flex:1;padding-left:6px;overflow:hidden"><div style="font-size:6px;color:#00aa00;text-transform:uppercase">PRICE:</div><div style="font-size:10px;color:#00cc00;font-weight:700;white-space:nowrap">${pr}</div></div>
         </div>
       </div>
+      <div style="width:8px;background:repeating-linear-gradient(180deg,#00aa00 0,#00aa00 4px,#0a1a0a 4px,#0a1a0a 8px);flex-shrink:0"></div>
+      ${stub('#050f05','1px solid #00aa00','#008800','#00aa00')}
     </div></div>`;
   }
 
-  /* ══ 6. WESTERN ══ */
-  if (safeStyle === 'western') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="display:flex;background:#f0e8d0;border:2px solid #6B3000;font-family:'Special Elite',cursive;overflow:hidden">
-      ${wm}
-      <div style="width:48px;background:#6B3000;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 4px;flex-shrink:0">
-        <div style="color:#f0d060;font-size:16px;line-height:1">★</div>
-        <div style="color:#f0d060;font-family:'Playfair Display',serif;font-size:13px;font-weight:900;writing-mode:vertical-rl;transform:rotate(180deg)">${priceDollars}</div>
-        <div style="color:#f0d060;font-size:16px;line-height:1">★</div>
+  if (s === 'western') {
+    return `<div style="${OUTER}"><div style="${FLEX};background:#f0e8d0;border:2px solid #6B3000">
+      <div style="width:${SIDE_W};height:100%;background:#6B3000;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 4px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="color:#f0d060;font-size:14px">★</div>
+        <div style="color:#f0d060;font-family:'Playfair Display',serif;font-size:11px;font-weight:900;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;overflow:hidden;max-height:50px">${pr}</div>
+        <div style="color:#f0d060;font-size:14px">★</div>
       </div>
-      <div style="flex:1;padding:8px 12px;border-left:3px double #8B5000;position:relative">
-        <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:#6B3000;margin-bottom:2px">${type} · Gate ${gate}</div>
-        ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1a0800;text-transform:uppercase;line-height:1.1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#1a0800;text-transform:uppercase;line-height:1.1;margin-bottom:2px">${name}</div>`}
-        <div style="font-size:8px;color:#6B3000;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">${venue}</div>
-        <div style="display:flex;gap:10px;border-top:1px dashed #a07040;padding-top:5px">
-          <div><div style="font-size:6px;color:#8B5000;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:11px;color:#1a0800;font-weight:700;font-family:'Playfair Display',serif">${date||'TBD'}</div></div>
-          <div><div style="font-size:6px;color:#8B5000;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:11px;color:#1a0800;font-weight:700;font-family:'Playfair Display',serif">${seat||'GA'}</div></div>
-          <div style="margin-left:auto"><div style="font-size:6px;color:#8B5000;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:11px;color:#6B3000;font-weight:700;font-family:'Playfair Display',serif">${price||'$0.00'}</div></div>
-        </div>
-      </div>
-      <div style="width:56px;border-left:2px dashed #8B5000;background:#e8dcc0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:8px 6px;flex-shrink:0;overflow:hidden;max-height:110px">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:#1a0800;text-transform:uppercase">${shortName}</div>
-        <div style="font-size:7px;color:#8B5000;letter-spacing:1px">No.${sn}</div>
-        <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#6B3000')}</div>
-      </div>
+      ${body('#f0e8d0','linear-gradient(90deg,#6B3000,#a05000)','#6B3000','#1a0800','#6B3000','#8B5000','#1a0800','#6B3000','3px double #8B5000')}
+      ${stub('#e8dcc0','2px dashed #8B5000','#1a0800','#6B3000')}
     </div></div>`;
   }
 
-  /* ══ 7. ART DECO ══ */
-  if (safeStyle === 'artdeco') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6)">
-    <div style="background:#f8f4e8;border:2px solid #1a1a1a;font-family:'Special Elite',cursive;overflow:hidden;position:relative">
-      <div style="height:5px;background:repeating-linear-gradient(90deg,#1a1a1a 0,#1a1a1a 8px,#c8a800 8px,#c8a800 16px)"></div>
-      <div style="display:flex">
-        <div style="width:32px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative">
-          <div style="width:20px;height:20px;border:2px solid #c8a800;transform:rotate(45deg)"></div>
+  if (s === 'artdeco') {
+    return `<div style="${OUTER}"><div style="display:flex;flex-direction:column;width:100%;height:100%;background:#f8f4e8;border:2px solid #1a1a1a;overflow:hidden;box-sizing:border-box">
+      <div style="height:5px;background:repeating-linear-gradient(90deg,#1a1a1a 0,#1a1a1a 8px,#c8a800 8px,#c8a800 16px);flex-shrink:0"></div>
+      <div style="display:flex;flex:1;min-height:0;overflow:hidden">
+        <div style="width:28px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <div style="width:16px;height:16px;border:2px solid #c8a800;transform:rotate(45deg)"></div>
         </div>
-        <div style="flex:1;padding:8px 12px;border-left:3px solid #c8a800;border-right:3px solid #c8a800">
-          <div style="font-size:7px;letter-spacing:6px;text-transform:uppercase;color:#c8a800;margin-bottom:2px">— ${type} — Admit One —</div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#0a0a0a;text-transform:uppercase;letter-spacing:2px;line-height:1.1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#0a0a0a;text-transform:uppercase;letter-spacing:2px;line-height:1.1;margin-bottom:2px">${name}</div>`}
-          <div style="font-size:8px;color:#605030;letter-spacing:3px;text-transform:uppercase;margin-bottom:5px">${venue}</div>
-          <div style="display:flex;gap:0;border-top:1px solid #c8a800;padding-top:5px">
-            <div style="flex:1;border-right:1px solid rgba(200,168,0,0.3);padding-right:8px"><div style="font-size:6px;letter-spacing:2px;color:#c8a800;text-transform:uppercase">Date</div><div style="font-size:11px;font-weight:700;color:#0a0a0a;font-family:'Playfair Display',serif">${date||'TBD'}</div></div>
-            <div style="flex:1;border-right:1px solid rgba(200,168,0,0.3);padding:0 8px"><div style="font-size:6px;letter-spacing:2px;color:#c8a800;text-transform:uppercase">Seat</div><div style="font-size:11px;font-weight:700;color:#0a0a0a;font-family:'Playfair Display',serif">${seat||'GA'}</div></div>
-            <div style="flex:1;border-right:1px solid rgba(200,168,0,0.3);padding:0 8px"><div style="font-size:6px;letter-spacing:2px;color:#c8a800;text-transform:uppercase">Gate</div><div style="font-size:11px;font-weight:700;color:#0a0a0a;font-family:'Playfair Display',serif">${gate}</div></div>
-            <div style="flex:1;padding-left:8px"><div style="font-size:6px;letter-spacing:2px;color:#c8a800;text-transform:uppercase">Price</div><div style="font-size:11px;font-weight:700;color:#1a1a1a;font-family:'Playfair Display',serif">${price||'$0.00'}</div></div>
+        <div style="flex:1;padding:6px 10px;border-left:3px solid #c8a800;border-right:3px solid #c8a800;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+          <div style="font-size:7px;letter-spacing:5px;text-transform:uppercase;color:#c8a800;flex-shrink:0;white-space:nowrap;overflow:hidden">— ${type} — Admit One —</div>
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#0a0a0a;text-transform:uppercase;letter-spacing:1px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+          <div style="font-size:8px;color:#605030;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="display:flex;gap:0;border-top:1px solid #c8a800;padding-top:4px;flex-shrink:0">
+            <div style="flex:1;border-right:1px solid rgba(200,168,0,0.3);padding-right:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#c8a800;text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:700;color:#0a0a0a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="flex:1;border-right:1px solid rgba(200,168,0,0.3);padding:0 6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#c8a800;text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:700;color:#0a0a0a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="flex:1;padding-left:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#c8a800;text-transform:uppercase">Price</div><div style="font-size:12px;font-weight:700;color:#1a1a1a;font-family:'Playfair Display',serif;white-space:nowrap">${pr}</div></div>
           </div>
         </div>
-        <div style="width:32px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative">
-          <div style="width:20px;height:20px;border:2px solid #c8a800;transform:rotate(45deg)"></div>
+        <div style="width:28px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <div style="width:16px;height:16px;border:2px solid #c8a800;transform:rotate(45deg)"></div>
         </div>
       </div>
-      <div style="height:5px;background:repeating-linear-gradient(90deg,#c8a800 0,#c8a800 8px,#1a1a1a 8px,#1a1a1a 16px)"></div>
+      <div style="height:5px;background:repeating-linear-gradient(90deg,#c8a800 0,#c8a800 8px,#1a1a1a 8px,#1a1a1a 16px);flex-shrink:0"></div>
     </div></div>`;
   }
 
-  /* ══ 8. CONSTRUCTIVIST ══ */
-  if (safeStyle === 'constructivist') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5);height:auto">
-    <div style="background:#e8e0d0;border:none;font-family:'Special Elite',cursive;overflow:hidden;position:relative;height:fit-content;display:block;display:flex;align-items:flex-start">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;width:52%;background:#cc1a00;clip-path:polygon(0 0,88% 0,68% 100%,0 100%)"></div>
-      <div style="display:flex;position:relative;z-index:1">
-        <div style="width:52%;padding:8px 12px;display:flex;flex-direction:column;justify-content:flex-start;gap:6px">
-          <div>
-            <div style="font-size:7px;letter-spacing:3px;color:rgba(255,220,200,0.8);text-transform:uppercase;margin-bottom:3px">${type}</div>
-            ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:6px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1">${name}</div>`}
-          </div>
-          <div style="font-size:8px;color:rgba(255,220,200,0.7);letter-spacing:1px;text-transform:uppercase">${venue}</div>
+  if (s === 'constructivist') {
+    return `<div style="${OUTER}"><div style="position:relative;width:100%;height:100%;background:#e8e0d0;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;width:54%;height:100%;background:#cc1a00;clip-path:polygon(0 0,86% 0,66% 100%,0 100%)"></div>
+      <div style="${FLEX};position:relative;z-index:1">
+        <div style="width:52%;height:100%;padding:8px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+          <div style="font-size:7px;letter-spacing:3px;color:rgba(255,210,190,0.8);text-transform:uppercase;flex-shrink:0;white-space:nowrap">${type}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px;flex-shrink:0">${logo&&pl==='left'?`<img src="${logo}" style="width:26px;height:26px;object-fit:contain;flex-shrink:0" alt="">`:''}${nm}</div>
+          <div style="font-size:8px;color:rgba(255,210,190,0.7);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
         </div>
-        <div style="flex:1;padding:8px 10px 8px 20px;display:flex;flex-direction:column;justify-content:flex-start;gap:6px">
-          <div style="font-size:7px;letter-spacing:3px;color:#604030;text-transform:uppercase">Gate ${gate} · No.${sn}</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
-            <div><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:10px;color:#1a0a00;font-weight:700">${date||'TBD'}</div></div>
-            <div><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:10px;color:#1a0a00;font-weight:700">${seat||'GA'}</div></div>
-            <div><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:10px;color:#1a0a00;font-weight:700">${gate}</div></div>
-            <div><div style="font-size:6px;color:#cc1a00;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:10px;color:#cc1a00;font-weight:700">${price||'$0.00'}</div></div>
+        <div style="flex:1;height:100%;padding:8px 8px 8px 16px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+          <div style="font-size:7px;letter-spacing:2px;color:#604030;text-transform:uppercase;white-space:nowrap;flex-shrink:0">Gate ${gate} · No.${sn}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;flex-shrink:0">
+            <div style="overflow:hidden"><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:9px;color:#1a0a00;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:9px;color:#1a0a00;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:#806040;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:9px;color:#1a0a00;font-weight:700">${gate}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:#cc1a00;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:9px;color:#cc1a00;font-weight:700">${pr}</div></div>
           </div>
         </div>
-        <div style="width:52px;background:#1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 6px;border-left:2px dashed rgba(255,255,255,0.2);flex-shrink:0;overflow:hidden;max-height:120px">
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;color:#c89060;font-family:'Playfair Display',serif;font-weight:900;text-transform:uppercase">${shortName}</div>
-          <div style="font-size:13px;font-weight:700;color:#cc1a00;font-family:'Playfair Display',serif">${priceDollars}</div>
-          <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#c89060')}</div>
+        <div style="width:${STUB_W};height:100%;background:#1a0a00;border-left:2px dashed rgba(255,255,255,0.2);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;color:#c89060;font-family:'Playfair Display',serif;font-weight:900;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-height:54px">${sn8}</div>
+          <div style="font-size:13px;font-weight:700;color:#cc1a00;font-family:'Playfair Display',serif">${pr}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#c89060')}</div>
         </div>
       </div>
     </div></div>`;
   }
 
-  /* ══ 9. RACING FORM ══ */
-  if (safeStyle === 'racing') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5);height:auto">
-    <div style="background:#f0f8ff;border:1px solid #0a3a6a;font-family:'Courier New',monospace;overflow:hidden;display:flex;flex-direction:column">
-      <div style="display:flex">
-        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0;align-self:stretch"></div>
-        <div style="flex:1;padding:6px 10px;border-left:1px solid #0a3a6a">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;border-bottom:2px solid #0a3a6a;padding-bottom:3px">
-            ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:6px">${logoImg}<div style="font-size:15px;font-weight:700;color:#0a0a2a;text-transform:uppercase;font-family:Georgia,serif">${name}</div></div>`:`<div style="font-size:15px;font-weight:700;color:#0a0a2a;text-transform:uppercase;font-family:Georgia,serif">${name}</div>`}
-            <div style="text-align:right"><div style="font-size:9px;color:#0a3a6a;font-weight:700">${date||'TBD'}</div><div style="font-size:7px;color:#4060a0;letter-spacing:1px;text-transform:uppercase">${type}</div></div>
-          </div>
-          <div style="display:flex;gap:0;margin-bottom:3px">
-            <div style="flex:2;border-right:1px solid #b0c8e0;padding-right:8px"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Venue</div><div style="font-size:9px;color:#0a0a2a;font-weight:700">${venue}</div></div>
-            <div style="flex:1;border-right:1px solid #b0c8e0;padding:0 8px"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Section</div><div style="font-size:9px;color:#0a0a2a;font-weight:700">${seat||'GA'}</div></div>
-            <div style="flex:1;border-right:1px solid #b0c8e0;padding:0 8px"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Gate</div><div style="font-size:9px;color:#0a0a2a;font-weight:700">${gate}</div></div>
-            <div style="flex:1;padding-left:8px"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Ticket No.</div><div style="font-size:9px;color:#0a0a2a;font-weight:700">${sn}</div></div>
-          </div>
-          <div style="background:#0a3a6a;color:#fff;padding:3px 8px;margin:0 -10px -6px;display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#90b8e0">Admit One</span>
-            <span style="font-family:Georgia,serif;font-size:14px;font-weight:700">${price||'$0.00'}</span>
-            <span style="font-size:7px;color:#90b8e0;letter-spacing:1px">VALID FOR ONE ENTRY</span>
-          </div>
+  if (s === 'racing') {
+    return `<div style="${OUTER}"><div style="${FLEX};background:#f0f8ff;border:1px solid #0a3a6a">
+      <div style="width:12px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0"></div>
+      <div style="flex:1;height:100%;padding:6px 10px;border-left:1px solid #0a3a6a;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0a3a6a;padding-bottom:3px;flex-shrink:0;overflow:hidden">
+          <div style="font-size:14px;font-weight:700;color:#0a0a2a;text-transform:uppercase;font-family:Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px">${logo&&pl==='left'?`<img src="${logo}" style="width:26px;height:26px;object-fit:contain;flex-shrink:0" alt="">`:''}${nm}</div>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px"><div style="font-size:9px;color:#0a3a6a;font-weight:700;white-space:nowrap">${dt}</div><div style="font-size:7px;color:#4060a0;letter-spacing:1px;text-transform:uppercase">${type}</div></div>
         </div>
-        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0;align-self:stretch"></div>
-        <div style="width:60px;background:#0a3a6a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:8px 6px;flex-shrink:0;overflow:hidden;align-self:flex-start">
-          <div style="font-size:7px;color:#90b8e0;letter-spacing:1px;text-align:center;text-transform:uppercase">Admit</div>
-          <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#fff">${priceDollars}</div>
-          <div style="font-size:7px;color:#90b8e0;font-family:'Courier New',monospace">No.${sn}</div>
-          <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#90b8e0')}</div>
+        <div style="display:flex;gap:0;flex:1;align-items:center">
+          <div style="flex:2;border-right:1px solid #b0c8e0;padding-right:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Venue</div><div style="font-size:9px;color:#0a0a2a;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div></div>
+          <div style="flex:1;border-right:1px solid #b0c8e0;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Seat</div><div style="font-size:9px;color:#0a0a2a;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+          <div style="flex:1;padding-left:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#4060a0;text-transform:uppercase">Gate</div><div style="font-size:9px;color:#0a0a2a;font-weight:700">${gate}</div></div>
         </div>
+        <div style="background:#0a3a6a;color:#fff;padding:3px 8px;margin:0 -10px -6px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0">
+          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:#90b8e0;white-space:nowrap">Admit One</span>
+          <span style="font-family:Georgia,serif;font-size:14px;font-weight:700;white-space:nowrap">${pr}</span>
+          <span style="font-size:7px;color:#90b8e0;letter-spacing:1px;white-space:nowrap">No.${sn}</span>
+        </div>
+      </div>
+      <div style="width:12px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0"></div>
+      <div style="width:${STUB_W};height:100%;background:#0a3a6a;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="font-size:7px;color:#90b8e0;letter-spacing:1px;text-align:center;text-transform:uppercase">Admit</div>
+        <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#fff">${pr.replace('$','$')}</div>
+        <div style="font-size:7px;color:#90b8e0;font-family:'Courier New',monospace;white-space:nowrap">No.${sn}</div>
+        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#90b8e0')}</div>
       </div>
     </div></div>`;
   }
 
-  /* ══ 10. WOODSTOCK/FESTIVAL ══ */
-  if (safeStyle === 'woodstock') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6)">
-    <div style="background:#1a0e04;border:1px solid #e87820;font-family:'Special Elite',cursive;overflow:hidden">
-      ${wm}
-      <div style="height:7px;background:linear-gradient(90deg,#e82020,#e87820,#e8e020,#20e820,#2020e8,#8020e8)"></div>
-      <div style="display:flex">
-        <div style="flex:1;padding:8px 12px">
-          <div style="font-size:7px;letter-spacing:5px;color:#e87820;text-transform:uppercase;margin-bottom:3px">☀ ${type} · Admit One · Gate ${gate} ☀</div>
-          ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#f8e8c0;text-transform:uppercase;line-height:1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#f8e8c0;text-transform:uppercase;line-height:1;margin-bottom:3px">${name}</div>`}
-          <div style="font-size:8px;color:#a07840;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px">${venue}</div>
-          <div style="display:flex;gap:10px;border-top:1px solid rgba(232,120,32,0.3);padding-top:5px">
-            <div><div style="font-size:6px;color:#e87820;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:11px;color:#f0d890;font-weight:700">${date||'TBD'}</div></div>
-            <div><div style="font-size:6px;color:#e87820;text-transform:uppercase;letter-spacing:1px">Zone</div><div style="font-size:11px;color:#f0d890;font-weight:700">${seat||'GA'}</div></div>
-            <div><div style="font-size:6px;color:#e87820;text-transform:uppercase;letter-spacing:1px">No.</div><div style="font-size:11px;color:#f0d890;font-weight:700">${sn}</div></div>
-            <div style="margin-left:auto;border:1px solid #20b840;padding:3px 8px;align-self:flex-end"><div style="font-size:6px;color:#20b840;text-transform:uppercase">Price</div><div style="font-size:13px;color:#40d860;font-family:'Playfair Display',serif;font-weight:700">${price||'$0.00'}</div></div>
+  if (s === 'woodstock') {
+    return `<div style="${OUTER}"><div style="display:flex;flex-direction:column;width:100%;height:100%;background:#1a0e04;border:1px solid #e87820;overflow:hidden;box-sizing:border-box">
+      <div style="height:6px;background:linear-gradient(90deg,#e82020,#e87820,#e8e020,#20e820,#2020e8,#8020e8);flex-shrink:0"></div>
+      <div style="display:flex;flex:1;min-height:0;overflow:hidden">
+        <div style="flex:1;padding:6px 10px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">
+          <div style="font-size:7px;letter-spacing:4px;color:#e87820;text-transform:uppercase;flex-shrink:0;white-space:nowrap;overflow:hidden">☀ ${type} · Admit One · Gate ${gate} ☀</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#f8e8c0;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+          <div style="font-size:8px;color:#a07840;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="display:flex;gap:10px;border-top:1px solid rgba(232,120,32,0.3);padding-top:4px;flex-shrink:0">
+            <div style="overflow:hidden"><div style="font-size:6px;color:#e87820;text-transform:uppercase;letter-spacing:1px">Date</div><div style="font-size:10px;color:#f0d890;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:#e87820;text-transform:uppercase;letter-spacing:1px">Zone</div><div style="font-size:10px;color:#f0d890;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="margin-left:auto;border:1px solid #20b840;padding:2px 8px;flex-shrink:0"><div style="font-size:6px;color:#20b840;text-transform:uppercase">Price</div><div style="font-size:12px;color:#40d860;font-family:'Playfair Display',serif;font-weight:700;white-space:nowrap">${pr}</div></div>
           </div>
         </div>
-        <div style="width:60px;border-left:2px dashed rgba(232,120,32,0.4);background:rgba(232,120,32,0.06);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:8px 6px;flex-shrink:0;overflow:hidden;max-height:110px">
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:#f8e8c0;text-transform:uppercase">${shortName}</div>
-          <div style="font-size:8px;color:#a07840;letter-spacing:1px">${sn}</div>
-          <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#e87820')}</div>
-        </div>
+        ${stub('rgba(232,120,32,0.08)','2px dashed rgba(232,120,32,0.4)','#f8e8c0','#e87820')}
       </div>
-      <div style="height:7px;background:linear-gradient(90deg,#8020e8,#2020e8,#20e820,#e8e020,#e87820,#e82020)"></div>
+      <div style="height:6px;background:linear-gradient(90deg,#8020e8,#2020e8,#20e820,#e8e020,#e87820,#e82020);flex-shrink:0"></div>
     </div></div>`;
   }
 
-  /* ══ DEFAULT: CLASSIC / SPORT ══ */
-  const isLight = safeStyle !== 'sport';
+  // DEFAULT: classic / sport / golden age
+  const isLight = s !== 'sport';
   const bg = isLight ? 'linear-gradient(160deg,#F0E8D0,#DCCFA8)' : 'linear-gradient(160deg,#0a1828,#0d1f3c)';
   const bc = isLight ? '#C8B078' : '#8B1A1A';
   const tc = isLight ? '#1a0a04' : '#F5EDD8';
   const vc = isLight ? '#6B4C2A' : '#a08060';
   const lc = isLight ? '#9a7040' : '#a08060';
   const pc = isLight ? '#8B1A1A' : '#e8a820';
-  const sc = isLight ? 'rgba(180,150,80,0.15)' : 'rgba(139,26,26,0.12)';
+  const sc2 = isLight ? 'rgba(180,150,80,0.2)' : 'rgba(139,26,26,0.15)';
   const bar = isLight ? '#2C1A0E' : '#c8a878';
-  return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6);height:auto">
-  <div style="display:flex;align-items:flex-start;background:${bg};border:1px solid ${bc};font-family:'Special Elite',cursive;overflow:hidden">
-    ${wm}
-    <div style="flex:1;padding:16px 18px;border-right:2px dashed ${bc};position:relative">
-      <div style="height:4px;background:linear-gradient(90deg,${pc},${isLight?'#C4862A':'#c84020'});position:absolute;top:0;left:0;right:0"></div>
-      <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};border-bottom:1px solid ${bc};padding-bottom:3px;margin-bottom:4px;margin-top:4px;display:flex;justify-content:space-between">
-        <span>${type}</span><span>Gate ${gate}</span><span>No.${sn}</span>
+  const topBar = isLight ? `linear-gradient(90deg,${pc},#C4862A)` : `linear-gradient(90deg,${pc},#c84020)`;
+
+  return `<div style="${OUTER}"><div style="${FLEX};background:${bg};border:1px solid ${bc}">
+    <div style="flex:1;height:100%;padding:10px 14px;border-right:2px dashed ${bc};display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative;box-sizing:border-box">
+      <div style="height:3px;background:${topBar};position:absolute;top:0;left:0;right:0"></div>
+      <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};border-bottom:1px solid ${bc};padding-bottom:2px;margin-top:2px;display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
+        <span style="white-space:nowrap">${type}</span><span style="white-space:nowrap">Gate ${gate}</span><span style="white-space:nowrap">No.${sn}</span>
       </div>
-      ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">${logoImg}<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1">${name}</div></div>`:`<div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1;margin-bottom:3px">${name}</div>`}
-      <div style="font-size:9px;letter-spacing:1.5px;color:${vc};text-transform:uppercase;margin-bottom:8px">${venue}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding-top:6px;border-top:1px dotted ${bc}">
-        <div style="border-right:1px solid ${bc};padding-right:8px"><div style="font-size:6px;letter-spacing:2px;color:${lc};text-transform:uppercase">Date</div><div style="font-size:11px;font-weight:700;color:${tc}">${date||'TBD'}</div></div>
-        <div style="border-right:1px solid ${bc};padding:0 8px"><div style="font-size:6px;letter-spacing:2px;color:${lc};text-transform:uppercase">Seat</div><div style="font-size:11px;font-weight:700;color:${tc}">${seat||'GA'}</div></div>
-        <div style="padding-left:8px"><div style="font-size:6px;letter-spacing:2px;color:${pc};text-transform:uppercase">Price</div><div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:900;color:${pc}">${price||'$0.00'}</div></div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logo&&pl==='left'?logoImg:''}${nm}</div>
+      <div style="font-size:8px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+      <div style="display:flex;gap:0;border-top:1px dotted ${bc};padding-top:4px;flex-shrink:0">
+        <div style="flex:1;border-right:1px solid ${bc};padding-right:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+        <div style="flex:1;border-right:1px solid ${bc};padding:0 6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+        <div style="flex:1;padding-left:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${pc};text-transform:uppercase">Price</div><div style="font-family:'Playfair Display',serif;font-size:12px;font-weight:900;color:${pc};white-space:nowrap">${pr}</div></div>
       </div>
     </div>
-    <div style="width:74px;background:${sc};padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;overflow:hidden;max-height:120px;overflow:hidden;align-self:stretch">
-      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px">${shortName}</div>
-      <div style="font-size:8px;color:${lc};letter-spacing:1px">No.${sn}</div>
-      <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode(bar)}</div>
-    </div>
+    ${stub(sc2,`2px dashed ${bc}`,tc,bar)}
   </div></div>`;
 }
 
