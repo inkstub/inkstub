@@ -1777,7 +1777,7 @@ nav {
   <script>
 
   // ── AUTH STATE FOR APP PAGE ──
-  function onUserChange(user) {
+  async function onUserChange(user) {
     const authDiv = document.getElementById('appNavAuth');
     if (!authDiv) return;
     if (user) {
@@ -1788,13 +1788,18 @@ nav {
           <span>${getUserName()}</span>
           <button onclick="signOut()" style="font-size:12px;color:#888880;background:none;border:none;cursor:pointer;padding:4px 8px;font-family:'DM Sans',sans-serif">Sign out</button>
         </div>`;
+      // Load collection from Supabase
+      const data = await loadCollectionFromCloud();
+      if (data) collection = data.map(rowToItem);
+      if (document.getElementById('view-collection')?.classList.contains('active')) {
+        renderCollection('all');
+      }
     } else {
-      // Clear local collection on sign out
+      // Clear collection on sign out
       collection = [];
       authDiv.innerHTML = `
         <button onclick="openSignIn()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:#888880;background:transparent;border:1px solid #2e2e2e;padding:7px 16px;cursor:pointer">Sign in</button>
         <button onclick="openSignUp()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#0A0A0A;background:#C8922A;border:none;padding:8px 18px;cursor:pointer">Get Started</button>`;
-      // Re-render collection view if it's active
       if (document.getElementById('view-collection')?.classList.contains('active')) {
         renderCollection('all');
       }
@@ -2055,7 +2060,7 @@ function buildCollectionEntryHTML(item) {
    STATE
 ════════════════════════════════════════ */
 let selectedStyle = 'ballpark';
-let collection = JSON.parse(localStorage.getItem('stub_collection') || '[]');
+let collection = [];
 let currentTicket = null;
 
 /* ════════════════════════════════════════
@@ -2312,23 +2317,27 @@ function renderTicketPreview() {
 /* ════════════════════════════════════════
    COLLECTION
 ════════════════════════════════════════ */
-function saveToCollection() {
+async function saveToCollection() {
   if (!currentTicket) return;
+  if (!currentUser) {
+    openSignIn();
+    return;
+  }
   const entry = {
     ...currentTicket,
     status: 'Saved',
     tracking: null,
     addedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-    id: Date.now(),
+    id: Date.now().toString(),
   };
   collection.push(entry);
-  persistCollection();
+  await saveItemToCloud(entry);
   updateStats();
   showToast('Saved to your collection!');
 }
 
 function persistCollection() {
-  localStorage.setItem('stub_collection', JSON.stringify(collection));
+  // No-op: collection is now stored in Supabase, not localStorage
 }
 
 function updateStats() {
