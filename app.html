@@ -440,18 +440,18 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 
 .ticket-wrap-outer {
   position: relative;
-  padding: 24px 0;
+  padding: 4px 0;
 }
 
 /* shadow/glow behind ticket */
 .ticket-wrap-outer::before {
   content: '';
   position: absolute;
-  inset: 30px 20px;
-  filter: blur(24px);
+  top: 4px; bottom: 4px; left: 20px; right: 20px;
+  filter: blur(20px);
   z-index: 0;
   border-radius: 4px;
-  opacity: 0.5;
+  opacity: 0.45;
 }
 .ticket-wrap-outer.glow-classic::before  { background: rgba(196,134,42,0.4); }
 .ticket-wrap-outer.glow-sport::before    { background: rgba(139,26,26,0.5); }
@@ -1364,6 +1364,8 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
   .category-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+.ticket-wrap { width: 100%; }
+.ticket-wrap-outer > div { width: 100%; }
 </style>
 </head>
 <body>
@@ -2019,7 +2021,7 @@ function buildTicketHTML(data) {
   /* ══ 8. CONSTRUCTIVIST ══ */
   if (safeStyle === 'constructivist') {
     return `<div style="position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="background:#e8e0d0;border:none;font-family:'Special Elite',cursive;overflow:hidden;position:relative;min-height:90px">
+    <div style="background:#e8e0d0;border:none;font-family:'Special Elite',cursive;overflow:hidden;position:relative">
       <div style="position:absolute;top:0;left:0;width:52%;height:100%;background:#cc1a00;clip-path:polygon(0 0,88% 0,68% 100%,0 100%)"></div>
       <div style="display:flex;position:relative;z-index:1">
         <div style="width:52%;padding:8px 12px;display:flex;flex-direction:column;justify-content:space-between">
