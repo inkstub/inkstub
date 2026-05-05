@@ -1,38 +1,8 @@
 // auth.js — Clerk authentication + Supabase collection storage
-// 
-// SETUP INSTRUCTIONS:
-// 1. Create account at clerk.com → create application → copy Publishable Key
-// 2. Create account at supabase.com → new project → copy Project URL + anon key
-// 3. In Supabase SQL editor, run:
-//    CREATE TABLE collections (
-//      id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-//      user_id text NOT NULL,
-//      event_name text NOT NULL,
-//      event_type text,
-//      venue text,
-//      event_date text,
-//      seat_info text,
-//      price text,
-//      style text,
-//      logo_url text,
-//      status text DEFAULT 'saved',
-//      tracking text,
-//      added_date text,
-//      created_at timestamp DEFAULT now()
-//    );
-//    -- Simple RLS: allow all operations, user_id filter in queries handles isolation
-//    ALTER TABLE collections ENABLE ROW LEVEL SECURITY;
-//    CREATE POLICY "Allow all with anon key" ON collections FOR ALL TO anon USING (true) WITH CHECK (true);
-// 4. Replace the keys below with your real ones
-// 5. Add to Netlify environment variables:
-//    CLERK_PUBLISHABLE_KEY = your key
-//    SUPABASE_URL = your url  
-//    SUPABASE_ANON_KEY = your key
 
-// ── CONFIG (replace with your keys) ──
-const CLERK_KEY   = 'pk_test_ZnVua3ktY2FyaWJvdS02Ny5jbGVyay5hY2NvdW50cy5kZXYk';
-const SUPA_URL    = 'https://abnaehtnlwgweaygdytr.supabase.co';
-const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFibmFlaHRubHdnd2VheWdkeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MzUzNjgsImV4cCI6MjA5MzUxMTM2OH0.ZZP_KmBAcZquEdWAXADLaBGd8JMHgiEJB9R3xs_SwDo';
+const CLERK_KEY = 'pk_test_ZnVua3ktY2FyaWJvdS02Ny5jbGVyay5hY2NvdW50cy5kZXYk';
+const SUPA_URL  = 'https://abnaehtnlwgweaygdytr.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFibmFlaHRubHdnd2VheWdkeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MzUzNjgsImV4cCI6MjA5MzUxMTM2OH0.ZZP_KmBAcZquEdWAXADLaBGd8JMHgiEJB9R3xs_SwDo';
 
 // ── STATE ──
 let currentUser = null;
@@ -48,26 +18,22 @@ const SUPA_HEADERS = {
 async function supaFetch(path, options = {}) {
   const res = await fetch(`${SUPA_URL}/rest/v1${path}`, {
     ...options,
-    headers: { ...SUPA_HEADERS, ...options.headers },
+    headers: { ...SUPA_HEADERS, ...(options.headers || {}) },
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`Supabase error ${res.status}: ${err}`);
+    throw new Error(`Supabase ${res.status}: ${err}`);
   }
   if (res.status === 204) return true;
   return res.json();
 }
 
-// ── COLLECTION CRUD ──
 async function loadCollectionFromCloud() {
   if (!currentUser) return null;
   try {
-    const data = await supaFetch(
-      `/collections?user_id=eq.${encodeURIComponent(currentUser.id)}&order=created_at.desc`
-    );
-    return Array.isArray(data) ? data : [];
+    return await supaFetch(`/collections?user_id=eq.${encodeURIComponent(currentUser.id)}&order=created_at.desc`);
   } catch(e) {
-    console.error('Load collection failed:', e);
+    console.error('Load failed:', e);
     return null;
   }
 }
@@ -95,7 +61,7 @@ async function saveItemToCloud(item) {
     });
     return true;
   } catch(e) {
-    console.error('Save to cloud failed:', e);
+    console.error('Save failed:', e);
     return false;
   }
 }
@@ -103,10 +69,7 @@ async function saveItemToCloud(item) {
 async function deleteItemFromCloud(id) {
   if (!currentUser) return false;
   try {
-    await supaFetch(
-      `/collections?id=eq.${id}&user_id=eq.${encodeURIComponent(currentUser.id)}`,
-      { method: 'DELETE' }
-    );
+    await supaFetch(`/collections?id=eq.${id}&user_id=eq.${encodeURIComponent(currentUser.id)}`, { method: 'DELETE' });
     return true;
   } catch(e) {
     console.error('Delete failed:', e);
@@ -114,25 +77,6 @@ async function deleteItemFromCloud(id) {
   }
 }
 
-async function updateItemStatusInCloud(id, status, tracking) {
-  if (!currentUser) return false;
-  try {
-    await supaFetch(
-      `/collections?id=eq.${id}&user_id=eq.${encodeURIComponent(currentUser.id)}`,
-      {
-        method: 'PATCH',
-        headers: { 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ status, tracking: tracking || null }),
-      }
-    );
-    return true;
-  } catch(e) {
-    console.error('Update status failed:', e);
-    return false;
-  }
-}
-
-// Convert Supabase row → app item format
 function rowToItem(row) {
   return {
     id:        row.id,
@@ -152,36 +96,94 @@ function rowToItem(row) {
 }
 
 // ── CLERK INIT ──
+// Clerk browser SDK: load script with data-clerk-publishable-key attribute
 async function initAuth(onUserChange) {
-  // Load Clerk script
-  await new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js';
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
+  return new Promise((resolve) => {
+    // Add Clerk script with publishable key as data attribute
+    const script = document.createElement('script');
+    script.setAttribute('data-clerk-publishable-key', CLERK_KEY);
+    script.src = `https://clerk.abnaehtnlwgweaygdytr.supabase.co`; // not used
+    
+    // Actually use the correct Clerk CDN approach
+    const clerkScript = document.createElement('script');
+    clerkScript.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
+    clerkScript.crossOrigin = 'anonymous';
+    
+    clerkScript.onload = async () => {
+      try {
+        clerkInstance = new window.Clerk(CLERK_KEY);
+        await clerkInstance.load({
+          appearance: {
+            variables: {
+              colorPrimary: '#C4862A',
+              colorBackground: '#161616',
+              colorInputBackground: '#0A0A0A',
+              colorInputText: '#F0EDE8',
+              colorText: '#F0EDE8',
+              colorTextSecondary: '#888880',
+            }
+          }
+        });
+        currentUser = clerkInstance.user || null;
+        onUserChange(currentUser);
+
+        clerkInstance.addListener(({ user }) => {
+          currentUser = user || null;
+          onUserChange(currentUser);
+        });
+
+        resolve(clerkInstance);
+      } catch(err) {
+        console.error('Clerk load error:', err);
+        onUserChange(null);
+        resolve(null);
+      }
+    };
+
+    clerkScript.onerror = () => {
+      console.error('Failed to load Clerk script');
+      onUserChange(null);
+      resolve(null);
+    };
+
+    document.head.appendChild(clerkScript);
   });
-
-  clerkInstance = new window.Clerk(CLERK_KEY);
-  await clerkInstance.load();
-
-  currentUser = clerkInstance.user;
-  onUserChange(currentUser);
-
-  clerkInstance.addListener(({ user }) => {
-    currentUser = user;
-    onUserChange(user);
-  });
-
-  return clerkInstance;
 }
 
 function openSignIn() {
-  if (clerkInstance) clerkInstance.openSignIn();
+  if (clerkInstance) {
+    clerkInstance.openSignIn({
+      appearance: {
+        variables: {
+          colorPrimary: '#C4862A',
+          colorBackground: '#161616',
+          colorInputBackground: '#222',
+          colorInputText: '#F0EDE8',
+          colorText: '#F0EDE8',
+        }
+      }
+    });
+  } else {
+    console.warn('Clerk not initialized yet');
+  }
 }
 
 function openSignUp() {
-  if (clerkInstance) clerkInstance.openSignUp();
+  if (clerkInstance) {
+    clerkInstance.openSignUp({
+      appearance: {
+        variables: {
+          colorPrimary: '#C4862A',
+          colorBackground: '#161616',
+          colorInputBackground: '#222',
+          colorInputText: '#F0EDE8',
+          colorText: '#F0EDE8',
+        }
+      }
+    });
+  } else {
+    console.warn('Clerk not initialized yet');
+  }
 }
 
 function signOut() {
@@ -190,5 +192,7 @@ function signOut() {
 
 function getUserName() {
   if (!currentUser) return null;
-  return currentUser.firstName || currentUser.emailAddresses?.[0]?.emailAddress || 'User';
+  return currentUser.firstName ||
+    currentUser.emailAddresses?.[0]?.emailAddress?.split('@')[0] ||
+    'User';
 }
