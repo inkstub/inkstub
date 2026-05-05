@@ -163,6 +163,11 @@ window._submitAuth = async function(mode) {
 function openSignIn()  { showAuthModal('signin'); }
 function openSignUp()  { showAuthModal('signup'); }
 function signOut() {
+  // Clear state immediately before async signout completes
+  currentUser = null;
+  if (typeof cloudCollection !== 'undefined') cloudCollection = [];
+  if (typeof renderCollection === 'function') renderCollection();
+  if (typeof onUserChange === 'function') onUserChange(null);
   if (_supabase) _supabase.auth.signOut();
 }
 function getUserName() {
