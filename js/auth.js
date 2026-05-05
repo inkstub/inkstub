@@ -1,6 +1,6 @@
 // auth.js — Inkstub authentication
 
-const CLERK_KEY = 'pk_test_ZnVua3ktY2FyaWJvdS02Ny5jbGVyay5hY2NvdW50cy5kZXYk';
+const CLERK_KEY = 'pk_live_Y2xlcmsuaW5rc3R1Yi5jb20k';
 const SUPA_URL  = 'https://abnaehtnlwgweaygdytr.supabase.co';
 const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFibmFlaHRubHdnd2VheWdkeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MzUzNjgsImV4cCI6MjA5MzUxMTM2OH0.ZZP_KmBAcZquEdWAXADLaBGd8JMHgiEJB9R3xs_SwDo';
 
