@@ -1206,6 +1206,7 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 
 .style-group { display: none; }
 .style-group.active { display: block; }
+#style-sport, #style-concert, #style-classic { pointer-events: all !important; position: relative; z-index: 10; }
 
 /* ── STYLE CARD PREVIEWS — new layout ── */
 .style-preview {
@@ -1594,46 +1595,36 @@ nav {
       <!-- STEP 3: STYLE -->
       <div class="card" id="card-style">
         <div class="step-label">Step 3 — Choose Your Style</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;position:relative;z-index:20">
 
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
-
-          <button id="style-classic" onclick="selectStyle('classic')" type="button" style="cursor:pointer;border:2px solid var(--gold);background:rgba(196,134,42,0.08);padding:12px;transition:all 0.2s;width:100%;text-align:left;display:block">
-            <div class="ht-classic" style="height:80px;overflow:hidden;margin-bottom:10px;border-radius:2px">
-              <div style="padding:10px 12px;display:flex;justify-content:space-between;height:100%">
-                <div><div style="font-size:6px;letter-spacing:2px;color:#7a5020;text-transform:uppercase;font-family:DM Sans,sans-serif">Concert</div><div style="font-family:'DM Serif Display',serif;font-size:16px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:2px">Rolling<br>Stones</div></div>
-                <div style="width:24px;border-left:1px dashed #B8A060;padding-left:6px;display:flex;flex-direction:column;justify-content:flex-end"><div style="display:flex;flex-direction:column;gap:1px"><span style="height:2px;width:12px;background:#2C1A0E;display:block"></span><span style="height:2px;width:8px;background:#2C1A0E;display:block"></span><span style="height:2px;width:14px;background:#2C1A0E;display:block"></span><span style="height:2px;width:9px;background:#2C1A0E;display:block"></span><span style="height:2px;width:11px;background:#2C1A0E;display:block"></span></div></div>
-              </div>
+          <div id="style-classic" style="cursor:pointer;padding:12px;border:2px solid #C8922A;background:rgba(196,134,42,0.08)">
+            <div style="height:72px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
+              <div><div style="font-size:6px;letter-spacing:2px;color:#7a5020;text-transform:uppercase;font-family:sans-serif">Concert</div><div style="font-family:serif;font-size:15px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:3px">Rolling<br>Stones</div></div>
             </div>
-            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream)">Classic</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Aged cream · gold</div>
-          </button>
+            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Classic</div>
+            <div style="font-size:10px;color:#888880;margin-top:2px">Aged cream · gold</div>
+          </div>
 
-          <button id="style-sport" onclick="selectStyle('sport')" type="button" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s;width:100%;text-align:left;display:block">
-            <div class="ht-sport" style="height:80px;overflow:hidden;margin-bottom:10px;border-radius:2px">
-              <div style="padding:10px 12px;display:flex;justify-content:space-between;height:100%">
-                <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase;font-family:DM Sans,sans-serif">Sports</div><div style="font-family:'DM Serif Display',serif;font-size:16px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:2px">Chicago<br>Bulls</div></div>
-                <div style="width:24px;border-left:1px dashed #8B1A1A;padding-left:6px;display:flex;flex-direction:column;justify-content:flex-end"><div style="display:flex;flex-direction:column;gap:1px"><span style="height:2px;width:12px;background:#c8a878;display:block"></span><span style="height:2px;width:8px;background:#c8a878;display:block"></span><span style="height:2px;width:14px;background:#c8a878;display:block"></span><span style="height:2px;width:9px;background:#c8a878;display:block"></span><span style="height:2px;width:11px;background:#c8a878;display:block"></span></div></div>
-              </div>
+          <div id="style-sport" style="cursor:pointer;padding:12px;border:1px solid #242424">
+            <div style="height:72px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
+              <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase;font-family:sans-serif">Sports</div><div style="font-family:serif;font-size:15px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:3px">Chicago<br>Bulls</div></div>
             </div>
-            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream)">Gameday</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Navy · crimson</div>
-          </button>
+            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Gameday</div>
+            <div style="font-size:10px;color:#888880;margin-top:2px">Navy · crimson</div>
+          </div>
 
-          <button id="style-concert" onclick="selectStyle('concert')" type="button" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s;width:100%;text-align:left;display:block">
-            <div class="ht-concert" style="height:80px;overflow:hidden;margin-bottom:10px;border-radius:2px">
-              <div style="padding:10px 12px;display:flex;justify-content:space-between;height:100%">
-                <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase;font-family:DM Sans,sans-serif">Concert</div><div style="font-family:'DM Serif Display',serif;font-size:16px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:2px">David<br>Bowie</div></div>
-                <div style="width:24px;border-left:1px dashed #6a3a8a;padding-left:6px;display:flex;flex-direction:column;justify-content:flex-end"><div style="display:flex;flex-direction:column;gap:1px"><span style="height:2px;width:12px;background:#b080d8;display:block"></span><span style="height:2px;width:8px;background:#b080d8;display:block"></span><span style="height:2px;width:14px;background:#b080d8;display:block"></span><span style="height:2px;width:9px;background:#b080d8;display:block"></span><span style="height:2px;width:11px;background:#b080d8;display:block"></span></div></div>
-              </div>
+          <div id="style-concert" style="cursor:pointer;padding:12px;border:1px solid #242424">
+            <div style="height:72px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
+              <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase;font-family:sans-serif">Concert</div><div style="font-family:serif;font-size:15px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:3px">David<br>Bowie</div></div>
             </div>
-            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream)">Midnight</div>
-            <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Dark · purple</div>
-          </button>
+            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Midnight</div>
+            <div style="font-size:10px;color:#888880;margin-top:2px">Dark · purple</div>
+          </div>
 
         </div>
       </div>
 
-      <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->
+            <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->
       <div class="card" id="card-preview" style="padding-bottom:20px;overflow:hidden">
         <div class="step-label">Step 4 — Preview &amp; Order</div>
         <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
@@ -1879,14 +1870,14 @@ let currentTicket = null;
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 function selectStyle(styleName) {
-  ['classic','sport','concert'].forEach(s => {
-    const el = document.getElementById('style-' + s);
+  ['classic','sport','concert'].forEach(function(s) {
+    var el = document.getElementById('style-' + s);
     if (!el) return;
     if (s === styleName) {
-      el.style.border = '2px solid var(--gold)';
+      el.style.border = '2px solid #C8922A';
       el.style.background = 'rgba(196,134,42,0.08)';
     } else {
-      el.style.border = '1px solid var(--border)';
+      el.style.border = '1px solid #242424';
       el.style.background = 'transparent';
     }
   });
@@ -1897,6 +1888,12 @@ function selectStyle(styleName) {
   }
 }
 
+
+  // Attach style button clicks
+  ['classic','sport','concert'].forEach(function(s) {
+    var el = document.getElementById('style-' + s);
+    if (el) el.addEventListener('click', function() { selectStyle(s); });
+  });
 
   // Style is already defaulted to 'classic'
   initNav();
