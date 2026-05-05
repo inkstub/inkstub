@@ -1981,7 +1981,7 @@ function buildCollectionEntryHTML(item) {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-let selectedStyle = 'classic';
+let selectedStyle = 'ballpark';
 let collection = JSON.parse(localStorage.getItem('stub_collection') || '[]');
 let currentTicket = null;
 
@@ -1989,6 +1989,9 @@ let currentTicket = null;
    INIT
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+  // Sync selectedStyle with whichever card is marked selected in HTML
+  const preselected = document.querySelector('.style-card.selected');
+  if (preselected) selectedStyle = preselected.dataset.style;
   initNav();
   initUpload();
   initStylePicker();
