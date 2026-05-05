@@ -15,15 +15,15 @@
   --cream:   #F5F0E8;
   --aged:    #E8DFC8;
   --brown:   #6B4C2A;
-  --dark:    #2C1A0E;
+  --dark:    #111111;
   --red:     #8B1A1A;
   --gold:    #C4862A;
   --gold-lt: #e8a840;
   --ink:     #1A1008;
   --green:   #2D5016;
-  --bg:      #1a0f08;
-  --card-bg: #231508;
-  --border:  rgba(196,134,42,0.25);
+  --bg:      #0A0A0A;
+  --card-bg: #161616;
+  --border:  rgba(196,134,42,0.2);
   --text-muted: #a08060;
 
   --font-display: 'Playfair Display', Georgia, serif;
@@ -1380,7 +1380,7 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
   <header class="header">
     <div class="header-inner">
       <div class="logo-block">
-        <span class="logo">STUB</span>
+        <a href="index.html" style="text-decoration:none;font-family:var(--font-display);font-size:32px;font-weight:900;color:var(--gold);letter-spacing:-1px">inkstub</a>
         <span class="logo-tagline">Preserve Every Memory</span>
       </div>
       <nav class="nav">
@@ -2402,12 +2402,18 @@ async function searchLogos() {
     }
 
     grid.innerHTML = '';
+    const seen = new Set();
     matches.forEach(team => {
-      const logos = team.logos.slice(0, 3);
-      logos.forEach((logoUrl, idx) => {
+      // Only show primary logo per team to avoid duplicates
+      const logos = team.logos.slice(0, 1);
+      logos.forEach((logoUrl) => {
+        // Deduplicate by team name
+        const key = team.name.toLowerCase().replace(/\s+/g,'');
+        if (seen.has(key)) return;
+        seen.add(key);
         const div = document.createElement('div');
         div.className = 'logo-result-item';
-        div.title = team.name + (idx > 0 ? ' (alternate)' : '') + ' — ' + team.league;
+        div.title = team.name + ' — ' + team.league;
         div.innerHTML = `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.style.display='none'">`;
         div.addEventListener('click', (e) => selectLogo(e, logoUrl, team.name));
         grid.appendChild(div);
