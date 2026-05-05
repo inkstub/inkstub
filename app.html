@@ -1782,51 +1782,73 @@ nav {
 
 /* tickets.js — Ticket HTML generation */
 
-function buildBarcode(bars, color) {
-  const heights = bars || [14,18,10,16,20,12,18,14,22,16,10,18,14,20,12,16,18,10,14,20];
-  return heights.map(h => `<span style="height:${h}px;background:${color}"></span>`).join('');
+function buildBarcode(heights, color) {
+  return heights.map(h => `<span style="height:${h}px;background:${color};display:block;width:2px"></span>`).join('');
 }
-
 function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
 function buildTicketHTML(data) {
-  const {name,type,venue,date,seat,price,style,logo,logoPlacement} = data;
+  const {name,type,venue,date,seat,price,style,logo} = data;
   const s = style || 'classic';
-  const sn = String(rnd(10000,99999));
 
-  const nm = (name||'Event Name').substring(0,24);
-  const vn = (venue||'Venue').substring(0,32);
-  const dt = (date||'TBD');
-  const st = (seat||'GA');
-  const pr = (price||'$0.00');
+  const nm = (name||'Event Name').substring(0,40);
+  const vn = (venue||'').substring(0,36);
+  const dt = date||'';
+  const st = seat||'';
+  const pr = price||'';
   const tp = (type||'Event');
+
+  // Detail line — only show values that exist
+  const detailParts = [];
+  if (dt) detailParts.push(dt);
+  if (st) detailParts.push(st);
+  const detailLine = detailParts.join(' &bull; ');
+
+  // Bottom row — only show gate/price if entered
+  const gate = data.gate || '';
+  const bottomParts = [];
+  if (gate) bottomParts.push(`Gate ${gate}`);
+  if (pr)   bottomParts.push(pr);
+  const bottomLine = bottomParts.join(' &bull; ');
 
   const W = '528px'; const H = '192px';
   const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.6);flex-shrink:0`;
 
+  // Colors per style — exact match to homepage
+  const cfg = {
+    classic: { bg:'linear-gradient(160deg,#F0E8D0,#DCCFA8)', typeC:'#7a5020', titleC:'#1a0a04', venueC:'#6B4C2A', detailC:'#9a7040', stubBorder:'#B8A060', stubTextC:'#1a0a04', barC:'#2C1A0E' },
+    sport:   { bg:'linear-gradient(160deg,#0a1828,#0d1f3c)', typeC:'#e8b870', titleC:'#F5EDD8', venueC:'#8a7060', detailC:'#8a7060', stubBorder:'#8B1A1A', stubTextC:'#E8DFC8', barC:'#c8a878' },
+    concert: { bg:'linear-gradient(160deg,#080812,#0d0d20)', typeC:'#c090e8', titleC:'#f5e8ff', venueC:'#8060a0', detailC:'#8060a0', stubBorder:'#6a3a8a', stubTextC:'#e8d0ff', barC:'#b080d8' },
+  };
+  const c = cfg[s] || cfg.classic;
+
+  // Barcode heights
+  const bars = [14,18,10,16,20,12,18,14,22,16,10,18,14,20,12,16,18,10,14,20,16,12];
+
+  // inkstub logo rotated 90deg in stub — gold color
+  const inkstubLogo = `<div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:16px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap;overflow:hidden;max-height:110px">inkstub</div>`;
+
+  // Logo on left if provided
   const logoImg = logo
-    ? `<img src="${logo}" style="width:36px;height:36px;object-fit:contain;flex-shrink:0;margin-right:8px;display:inline-block" alt="">`
+    ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;margin-right:8px;display:inline-block;vertical-align:middle" alt="">`
     : '';
 
-  const htClass = s === 'sport' ? 'ht-sport' : s === 'concert' ? 'ht-concert' : 'ht-classic';
-  const barColor = s === 'sport' ? '#c8a878' : s === 'concert' ? '#b080d8' : '#2C1A0E';
-  const stubName = nm.substring(0, 14);
-
   return `<div style="${OUTER}">
-    <div class="${htClass}" style="width:100%;height:100%">
-      <div class="ht-body">
-        <div class="ht-main">
-          <div class="ht-type">${tp}</div>
-          <div class="ht-title" style="display:flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${logoImg}${nm}</div>
-          <div class="ht-venue" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>
-          <div class="ht-detail" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt} &bull; ${st}</div>
-          <div class="ht-detail" style="margin-top:auto">${pr} &bull; Gate ${sn[0]}</div>
+    <div style="background:${c.bg};width:100%;height:100%;display:flex">
+      <!-- MAIN BODY -->
+      <div style="flex:1;padding:22px 20px 18px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box">
+        <div>
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${c.typeC};font-family:'DM Sans',sans-serif;margin-bottom:5px">${tp}</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${c.titleC};margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm}</div>
+          ${vn ? `<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${c.venueC};font-family:'DM Sans',sans-serif;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>` : ''}
+          ${detailLine ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${c.detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine}</div>` : ''}
         </div>
-        <div class="ht-stub">
-          <div class="ht-stub-text">${stubName}</div>
-          <div style="font-size:7px;font-family:'Courier New',monospace;color:inherit;opacity:0.5;white-space:nowrap">${sn}</div>
-          <div class="ht-barcode">${buildBarcode([14,18,10,16,20,12,18,14,22,16,10,18,14,20,12,16,18,10,14,20], barColor)}</div>
-        </div>
+        ${bottomLine ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${c.detailC};font-family:'DM Sans',sans-serif">${bottomLine}</div>` : ''}
+      </div>
+      <!-- STUB -->
+      <div style="width:80px;border-left:1px dashed ${c.stubBorder};padding:16px 10px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        ${inkstubLogo}
+        <div style="display:flex;gap:1.5px;align-items:flex-end">${buildBarcode(bars, c.barC)}</div>
       </div>
     </div>
   </div>`;
