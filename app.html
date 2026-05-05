@@ -1790,7 +1790,13 @@ nav {
         </div>`;
       // Load collection from Supabase
       const data = await loadCollectionFromCloud();
-      if (data) collection = data.map(rowToItem);
+      console.log('Loaded from cloud:', data);
+      if (data && data.length > 0) {
+        collection = data.map(rowToItem);
+        console.log('Mapped collection:', collection);
+      } else {
+        collection = [];
+      }
       if (document.getElementById('view-collection')?.classList.contains('active')) {
         renderCollection('all');
       }
