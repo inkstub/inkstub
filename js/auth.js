@@ -53,6 +53,17 @@ function showAuthModal(mode) {
       <div style="font-size:13px;color:#888;margin-bottom:24px" id="_authSub">${mode === 'signin' ? 'Welcome back to inkstub' : 'Start preserving your memories'}</div>
       <div id="_authError" style="display:none;background:#2a0a0a;border:1px solid #c84040;color:#f08080;font-size:12px;padding:10px;margin-bottom:16px"></div>
       <div style="display:flex;flex-direction:column;gap:12px">
+        ${mode === 'signup' ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C4862A;margin-bottom:5px">First Name</div>
+            <input id="_authFirstName" type="text" placeholder="Jane" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#f0ede8;font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;box-sizing:border-box">
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C4862A;margin-bottom:5px">Last Name</div>
+            <input id="_authLastName" type="text" placeholder="Smith" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#f0ede8;font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;box-sizing:border-box">
+          </div>
+        </div>` : ''}
         <div>
           <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C4862A;margin-bottom:5px">Email</div>
           <input id="_authEmail" type="email" placeholder="you@example.com" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#f0ede8;font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;box-sizing:border-box">
@@ -87,9 +98,18 @@ window._submitAuth = async function(mode) {
   const password = document.getElementById('_authPassword').value;
   const errEl = document.getElementById('_authError');
   const btn = document.getElementById('_authSubmit');
+  const firstNameEl = document.getElementById('_authFirstName');
+  const lastNameEl = document.getElementById('_authLastName');
+  const firstName = firstNameEl ? firstNameEl.value.trim() : '';
+  const lastName = lastNameEl ? lastNameEl.value.trim() : '';
 
   if (!email || !password) {
     errEl.textContent = 'Please enter your email and password';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (mode === 'signup' && (!firstName || !lastName)) {
+    errEl.textContent = 'Please enter your first and last name';
     errEl.style.display = 'block';
     return;
   }
@@ -103,7 +123,17 @@ window._submitAuth = async function(mode) {
     if (mode === 'signin') {
       result = await _supabase.auth.signInWithPassword({ email, password });
     } else {
-      result = await _supabase.auth.signUp({ email, password });
+      result = await _supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            full_name: firstName + ' ' + lastName,
+          }
+        }
+      });
     }
 
     if (result.error) {
@@ -137,7 +167,8 @@ function signOut() {
 }
 function getUserName() {
   if (!currentUser) return null;
-  return currentUser.user_metadata?.full_name ||
+  return currentUser.user_metadata?.first_name ||
+    currentUser.user_metadata?.full_name ||
     currentUser.user_metadata?.name ||
     currentUser.email?.split('@')[0] || 'User';
 }
