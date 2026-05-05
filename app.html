@@ -1369,6 +1369,7 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 }
 
 .ticket-wrap { width: 100%; }
+#ticketEl { display:flex; justify-content:center; overflow-x:auto; padding: 12px 0; }
 .ticket-wrap-outer > div { width: 100%; }
 </style>
 </head>
@@ -1616,8 +1617,8 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="step-label">Step 4 — Preview &amp; Order</div>
         <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
 
-        <div class="ticket-wrap" id="ticketWrap" style="display:none;overflow:hidden">
-          <div class="preview-label">Your Collectible Stub — Actual Size: 5.5" × 2"</div>
+        <div class="ticket-wrap" id="ticketWrap" style="display:none;overflow:visible">
+          <div class="preview-label">Your Collectible Stub — Printed Size: 5.5" × 2" (528 × 192px)</div>
           <div id="ticketEl" style="line-height:0;display:block;height:fit-content"></div>
 
           <div class="action-row">
@@ -1762,8 +1763,8 @@ function buildTicketHTML(data) {
     ? `<img src="${logo}" style="width:100%;height:100%;object-fit:contain;display:block" alt="">`
     : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:0.15"><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="10" fill="currentColor">LOGO</text></svg></div>`;
 
-  const H = '108px';
-  const OUTER = `display:block;width:100%;height:${H};overflow:hidden;box-shadow:0 3px 18px rgba(0,0,0,0.45)`;
+  const H = '192px';
+  const OUTER = `display:block;width:528px;height:${H};overflow:hidden;box-shadow:0 3px 18px rgba(0,0,0,0.45);flex-shrink:0`;
 
   /* ══════════════════════════════════════════
      STYLE 1 — THEATRE (Gold, big title, stub with ADMIT ONE vertical)
@@ -1779,9 +1780,9 @@ function buildTicketHTML(data) {
       <div style="flex:1;height:100%;padding:8px 16px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box;position:relative">
         <!-- subtle cityscape watermark -->
         <div style="position:absolute;bottom:0;left:0;right:0;height:40px;opacity:0.12;background:repeating-linear-gradient(90deg,transparent 0,transparent 14px,#1a0a00 14px,#1a0a00 16px),repeating-linear-gradient(180deg,transparent 0,transparent 20px,#1a0a00 20px,#1a0a00 22px)"></div>
-        <div style="font-size:8px;letter-spacing:4px;text-transform:uppercase;color:#1a0a00;text-align:center;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>
-        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
-        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#1a0a00;text-align:center;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp}</div>
+        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#1a0a00;text-align:center;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#1a0a00;text-align:center;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;border-top:1px solid rgba(26,10,0,0.3);padding-top:5px;flex-shrink:0">
           <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">PRICE : </span><span style="font-size:8px;color:#1a0a00">${pr}</span></div>
           <div style="white-space:nowrap;overflow:hidden"><span style="font-size:8px;font-weight:700;color:#1a0a00;text-transform:uppercase">GATE : </span><span style="font-size:8px;color:#1a0a00">${gate}</span></div>
@@ -1791,8 +1792,8 @@ function buildTicketHTML(data) {
         </div>
       </div>
       <!-- STUB -->
-      <div style="width:72px;height:100%;background:#fff;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#1a0a00;text-transform:uppercase;letter-spacing:2px;white-space:nowrap;overflow:hidden;max-height:64px">ADMIT ONE</div>
+      <div style="width:100px;height:100%;background:#fff;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#1a0a00;text-transform:uppercase;letter-spacing:3px;white-space:nowrap;overflow:hidden;max-height:110px">ADMIT ONE</div>
         <div style="background:#c8920a;padding:3px 6px;width:100%">
           <div style="font-size:6px;color:#1a0a00;letter-spacing:1px;text-transform:uppercase;text-align:center">TICKET NO:</div>
           <div style="font-size:8px;font-weight:700;color:#1a0a00;text-align:center;font-family:'Courier New',monospace">${sn}</div>
@@ -1817,7 +1818,7 @@ function buildTicketHTML(data) {
     return `<div style="${OUTER}">
     <div style="display:flex;width:100%;height:100%;background:#dd1a1a;border:3px solid #f0e0c8;font-family:'Special Elite',cursive;overflow:hidden;box-sizing:border-box">
       <!-- LOGO ZONE -->
-      <div style="width:90px;height:100%;background:rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box">
+      <div style="width:120px;height:100%;background:rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box">
         ${logoBlock}
       </div>
       <!-- MAIN -->
@@ -1828,16 +1829,16 @@ function buildTicketHTML(data) {
         </div>
         <!-- dotted divider -->
         <div style="display:flex;gap:3px;flex-shrink:0;overflow:hidden">${Array(28).fill('<span style="width:3px;height:3px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
-        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:30px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
         <div style="display:flex;gap:3px;flex-shrink:0;overflow:hidden">${Array(28).fill('<span style="width:3px;height:3px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
         <div style="font-size:8px;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;flex-shrink:0">${dt} · Gate ${gate} · ${pr}</div>
       </div>
       <!-- STUB: black with seat boxes -->
-      <div style="width:80px;height:100%;background:#111;border-left:2px dashed rgba(255,255,255,0.3);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+      <div style="width:110px;height:100%;background:#111;border-left:2px dashed rgba(255,255,255,0.3);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
         <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#aaa;white-space:nowrap">ROW</div>
-        <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;text-align:center;width:100%;padding:2px 0;white-space:nowrap;overflow:hidden">${rowNum}</div>
+        <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;width:100%;padding:3px 0;white-space:nowrap;overflow:hidden">${rowNum}</div>
         <div style="font-size:7px;letter-spacing:1px;text-transform:uppercase;color:#aaa;white-space:nowrap">SEAT</div>
-        <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;text-align:center;width:100%;padding:2px 0;white-space:nowrap;overflow:hidden">${seatNum}</div>
+        <div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;text-align:center;width:100%;padding:3px 0;white-space:nowrap;overflow:hidden">${seatNum}</div>
         <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#dd1a1a', true)}</div>
       </div>
     </div></div>`;
@@ -1851,7 +1852,7 @@ function buildTicketHTML(data) {
     return `<div style="${OUTER}">
     <div style="display:flex;width:100%;height:100%;background:#1a3a6a;font-family:'Special Elite',cursive;overflow:hidden">
       <!-- LOGO / PHOTO ZONE -->
-      <div style="width:88px;height:100%;background:linear-gradient(135deg,#0d2040,#1a3a6a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
+      <div style="width:120px;height:100%;background:linear-gradient(135deg,#0d2040,#1a3a6a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:8px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
         ${logoBlock}
       </div>
       <!-- MAIN -->
@@ -1863,7 +1864,7 @@ function buildTicketHTML(data) {
         </div>
         <div style="flex-shrink:0;overflow:hidden">
           <div style="font-family:'Playfair Display',serif;font-size:9px;font-style:italic;color:#e05050;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.5px">${nm}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.5px">${nm}</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;overflow:hidden">
           <div style="display:flex;align-items:center;gap:5px"><div style="color:rgba(255,255,255,0.4);font-size:9px">★</div><div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap">${dt}</div></div>
@@ -1873,7 +1874,7 @@ function buildTicketHTML(data) {
         </div>
       </div>
       <!-- STUB: cream -->
-      <div style="width:90px;height:100%;background:#f5f0e0;border-left:2px dashed #8B6000;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+      <div style="width:110px;height:100%;background:#f5f0e0;border-left:2px dashed #8B6000;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
         <div style="font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:#e05050;text-align:center;white-space:nowrap">Admit One</div>
         <div style="text-align:center;overflow:hidden;width:100%">
           <div style="font-size:6px;letter-spacing:1px;color:#8B6000;text-transform:uppercase">GATE</div>
@@ -1897,7 +1898,7 @@ function buildTicketHTML(data) {
     return `<div style="${OUTER}">
     <div style="display:flex;width:100%;height:100%;background:#f0ece4;font-family:'Special Elite',cursive;overflow:hidden">
       <!-- PHOTO / LOGO ZONE -->
-      <div style="width:90px;height:100%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+      <div style="width:120px;height:100%;background:#222;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
         ${logoBlock}
       </div>
       <!-- MAIN -->
@@ -1907,7 +1908,7 @@ function buildTicketHTML(data) {
           <div style="font-size:7px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px">${vn}</div>
         </div>
         <div style="flex-shrink:0;overflow:hidden">
-          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:nowrap;flex-shrink:0;overflow:hidden">
           <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;white-space:nowrap;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;text-transform:uppercase">${dt}</span></div>
@@ -1916,7 +1917,7 @@ function buildTicketHTML(data) {
         </div>
       </div>
       <!-- STUB: barcode + vertical seat info -->
-      <div style="width:68px;height:100%;background:#f0ece4;border-left:2px dashed #999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+      <div style="width:90px;height:100%;background:#f0ece4;border-left:2px dashed #999;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:6px 5px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
         <div style="display:flex;justify-content:space-between;width:100%;overflow:hidden">
           <div style="text-align:center;flex:1;overflow:hidden">
             <div style="font-size:6px;letter-spacing:1px;color:#888;text-transform:uppercase">Seat</div>
@@ -1954,7 +1955,7 @@ function buildTicketHTML(data) {
       <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};border-bottom:1px solid ${bc};padding-bottom:2px;margin-top:2px;display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
         <span style="white-space:nowrap">${tp}</span><span style="white-space:nowrap">Gate ${gate}</span><span style="white-space:nowrap">No.${sn}</span>
       </div>
-      <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logoImg2}${nm}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px;flex-shrink:0">${logoImg2}${nm}</div>
       <div style="font-size:8px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
       <div style="display:flex;gap:0;border-top:1px dotted ${bc};padding-top:4px;flex-shrink:0">
         <div style="flex:1;border-right:1px solid ${bc};padding-right:6px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:${lc};text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
@@ -1982,7 +1983,7 @@ function buildCollectionEntryHTML(item) {
     <div class="stub-entry">
       <span class="stub-status-badge ${badgeClass}">${item.status}</span>
       ${buildTicketHTML(item)}
-      <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; padding: 0 4px;">
+      <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; padding: 0 4px; max-width:528px; margin-left:auto; margin-right:auto;">
         <span style="font-family:var(--font-stamp); font-size:10px; letter-spacing:2px; color:#604030;">
           ${item.tracking || ''}
         </span>
