@@ -927,6 +927,1375 @@
     .auth-prompt-title { font-family:'DM Serif Display',serif; font-size:22px; color:var(--text); margin-bottom:8px; }
     .auth-prompt-sub { font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.7; }
     .auth-prompt-btns { display:flex; gap:10px; justify-content:center; }
+
+    /* ══ APP STYLES ══ */
+  <style>
+/* ══════════════════════════════════════════════
+   STUB — MAIN STYLESHEET
+   ══════════════════════════════════════════════ */
+
+:root {
+  --cream:   #F5F0E8;
+  --aged:    #E8DFC8;
+  --brown:   #6B4C2A;
+  --dark:    #111111;
+  --red:     #8B1A1A;
+  --gold:    #C4862A;
+  --gold-lt: #e8a840;
+  --ink:     #1A1008;
+  --green:   #2D5016;
+  --bg:      #0A0A0A;
+  --card-bg: #161616;
+  --border:  rgba(196,134,42,0.2);
+  --text-muted: #a08060;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-stamp:   'Special Elite', 'Courier New', monospace;
+  --font-mono:    'Courier Prime', 'Courier New', monospace;
+
+  --radius: 0px;
+  --shadow: 6px 6px 0 rgba(0,0,0,0.5);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-mono);
+  background: var(--bg);
+  color: var(--cream);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--dark);
+  border-bottom: 3px solid var(--gold);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-block { display: flex; flex-direction: column; gap: 1px; }
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.logo-tagline {
+  font-family: var(--font-stamp);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nav { display: flex; gap: 4px; }
+
+.nav-btn {
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover { color: var(--gold); border-color: var(--gold); }
+.nav-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 700; }
+
+/* ── LAYOUT ── */
+main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── HERO ── */
+.section-hero {
+  text-align: center;
+  padding: 40px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.section-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  color: var(--cream);
+}
+
+.hero-sub {
+  font-family: var(--font-stamp);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+
+.step-label {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone {
+  position: relative;
+  border: 2px dashed rgba(196,134,42,0.5);
+  background: radial-gradient(ellipse at center, rgba(196,134,42,0.07) 0%, rgba(196,134,42,0.02) 70%);
+  padding: 52px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* animated corner accents */
+.upload-zone::before,
+.upload-zone::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--gold);
+  border-style: solid;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+.upload-zone::before { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+.upload-zone::after  { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+
+.upload-zone:hover {
+  background: radial-gradient(ellipse at center, rgba(196,134,42,0.14) 0%, rgba(196,134,42,0.04) 70%);
+  border-color: var(--gold);
+}
+.upload-zone:hover::before,
+.upload-zone:hover::after {
+  width: 28px; height: 28px; opacity: 1;
+}
+
+.upload-zone.drag-over {
+  background: radial-gradient(ellipse at center, rgba(196,134,42,0.2) 0%, rgba(196,134,42,0.06) 70%);
+  border-color: var(--gold-lt);
+  border-style: solid;
+  transform: scale(1.01);
+}
+
+.upload-zone.has-file {
+  border-color: #4a8a28;
+  border-style: solid;
+  background: radial-gradient(ellipse at center, rgba(45,80,22,0.18) 0%, rgba(45,80,22,0.06) 70%);
+}
+.upload-zone.has-file::before,
+.upload-zone.has-file::after { border-color: #4a8a28; opacity: 0.8; }
+
+.upload-icon {
+  font-size: 44px;
+  margin-bottom: 14px;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(196,134,42,0.4));
+  transition: transform 0.3s ease;
+}
+.upload-zone:hover .upload-icon { transform: translateY(-3px); }
+
+.upload-title {
+  font-family: var(--font-stamp);
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.upload-hint {
+  font-size: 11px;
+  color: #806848;
+  letter-spacing: 1px;
+}
+
+.upload-formats {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.upload-format-tag {
+  font-family: var(--font-stamp);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #604030;
+  border: 1px solid rgba(196,134,42,0.2);
+  padding: 3px 9px;
+}
+
+/* success state */
+.upload-success .upload-icon { filter: drop-shadow(0 0 12px rgba(74,138,40,0.5)); }
+.upload-success .upload-title { color: #6ab840; }
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 24px;
+  color: #604030;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── FORM ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-full { grid-column: 1 / -1; }
+
+.field-label {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.field-input {
+  background: rgba(245,240,232,0.06);
+  border: 1px solid rgba(196,134,42,0.35);
+  color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  width: 100%;
+}
+
+.field-input:focus {
+  border-color: var(--gold);
+  background: rgba(245,240,232,0.1);
+}
+
+.field-input::placeholder { color: #504030; }
+
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4862A' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.field-select option { background: #2C1A0E; color: var(--cream); }
+
+/* ── STYLE PICKER ── */
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.style-card {
+  border: 2px solid var(--border);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.style-card:hover { border-color: rgba(196,134,42,0.6); }
+.style-card.selected { border-color: var(--gold); }
+
+.style-preview {
+  height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.classic-preview  { background: linear-gradient(135deg, #D4A04C, #8B6914); }
+.sport-preview    { background: linear-gradient(135deg, #1a3a6e, #8B1A1A); }
+.concert-preview  { background: linear-gradient(135deg, #1a1a2e, #4a1a6e); }
+
+.mini-ticket-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 1px;
+}
+
+.mini-ticket-detail {
+  font-family: var(--font-stamp);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.6);
+}
+
+.style-card-info { padding: 10px 12px; }
+.style-name { font-family: var(--font-stamp); font-size: 12px; color: var(--cream); letter-spacing: 1px; margin-bottom: 2px; }
+.style-era  { font-size: 10px; color: #806848; letter-spacing: 1px; }
+
+/* Fix: card info inside style-card */
+.style-card .style-name, .style-card .style-era {
+  display: block;
+  padding: 0 12px;
+}
+.style-card .style-name { padding-top: 10px; }
+.style-card .style-era  { padding-bottom: 10px; }
+
+/* ── BUTTONS ── */
+.btn-preview {
+  width: 100%;
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 17px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+}
+.btn-preview:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-preview:active { transform: none; }
+
+.btn-primary {
+  background: var(--red);
+  color: var(--cream);
+  border: none;
+  font-family: var(--font-stamp);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: #a02020; }
+.btn-full { width: 100%; padding: 18px; font-size: 14px; letter-spacing: 3px; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 13px 22px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--gold); background: rgba(196,134,42,0.08); }
+
+.action-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+.action-row .btn-secondary,
+.action-row .btn-primary { flex: 1; text-align: center; }
+
+/* ── TICKET PREVIEW WRAPPER ── */
+.preview-label {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* ══════════════════════════
+   TICKET STYLES — REDESIGNED
+══════════════════════════ */
+
+.ticket-wrap-outer {
+  position: relative;
+  padding: 4px 0;
+  display: block;
+  line-height: normal;
+  align-self: flex-start;
+  width: 100%;
+}
+
+/* shadow/glow behind ticket */
+.ticket-wrap-outer::before {
+  content: '';
+  position: absolute;
+  top: 4px; bottom: 4px; left: 20px; right: 20px;
+  filter: blur(20px);
+  z-index: 0;
+  border-radius: 4px;
+  opacity: 0.45;
+}
+.ticket-wrap-outer.glow-classic::before  { background: rgba(196,134,42,0.4); }
+.ticket-wrap-outer.glow-sport::before    { background: rgba(139,26,26,0.5); }
+.ticket-wrap-outer.glow-concert::before  { background: rgba(106,58,138,0.5); }
+.ticket-wrap-outer.glow-baseball::before { background: rgba(139,105,20,0.4); }
+.ticket-wrap-outer.glow-neon::before     { background: rgba(0,212,255,0.2); }
+.ticket-wrap-outer.glow-broadway::before { background: rgba(200,168,32,0.3); }
+.ticket-wrap-outer.glow-festival::before { background: rgba(232,120,32,0.3); }
+
+.ticket {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  font-family: var(--font-stamp);
+  border-radius: 3px;
+  z-index: 1;
+  /* punched hole effect */
+}
+
+/* notched edges (ticket punch look) */
+.ticket::before {
+  content: '';
+  position: absolute;
+  left: calc(100% - 93px);
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+/* bottom notch */
+.ticket-notch-bottom {
+  position: absolute;
+  left: calc(100% - 93px);
+  bottom: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+/* paper grain overlay */
+.ticket-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 6;
+}
+
+.ticket-body {
+  flex: 1;
+  padding: 20px 24px 20px 22px;
+  border-right: 2px dashed;
+  position: relative;
+  min-width: 0;
+  z-index: 2;
+}
+
+/* decorative top border stripe */
+.ticket-body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+}
+
+.ticket-stub-col {
+  width: 88px;
+  flex-shrink: 0;
+  padding: 16px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  position: relative;
+}
+
+.t-type {
+  font-size: 8px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid;
+  display: inline-block;
+}
+
+.t-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 5px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.t-venue {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.t-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px dotted;
+}
+
+.t-detail-lbl { font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+.t-detail-val { font-size: 13px; font-weight: 700; display: block; letter-spacing: 0.5px; }
+
+.t-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.t-price-box {
+  display: inline-block;
+  border: 2px solid;
+  padding: 6px 12px;
+}
+.t-price-lbl { font-size: 7px; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+.t-price-val { font-family: var(--font-display); font-size: 20px; font-weight: 900; display: block; line-height: 1; }
+
+.t-stamp {
+  width: 60px;
+  height: 60px;
+  border: 2.5px solid;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-12deg);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.t-stamp-text { font-size: 7px; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; line-height: 1.6; }
+
+/* STUB COLUMN */
+.t-stub-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.t-stub-num {
+  font-size: 8px;
+  letter-spacing: 1px;
+  margin-top: 8px;
+  text-align: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  opacity: 0.7;
+}
+
+.t-barcode {
+  display: flex;
+  gap: 1.5px;
+  align-items: flex-end;
+}
+.t-barcode span { display: block; width: 2px; border-radius: 1px; }
+
+/* ── CLASSIC ── */
+.ticket.classic {
+  background: linear-gradient(160deg, #F0E8D0 0%, #E4D8B8 50%, #DCCFA8 100%);
+  border: 1px solid #C8B078;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+.ticket.classic::before          { background: var(--bg); box-shadow: 0 0 0 2px #C8B078; }
+.ticket.classic .ticket-notch-bottom { background: var(--bg); box-shadow: 0 0 0 2px #C8B078; }
+.ticket.classic .ticket-body     { border-right-color: #B8A060; border-right-style: dashed; }
+.ticket.classic .ticket-body::before { background: linear-gradient(90deg, #8B1A1A, #C4862A); }
+.ticket.classic .t-details       { border-bottom-color: #C8B078; }
+.ticket.classic .t-type          { color: #7a5020; border-bottom-color: #B89050; }
+.ticket.classic .t-title         { color: #1a0a04; }
+.ticket.classic .t-venue         { color: #6B4C2A; }
+.ticket.classic .t-detail-lbl   { color: #9a7040; }
+.ticket.classic .t-detail-val   { color: #2C1A0E; }
+.ticket.classic .t-price-box    { border-color: #8B1A1A; }
+.ticket.classic .t-price-lbl    { color: #8B1A1A; }
+.ticket.classic .t-price-val    { color: #8B1A1A; }
+.ticket.classic .t-stamp        { border-color: #2D5016; }
+.ticket.classic .t-stamp-text   { color: #2D5016; }
+.ticket.classic .t-stub-label   { color: #1a0a04; }
+.ticket.classic .t-stub-num     { color: #9a7040; }
+.ticket.classic .t-barcode span { background: #2C1A0E; }
+.ticket.classic .ticket-stub-col { border-left: none; background: rgba(180,150,80,0.15); }
+
+/* ── SPORT ── */
+.ticket.sport {
+  background: linear-gradient(160deg, #0a1828 0%, #0d1f3c 60%, #101830 100%);
+  border: 1px solid #1a3060;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.ticket.sport::before            { background: var(--bg); box-shadow: 0 0 0 2px #1a3060; }
+.ticket.sport .ticket-notch-bottom { background: var(--bg); box-shadow: 0 0 0 2px #1a3060; }
+.ticket.sport .ticket-body      { border-right-color: #8B1A1A; }
+.ticket.sport .ticket-body::before { background: linear-gradient(90deg, #8B1A1A, #c84020); }
+.ticket.sport .t-details        { border-bottom-color: rgba(200,160,120,0.2); }
+.ticket.sport .t-type           { color: #e8b870; border-bottom-color: rgba(232,184,112,0.4); }
+.ticket.sport .t-title          { color: #F5EDD8; }
+.ticket.sport .t-venue          { color: #8a7060; }
+.ticket.sport .t-detail-lbl    { color: #8a7060; }
+.ticket.sport .t-detail-val    { color: #E8DFC8; }
+.ticket.sport .t-price-box     { border-color: #e8a820; }
+.ticket.sport .t-price-lbl     { color: #e8a820; }
+.ticket.sport .t-price-val     { color: #e8a820; }
+.ticket.sport .t-stamp         { border-color: #8B1A1A; }
+.ticket.sport .t-stamp-text    { color: #c83020; }
+.ticket.sport .t-stub-label    { color: #E8DFC8; }
+.ticket.sport .t-stub-num      { color: #8a7060; }
+.ticket.sport .t-barcode span  { background: #c8a878; }
+.ticket.sport .ticket-stub-col { background: rgba(139,26,26,0.12); }
+
+/* ── CONCERT ── */
+.ticket.concert {
+  background: linear-gradient(160deg, #080812 0%, #0d0d20 60%, #100818 100%);
+  border: 1px solid #4a2868;
+  box-shadow: 0 4px 28px rgba(80,0,120,0.4), inset 0 1px 0 rgba(200,150,255,0.06);
+}
+.ticket.concert::before           { background: var(--bg); box-shadow: 0 0 0 2px #4a2868; }
+.ticket.concert .ticket-notch-bottom { background: var(--bg); box-shadow: 0 0 0 2px #4a2868; }
+.ticket.concert .ticket-body     { border-right-color: #6a3a8a; }
+.ticket.concert .ticket-body::before { background: linear-gradient(90deg, #6a3a8a, #c060e8); }
+.ticket.concert .t-details       { border-bottom-color: rgba(180,120,220,0.2); }
+.ticket.concert .t-type          { color: #c090e8; border-bottom-color: rgba(192,144,232,0.35); }
+.ticket.concert .t-title         { color: #f5e8ff; }
+.ticket.concert .t-venue         { color: #8060a0; }
+.ticket.concert .t-detail-lbl   { color: #8060a0; }
+.ticket.concert .t-detail-val   { color: #e8d0ff; }
+.ticket.concert .t-price-box    { border-color: #c060e8; }
+.ticket.concert .t-price-lbl    { color: #c060e8; }
+.ticket.concert .t-price-val    { color: #d080ff; }
+.ticket.concert .t-stamp        { border-color: #7030a8; }
+.ticket.concert .t-stamp-text   { color: #a060d8; }
+.ticket.concert .t-stub-label   { color: #e8d0ff; }
+.ticket.concert .t-stub-num     { color: #8060a0; }
+.ticket.concert .t-barcode span { background: #b080d8; }
+.ticket.concert .ticket-stub-col { background: rgba(106,58,138,0.15); }}
+.ticket.concert .ticket-body { border-right-color: #6a3a8a; }
+.ticket.concert .t-type      { color: #c090e8; border-bottom-color: #c090e8; }
+.ticket.concert .t-title     { color: #f0e0ff; }
+.ticket.concert .t-venue     { color: #9060a8; }
+.ticket.concert .t-detail-lbl { color: #9060a8; }
+.ticket.concert .t-detail-val { color: #e8d0ff; }
+.ticket.concert .t-price-box  { border-color: #d4a0ff; }
+.ticket.concert .t-price-lbl  { color: #d4a0ff; }
+.ticket.concert .t-price-val  { color: #d4a0ff; }
+.ticket.concert .t-stamp      { border-color: #8040c0; }
+.ticket.concert .t-stamp-text { color: #8040c0; }
+.ticket.concert .t-stub-label { color: #e8d0ff; }
+.ticket.concert .t-stub-num   { color: #9060a8; }
+.ticket.concert .t-barcode span { background: #c090e8; }
+
+/* ── ORDER SUMMARY ── */
+.order-lines { margin-bottom: 28px; }
+
+.order-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.order-total {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 17px;
+  border-bottom: none;
+  margin-top: 4px;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.order-note {
+  text-align: center;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #604030;
+  margin-top: 12px;
+}
+
+/* ── CONFIRM ── */
+.card-confirm { text-align: center; padding: 48px 32px; }
+.confirm-icon { font-size: 44px; margin-bottom: 16px; }
+.confirm-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.confirm-sub {
+  font-family: var(--font-stamp);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+.tracking-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+  background: rgba(0,0,0,0.35);
+  padding: 10px 24px;
+  letter-spacing: 5px;
+  margin: 8px 0 20px;
+}
+
+/* ── COLLECTION ── */
+.collection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding-top: 32px;
+}
+
+.collection-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.collection-sub {
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.collection-stats { display: flex; gap: 28px; }
+.stat { text-align: right; }
+.stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--gold); display: block; }
+.stat-lbl { font-family: var(--font-stamp); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #806848; display: block; }
+
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+
+.filter-btn {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+
+.stubs-grid { display: flex; flex-direction: column; gap: 28px; }
+
+.stub-entry {
+  position: relative;
+}
+
+.stub-status-badge {
+  position: absolute;
+  top: -9px;
+  right: 16px;
+  font-family: var(--font-stamp);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  z-index: 10;
+}
+.badge-saved     { background: #3a2a1a; color: #a08060; }
+.badge-printing  { background: var(--gold); color: var(--dark); }
+.badge-shipped   { background: var(--green); color: var(--cream); }
+.badge-delivered { background: #3a6010; color: var(--cream); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 80px 32px; }
+.empty-icon  { font-size: 52px; opacity: 0.25; margin-bottom: 16px; }
+.empty-title { font-family: var(--font-display); font-size: 22px; color: var(--cream); margin-bottom: 8px; }
+.empty-sub   { font-family: var(--font-stamp); font-size: 12px; color: #806848; letter-spacing: 1px; margin-bottom: 24px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--gold);
+  color: var(--dark);
+  font-family: var(--font-stamp);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  padding: 13px 28px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 999;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .header-inner { padding: 12px 16px; }
+  .nav-btn { padding: 8px 12px; font-size: 10px; }
+  main { padding: 20px 16px 60px; }
+  .card { padding: 20px 18px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .style-grid { grid-template-columns: 1fr; }
+  .address-grid { grid-template-columns: 1fr; }
+  .collection-header { flex-direction: column; gap: 16px; }
+  .action-row { flex-direction: column; }
+}
+
+  
+/* ── LOGO SEARCH ── */
+.logo-search-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.btn-search {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 11px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  height: 42px;
+}
+.btn-search:hover { background: var(--gold-lt); }
+
+.logo-results { margin-bottom: 16px; }
+
+.logo-results-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.logo-result-item {
+  width: 72px;
+  height: 72px;
+  border: 2px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 6px;
+}
+.logo-result-item:hover { border-color: var(--gold); background: rgba(196,134,42,0.08); }
+.logo-result-item.selected { border-color: var(--gold); background: rgba(196,134,42,0.15); }
+.logo-result-item img { width: 100%; height: 100%; object-fit: contain; }
+
+.logo-selected {
+  background: rgba(196,134,42,0.06);
+  border: 1px solid rgba(196,134,42,0.2);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.logo-selected-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-selected-inner img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+}
+
+.logo-selected-name {
+  font-family: var(--font-stamp);
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.logo-placement-label {
+  font-family: var(--font-stamp);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.logo-placement-opts {
+  display: flex;
+  gap: 6px;
+}
+
+.placement-btn {
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.placement-btn.active, .placement-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-remove-logo {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(139,26,26,0.4);
+  color: #c84040;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-remove-logo:hover { border-color: var(--red); }
+
+.logo-skip {
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* ── NEW STYLE PREVIEWS ── */
+.baseball-preview { background: linear-gradient(135deg, #F5EDD8, #D4C090); }
+.neon-preview     { background: linear-gradient(135deg, #080820, #101040); }
+.broadway-preview { background: linear-gradient(135deg, #0a0a08, #1a1808); }
+.festival-preview { background: linear-gradient(135deg, #2a1a08, #1a2808); }
+
+/* ── LOGO ON TICKET ── */
+.t-logo-left {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.t-logo-top {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.t-logo-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── BASEBALL STYLE ── */
+.ticket.baseball {
+  background: linear-gradient(160deg, #F8F0DC 0%, #EDE0C0 50%, #E4D4A8 100%);
+  border: 2px solid #8B6914;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.ticket.baseball .ticket-body     { border-right-color: #8B6914; border-right-style: dashed; }
+.ticket.baseball .ticket-body::before { background: linear-gradient(90deg, #1a4a1a, #2a7a2a); }
+.ticket.baseball .t-details       { border-bottom-color: #C8A850; }
+.ticket.baseball .t-type          { color: #5a3a10; border-bottom-color: #8B6914; }
+.ticket.baseball .t-title         { color: #1a0a04; font-size: 24px; }
+.ticket.baseball .t-venue         { color: #6B4C2A; }
+.ticket.baseball .t-detail-lbl   { color: #8B6914; }
+.ticket.baseball .t-detail-val   { color: #1a0a04; }
+.ticket.baseball .t-price-box    { border-color: #1a4a1a; border-radius: 50px; }
+.ticket.baseball .t-price-lbl    { color: #1a4a1a; }
+.ticket.baseball .t-price-val    { color: #1a4a1a; }
+.ticket.baseball .t-stamp        { border-color: #8B1A1A; border-radius: 4px; }
+.ticket.baseball .t-stamp-text   { color: #8B1A1A; }
+.ticket.baseball .t-stub-label   { color: #1a0a04; }
+.ticket.baseball .t-stub-num     { color: #8B6914; }
+.ticket.baseball .t-barcode span { background: #1a0a04; }
+.ticket.baseball .ticket-stub-col { background: rgba(139,105,20,0.1); }
+
+/* ── NEON ARENA STYLE ── */
+.ticket.neon {
+  background: linear-gradient(160deg, #06061a 0%, #080820 60%, #0a0618 100%);
+  border: 1px solid #00d4ff;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2), 0 4px 24px rgba(0,0,0,0.8);
+}
+.ticket.neon .ticket-body     { border-right-color: #ff006e; }
+.ticket.neon .ticket-body::before { background: linear-gradient(90deg, #00d4ff, #ff006e); }
+.ticket.neon .t-details       { border-bottom-color: rgba(0,212,255,0.2); }
+.ticket.neon .t-type          { color: #00d4ff; border-bottom-color: rgba(0,212,255,0.3); }
+.ticket.neon .t-title         { color: #ffffff; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+.ticket.neon .t-venue         { color: #6080a0; }
+.ticket.neon .t-detail-lbl   { color: #6080a0; }
+.ticket.neon .t-detail-val   { color: #e0f0ff; }
+.ticket.neon .t-price-box    { border-color: #ff006e; box-shadow: 0 0 8px rgba(255,0,110,0.3); }
+.ticket.neon .t-price-lbl    { color: #ff006e; }
+.ticket.neon .t-price-val    { color: #ff006e; text-shadow: 0 0 8px rgba(255,0,110,0.5); }
+.ticket.neon .t-stamp        { border-color: #00d4ff; box-shadow: 0 0 6px rgba(0,212,255,0.3); }
+.ticket.neon .t-stamp-text   { color: #00d4ff; }
+.ticket.neon .t-stub-label   { color: #e0f0ff; }
+.ticket.neon .t-stub-num     { color: #6080a0; }
+.ticket.neon .t-barcode span { background: #00d4ff; }
+.ticket.neon .ticket-stub-col { background: rgba(0,212,255,0.05); }
+
+/* ── BROADWAY STYLE ── */
+.ticket.broadway {
+  background: linear-gradient(160deg, #0c0c08 0%, #141408 60%, #0c0c04 100%);
+  border: 1px solid #c8a820;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.9), inset 0 0 40px rgba(200,168,32,0.04);
+}
+.ticket.broadway .ticket-body     { border-right-color: #c8a820; border-right-style: double; border-right-width: 3px; }
+.ticket.broadway .ticket-body::before { background: linear-gradient(90deg, #c8a820, #e8c840); }
+.ticket.broadway .t-details       { border-bottom-color: rgba(200,168,32,0.25); }
+.ticket.broadway .t-type          { color: #c8a820; border-bottom-color: rgba(200,168,32,0.3); letter-spacing: 5px; }
+.ticket.broadway .t-title         { color: #f5e8c0; font-style: italic; }
+.ticket.broadway .t-venue         { color: #806840; }
+.ticket.broadway .t-detail-lbl   { color: #806840; }
+.ticket.broadway .t-detail-val   { color: #e8d890; }
+.ticket.broadway .t-price-box    { border-color: #c8a820; border-width: 1px; }
+.ticket.broadway .t-price-lbl    { color: #c8a820; }
+.ticket.broadway .t-price-val    { color: #f0d860; }
+.ticket.broadway .t-stamp        { border-color: #c8a820; border-style: double; border-width: 3px; }
+.ticket.broadway .t-stamp-text   { color: #c8a820; }
+.ticket.broadway .t-stub-label   { color: #f5e8c0; font-style: italic; }
+.ticket.broadway .t-stub-num     { color: #806840; }
+.ticket.broadway .t-barcode span { background: #c8a820; }
+.ticket.broadway .ticket-stub-col { background: rgba(200,168,32,0.06); border-left: 1px solid rgba(200,168,32,0.2); }
+
+/* ── FESTIVAL STYLE ── */
+.ticket.festival {
+  background: linear-gradient(160deg, #1a0e04 0%, #0e1a04 40%, #04100e 100%);
+  border: 1px solid #e87820;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.7);
+}
+.ticket.festival .ticket-body     { border-right-color: #e87820; border-right-style: dashed; }
+.ticket.festival .ticket-body::before { background: linear-gradient(90deg, #e87820, #20b840, #2080e8); }
+.ticket.festival .t-details       { border-bottom-color: rgba(232,120,32,0.25); }
+.ticket.festival .t-type          { color: #e87820; border-bottom-color: rgba(232,120,32,0.3); }
+.ticket.festival .t-title         { color: #f8e8c0; }
+.ticket.festival .t-venue         { color: #a07840; }
+.ticket.festival .t-detail-lbl   { color: #a07840; }
+.ticket.festival .t-detail-val   { color: #f0d890; }
+.ticket.festival .t-price-box    { border-color: #20b840; }
+.ticket.festival .t-price-lbl    { color: #20b840; }
+.ticket.festival .t-price-val    { color: #40d860; }
+.ticket.festival .t-stamp        { border-color: #2080e8; }
+.ticket.festival .t-stamp-text   { color: #60a0f0; }
+.ticket.festival .t-stub-label   { color: #f8e8c0; }
+.ticket.festival .t-stub-num     { color: #a07840; }
+.ticket.festival .t-barcode span { background: #e87820; }
+.ticket.festival .ticket-stub-col { background: rgba(232,120,32,0.06); }
+
+
+/* ── CATEGORY PICKER ── */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.category-card {
+  border: 2px solid var(--border);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(245,240,232,0.03);
+}
+.category-card:hover { border-color: rgba(196,134,42,0.5); background: rgba(196,134,42,0.05); }
+.category-card.active { border-color: var(--gold); background: rgba(196,134,42,0.1); }
+
+.category-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+.category-name { font-family: var(--font-stamp); font-size: 12px; color: var(--cream); letter-spacing: 1px; display: block; margin-bottom: 3px; }
+.category-desc { font-size: 10px; color: var(--text-muted); display: block; }
+
+.style-divider {
+  text-align: center;
+  font-family: var(--font-stamp);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #604030;
+  margin-bottom: 16px;
+}
+
+.style-group { display: none; }
+.style-group.active { display: block; }
+
+/* ── STYLE CARD PREVIEWS — new layout ── */
+.style-preview {
+  height: 80px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  position: relative;
+}
+
+.sp-edge {
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.sp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  gap: 2px;
+}
+
+.sp-type {
+  font-family: var(--font-stamp);
+  font-size: 7px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #7a5020;
+}
+
+.sp-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sp-detail {
+  font-family: var(--font-stamp);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #9a7040;
+}
+
+/* new style preview backgrounds */
+.gridiron-preview  { background: linear-gradient(135deg, #1a0e04, #2a1a08); }
+.jazzclub-preview  { background: linear-gradient(135deg, #0c0c04, #1a1808); }
+.psychedelic-preview { background: linear-gradient(135deg, #1a0428, #041a28); }
+.cinema-preview    { background: linear-gradient(135deg, #1a0404, #0a0808); }
+
+/* ── GRIDIRON TICKET ── */
+.ticket.gridiron {
+  background: linear-gradient(160deg, #fffaee 0%, #f5e8c8 50%, #ede0b0 100%);
+  border: 1px solid #8B4500;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.ticket.gridiron .ticket-body     { border-right-color: #8B4500; border-right-style: dashed; }
+.ticket.gridiron .ticket-body::before { background: linear-gradient(90deg, #8B4500, #c86000); }
+.ticket.gridiron .t-details       { border-bottom-color: #c8a050; }
+.ticket.gridiron .t-type          { color: #5a2a00; border-bottom-color: #8B4500; }
+.ticket.gridiron .t-title         { color: #1a0800; }
+.ticket.gridiron .t-venue         { color: #7a4a10; }
+.ticket.gridiron .t-detail-lbl   { color: #8B4500; }
+.ticket.gridiron .t-detail-val   { color: #1a0800; }
+.ticket.gridiron .t-price-box    { border-color: #8B4500; border-radius: 2px; }
+.ticket.gridiron .t-price-lbl    { color: #8B4500; }
+.ticket.gridiron .t-price-val    { color: #8B4500; }
+.ticket.gridiron .t-stamp        { border-color: #1a4a1a; }
+.ticket.gridiron .t-stamp-text   { color: #1a4a1a; }
+.ticket.gridiron .t-stub-label   { color: #1a0800; }
+.ticket.gridiron .t-stub-num     { color: #8B4500; }
+.ticket.gridiron .t-barcode span { background: #1a0800; }
+.ticket.gridiron .ticket-stub-col { background: rgba(139,69,0,0.1); }
+
+/* ── JAZZ CLUB TICKET ── */
+.ticket.jazzclub {
+  background: linear-gradient(160deg, #0c0c04 0%, #181808 60%, #100c04 100%);
+  border: 1px solid #c8a020;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(200,160,32,0.06);
+}
+.ticket.jazzclub .ticket-body     { border-right-color: #c8a020; border-right-style: double; border-right-width: 3px; }
+.ticket.jazzclub .ticket-body::before { background: linear-gradient(90deg, #c8a020, #e8c040); height: 3px; }
+.ticket.jazzclub .t-details       { border-bottom-color: rgba(200,160,32,0.2); }
+.ticket.jazzclub .t-type          { color: #c8a020; border-bottom-color: rgba(200,160,32,0.3); font-style: italic; }
+.ticket.jazzclub .t-title         { color: #f0e8d0; font-style: italic; }
+.ticket.jazzclub .t-venue         { color: #806840; }
+.ticket.jazzclub .t-detail-lbl   { color: #806840; }
+.ticket.jazzclub .t-detail-val   { color: #e8d890; }
+.ticket.jazzclub .t-price-box    { border-color: #c8a020; border-style: double; }
+.ticket.jazzclub .t-price-lbl    { color: #c8a020; }
+.ticket.jazzclub .t-price-val    { color: #f0d840; }
+.ticket.jazzclub .t-stamp        { border-color: #c8a020; border-style: double; border-width: 3px; }
+.ticket.jazzclub .t-stamp-text   { color: #c8a020; }
+.ticket.jazzclub .t-stub-label   { color: #f0e8d0; font-style: italic; }
+.ticket.jazzclub .t-stub-num     { color: #806840; }
+.ticket.jazzclub .t-barcode span { background: #c8a020; }
+.ticket.jazzclub .ticket-stub-col { background: rgba(200,160,32,0.05); }
+
+/* ── PSYCHEDELIC TICKET ── */
+.ticket.psychedelic {
+  background: linear-gradient(160deg, #0c0420 0%, #200428 60%, #040c20 100%);
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #e820c8, #20e8c8, #e8c820) 1;
+  box-shadow: 0 4px 24px rgba(200,0,200,0.3);
+}
+.ticket.psychedelic .ticket-body     { border-right: 2px dashed #e820c8; }
+.ticket.psychedelic .ticket-body::before { background: linear-gradient(90deg, #e820c8, #20e8c8, #e8c820); }
+.ticket.psychedelic .t-details       { border-bottom-color: rgba(232,32,200,0.2); }
+.ticket.psychedelic .t-type          { color: #e820c8; border-bottom-color: rgba(232,32,200,0.3); letter-spacing: 4px; }
+.ticket.psychedelic .t-title         { color: #fff; text-shadow: 0 0 12px #e820c8; }
+.ticket.psychedelic .t-venue         { color: #a060c0; }
+.ticket.psychedelic .t-detail-lbl   { color: #a060c0; }
+.ticket.psychedelic .t-detail-val   { color: #e8c8ff; }
+.ticket.psychedelic .t-price-box    { border-color: #20e8c8; }
+.ticket.psychedelic .t-price-lbl    { color: #20e8c8; }
+.ticket.psychedelic .t-price-val    { color: #20e8c8; text-shadow: 0 0 8px #20e8c8; }
+.ticket.psychedelic .t-stamp        { border-color: #e8c820; }
+.ticket.psychedelic .t-stamp-text   { color: #e8c820; }
+.ticket.psychedelic .t-stub-label   { color: #e8c8ff; }
+.ticket.psychedelic .t-stub-num     { color: #a060c0; }
+.ticket.psychedelic .t-barcode span { background: #e820c8; }
+.ticket.psychedelic .ticket-stub-col { background: rgba(232,32,200,0.06); }
+
+/* ── CINEMA TICKET ── */
+.ticket.cinema {
+  background: linear-gradient(160deg, #1a0808 0%, #100404 60%, #0c0404 100%);
+  border: 1px solid #c82020;
+  box-shadow: 0 4px 20px rgba(200,0,0,0.2), 0 4px 24px rgba(0,0,0,0.8);
+}
+.ticket.cinema .ticket-body     { border-right-color: #c82020; border-right-style: dashed; }
+.ticket.cinema .ticket-body::before { background: linear-gradient(90deg, #c82020, #e84040); }
+.ticket.cinema .t-details       { border-bottom-color: rgba(200,32,32,0.2); }
+.ticket.cinema .t-type          { color: #c82020; border-bottom-color: rgba(200,32,32,0.3); letter-spacing: 5px; }
+.ticket.cinema .t-title         { color: #f5f0e8; letter-spacing: 1px; }
+.ticket.cinema .t-venue         { color: #806050; }
+.ticket.cinema .t-detail-lbl   { color: #806050; }
+.ticket.cinema .t-detail-val   { color: #e8e0d0; }
+.ticket.cinema .t-price-box    { border-color: #f5f0e8; }
+.ticket.cinema .t-price-lbl    { color: #c0b090; }
+.ticket.cinema .t-price-val    { color: #f5f0e8; }
+.ticket.cinema .t-stamp        { border-color: #c82020; }
+.ticket.cinema .t-stamp-text   { color: #c82020; }
+.ticket.cinema .t-stub-label   { color: #f5f0e8; }
+.ticket.cinema .t-stub-num     { color: #806050; }
+.ticket.cinema .t-barcode span { background: #c82020; }
+.ticket.cinema .ticket-stub-col { background: rgba(200,32,32,0.08); }
+
+/* glow for new styles */
+.ticket-wrap-outer.glow-gridiron::before    { background: rgba(139,69,0,0.35); }
+.ticket-wrap-outer.glow-jazzclub::before    { background: rgba(200,160,32,0.25); }
+.ticket-wrap-outer.glow-psychedelic::before { background: rgba(232,32,200,0.25); }
+.ticket-wrap-outer.glow-cinema::before      { background: rgba(200,32,32,0.3); }
+
+@media (max-width: 600px) {
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.ticket-wrap { width: 100%; }
+#ticketEl { display:block; overflow-x:auto; overflow-y:hidden; padding: 8px 0 4px; }
+#ticketEl > div { margin: 0 auto; }
+.ticket-wrap-outer > div { width: 100%; }
+
   </style>
 </head>
 <body>
@@ -936,7 +2305,7 @@
     <a href="index.html" class="nav-logo">inkstub</a>
     <ul class="nav-links">
       <li><a href="#how">How it works</a></li>
-      <li><a href="#styles">Styles</a></li>
+      <li><a href="#create">Create a Stub</a></li>
       <li><a href="#collection">My Collection</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
@@ -952,7 +2321,7 @@
     <h1>Your digital tickets<br>deserve to <em>last forever</em></h1>
     <p class="hero-sub">Upload any e-ticket — concert, game, show. We print a beautiful vintage-style collectible stub on archival cardstock and mail it to your door.</p>
     <div class="hero-actions">
-      <a href="app.html" class="btn-hero-primary">Create Your Stub →</a>
+      <a onclick="document.getElementById('create').scrollIntoView({behavior:'smooth'})" href="#create" class="btn-hero-primary">Create Your Stub →</a>
       <a href="#how" class="btn-hero-secondary">See how it works</a>
     </div>
 
@@ -1052,7 +2421,7 @@
           <span class="section-label">Ticket styles</span>
           <h2 class="section-title">Three eras.<br>One memory.</h2>
         </div>
-        <a href="app.html" class="btn-hero-secondary reveal" style="transition-delay:0.1s">Start creating →</a>
+        <a href="#create" class="btn-hero-secondary reveal" style="transition-delay:0.1s">Start creating →</a>
       </div>
 
       <div class="styles-grid">
@@ -1190,6 +2559,351 @@
   </section>
 
 
+
+  <!-- CREATE A STUB SECTION -->
+  <section id="create" style="padding:80px 0;border-top:1px solid var(--border)">
+    <div style="max-width:900px;margin:0 auto;padding:0 24px">
+      <div class="reveal" style="text-align:center;margin-bottom:40px">
+        <span class="section-label">Create a Stub</span>
+        <h2 class="section-title">Turn your ticket into a keepsake</h2>
+        <p class="section-sub" style="margin:0 auto">Upload your e-ticket and we'll print a beautiful collectible stub on archival cardstock.</p>
+      </div>
+  
+    <section class="view active" id="view-create">
+      <div class="section-hero">
+        <h1>Turn Your Digital Ticket<br>Into a Keepsake</h1>
+        <p class="hero-sub">Upload your e-ticket — we print &amp; mail a collectible stub to your door</p>
+      </div>
+
+      <!-- STEP 1: UPLOAD -->
+      <div class="card" id="card-upload">
+        <div class="step-label">Step 1 — Upload Your Ticket</div>
+
+        <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
+
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-inner">
+            <div class="upload-icon">🎟</div>
+            <div class="upload-title">Click to upload your e-ticket</div>
+            <div class="upload-hint">Drag &amp; drop works too</div>
+            <div class="upload-formats">
+              <span class="upload-format-tag">PNG</span>
+              <span class="upload-format-tag">JPG</span>
+              <span class="upload-format-tag">PDF</span>
+              <span class="upload-format-tag">SCREENSHOT</span>
+            </div>
+          </div>
+          <div class="upload-success" id="uploadSuccess" style="display:none">
+            <div class="upload-icon">✅</div>
+            <div class="upload-title" id="uploadFileName">File uploaded</div>
+            <div class="upload-hint">Looking good — fill in details below</div>
+          </div>
+        </div>
+
+        <div class="divider"><span>or enter details manually</span></div>
+
+        <!-- FORM -->
+        <div class="form-grid">
+          <div class="field">
+            <label class="field-label" for="eventName">Event Name</label>
+            <input class="field-input" id="eventName" type="text" placeholder="e.g. Taylor Swift: Eras Tour">
+          </div>
+          <div class="field">
+            <label class="field-label" for="eventType">Event Type</label>
+            <select class="field-input field-select" id="eventType">
+              <option value="Concert">Concert</option>
+              <option value="Sports">Sports Game</option>
+              <option value="Theatre">Theatre</option>
+              <option value="Festival">Festival</option>
+              <option value="Comedy">Comedy Show</option>
+              <option value="Other">Other Event</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="venue">Venue</label>
+            <input class="field-input" id="venue" type="text" placeholder="e.g. Wrigley Field, Chicago, IL">
+          </div>
+          <div class="field">
+            <label class="field-label" for="eventDate">Date</label>
+            <input class="field-input" id="eventDate" type="text" placeholder="e.g. June 2, 2024">
+          </div>
+          <div class="field">
+            <label class="field-label" for="seatInfo">Section / Row / Seat</label>
+            <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
+          </div>
+          <div class="field">
+            <label class="field-label" for="ticketPrice">Original Ticket Price</label>
+            <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. $85.00">
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: LOGO -->
+      <div class="card" id="card-logo">
+        <div class="step-label">Step 2 — Add a Team Logo (Optional)</div>
+        <div class="logo-search-row">
+          <div class="field" style="flex:1">
+            <label class="field-label" for="logoSearch">Search for a sports team</label>
+            <input class="field-input" id="logoSearch" type="text" placeholder="e.g. Chicago Bulls, New York Yankees...">
+          </div>
+          <button class="btn-search" id="btnLogoSearch">Search</button>
+        </div>
+        <div class="logo-results" id="logoResults" style="display:none">
+          <div class="logo-results-grid" id="logoResultsGrid"></div>
+        </div>
+        <div class="logo-selected" id="logoSelected" style="display:none">
+          <div class="logo-selected-inner">
+            <img id="logoSelectedImg" src="" alt="Selected logo">
+            <div>
+              <div class="logo-selected-name" id="logoSelectedName"></div>
+              <div class="logo-placement-label">Logo placement</div>
+              <div class="logo-placement-opts">
+                <button class="placement-btn active" data-placement="left">◧ Left</button>
+                <button class="placement-btn" data-placement="watermark">⬡ Watermark</button>
+                <button class="placement-btn" data-placement="top">⬆ Top center</button>
+              </div>
+            </div>
+            <button class="btn-remove-logo" id="btnRemoveLogo">✕ Remove</button>
+          </div>
+        </div>
+        <div class="logo-skip">No logo? That's fine — <button class="btn-text" id="btnSkipLogo">skip this step</button></div>
+      </div>
+
+      <!-- STEP 3: STYLE -->
+      <div class="card" id="card-style">
+        <div class="step-label">Step 3 — Choose Your Style</div>
+
+        <!-- CATEGORY PICKER -->
+        <div class="category-grid" id="categoryPicker">
+          <div class="category-card active" data-category="sports">
+            <div class="category-icon">🏟</div>
+            <div class="category-name">Sports</div>
+            <div class="category-desc">Baseball, Arena, Football</div>
+          </div>
+          <div class="category-card" data-category="concerts">
+            <div class="category-icon">🎸</div>
+            <div class="category-name">Concerts</div>
+            <div class="category-desc">Festival, Music, Shows</div>
+          </div>
+          <div class="category-card" data-category="theatre">
+            <div class="category-icon">🎭</div>
+            <div class="category-name">Theatre</div>
+            <div class="category-desc">Broadway, Cinema, Arts</div>
+          </div>
+          <div class="category-card" data-category="other">
+            <div class="category-icon">✦</div>
+            <div class="category-name">Other</div>
+            <div class="category-desc">Classic, Custom</div>
+          </div>
+        </div>
+
+        <div class="style-divider">— Select a style below —</div>
+
+        <!-- SPORTS -->
+        <div class="style-group active" id="group-sports">
+          <div class="style-grid" id="stylePicker">
+            <div class="style-card selected" data-style="ballpark">
+              <div class="style-preview" style="background:#1a3a6a;display:flex;align-items:stretch;overflow:hidden">
+                <div style="width:28px;background:linear-gradient(135deg,#0d2040,#1a3a6a);display:flex;align-items:center;justify-content:center;font-size:16px">⚾</div>
+                <div class="sp-main"><div class="sp-type" style="color:rgba(255,255,255,0.6)">SPORTS</div><div class="sp-title" style="color:#fff">BALLPARK</div><div class="sp-detail" style="color:rgba(255,255,255,0.5)">Logo · Script · Cream stub</div></div>
+              </div>
+              <div class="style-name">Ballpark</div><div class="style-era">Navy · logo zone · details stub</div>
+            </div>
+            <div class="style-card" data-style="sport">
+              <div class="style-preview" style="background:linear-gradient(135deg,#0a1828,#0d1f3c)">
+                <div class="sp-edge sp-edge-left" style="background:#8B1A1A"></div>
+                <div class="sp-main"><div class="sp-type" style="color:#e8b870">ARENA</div><div class="sp-title" style="color:#F5EDD8">GAMEDAY</div><div class="sp-detail" style="color:#8a7060">Dark navy + crimson</div></div>
+                <div class="sp-edge sp-edge-right" style="background:#8B1A1A"></div>
+              </div>
+              <div class="style-name">Gameday</div><div class="style-era">Navy · crimson · classic</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONCERTS -->
+        <div class="style-group" id="group-concerts">
+          <div class="style-grid">
+            <div class="style-card" data-style="festival">
+              <div class="style-preview" style="background:#f0ece4;display:flex;align-items:stretch;overflow:hidden">
+                <div style="width:28px;background:#222;display:flex;align-items:center;justify-content:center;font-size:14px">🎵</div>
+                <div class="sp-main"><div class="sp-type" style="color:#888">FESTIVAL</div><div class="sp-title" style="color:#111">MODERN</div><div class="sp-detail" style="color:#888">Cream · pill buttons · barcode</div></div>
+              </div>
+              <div class="style-name">Festival</div><div class="style-era">Clean · modern · minimal</div>
+            </div>
+            <div class="style-card" data-style="classic">
+              <div class="style-preview" style="background:linear-gradient(135deg,#F0E8D0,#DCCFA8)">
+                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
+                <div class="sp-main"><div class="sp-type" style="color:#7a5020">CONCERT</div><div class="sp-title" style="color:#1a0a04">CLASSIC</div><div class="sp-detail" style="color:#9a7040">Aged paper · warm gold</div></div>
+                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
+              </div>
+              <div class="style-name">Classic</div><div class="style-era">Aged paper · vintage</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THEATRE -->
+        <div class="style-group" id="group-theatre">
+          <div class="style-grid">
+            <div class="style-card" data-style="theatre">
+              <div class="style-preview" style="background:#c8920a;display:flex;align-items:stretch;overflow:hidden">
+                <div class="sp-main"><div class="sp-type" style="color:#1a0a00">THEATRE</div><div class="sp-title" style="color:#1a0a00">GOLD</div><div class="sp-detail" style="color:rgba(26,10,0,0.6)">Gold · big title · ADMIT ONE stub</div></div>
+                <div style="width:28px;background:rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:9px;font-weight:700;color:#1a0a00;letter-spacing:2px;text-transform:uppercase">ADMIT ONE</div>
+              </div>
+              <div class="style-name">Theatre Gold</div><div class="style-era">Gold · ornate · ADMIT ONE stub</div>
+            </div>
+            <div class="style-card" data-style="cinema">
+              <div class="style-preview" style="background:#dd1a1a;display:flex;align-items:stretch;overflow:hidden">
+                <div style="width:28px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:16px">🎬</div>
+                <div class="sp-main"><div class="sp-type" style="color:rgba(255,255,255,0.7)">CINEMA</div><div class="sp-title" style="color:#fff">RED</div><div class="sp-detail" style="color:rgba(255,255,255,0.5)">Red · logo · seat boxes</div></div>
+                <div style="width:28px;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px">
+                  <div style="font-size:6px;color:#aaa">ROW</div>
+                  <div style="background:#dd1a1a;width:100%;text-align:center;font-size:10px;font-weight:700;color:#fff">02</div>
+                </div>
+              </div>
+              <div class="style-name">Cinema Red</div><div class="style-era">Red · logo zone · seat boxes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OTHER -->
+        <div class="style-group" id="group-other">
+          <div class="style-grid">
+            <div class="style-card" data-style="classic">
+              <div class="style-preview" style="background:linear-gradient(135deg,#F0E8D0,#DCCFA8)">
+                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
+                <div class="sp-main"><div class="sp-type" style="color:#7a5020">GENERAL</div><div class="sp-title" style="color:#1a0a04">CLASSIC</div><div class="sp-detail" style="color:#9a7040">Aged cream paper</div></div>
+                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
+              </div>
+              <div class="style-name">Classic</div><div class="style-era">Gold · aged paper</div>
+            </div>
+            <div class="style-card" data-style="festival">
+              <div class="style-preview" style="background:#f0ece4;display:flex;align-items:stretch">
+                <div style="width:28px;background:#222"></div>
+                <div class="sp-main"><div class="sp-type" style="color:#888">MODERN</div><div class="sp-title" style="color:#111">MINIMAL</div><div class="sp-detail" style="color:#888">Clean · pill dates</div></div>
+              </div>
+              <div class="style-name">Modern</div><div class="style-era">Clean · minimal</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STEP 3: PREVIEW -->
+      <div class="card" id="card-preview" style="padding-bottom:20px;overflow:hidden">
+        <div class="step-label">Step 4 — Preview &amp; Order</div>
+        <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
+
+        <div class="ticket-wrap" id="ticketWrap" style="display:none;overflow:visible">
+          <div class="preview-label">Your Collectible Stub — Printed Size: 5.5" × 2" (528 × 192px)</div>
+          <div id="ticketEl" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
+
+          <div class="action-row">
+            <button class="btn-secondary" id="btnSave">Save to Collection</button>
+            <button class="btn-primary" id="btnOrder">Order Print — $14.99</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <div class="card" id="card-order" style="display:none">
+        <div class="step-label">Step 4 — Complete Your Order</div>
+        <div class="order-lines">
+          <div class="order-line">
+            <span>Premium stub print (5.5" × 2")</span><span>$9.99</span>
+          </div>
+          <div class="order-line">
+            <span>Archival cardstock + UV gloss coating</span><span>$2.50</span>
+          </div>
+          <div class="order-line">
+            <span>Tracked first-class shipping (3–5 days)</span><span>$2.50</span>
+          </div>
+          <div class="order-line order-total">
+            <span>Total</span><span>$14.99</span>
+          </div>
+        </div>
+
+        <div class="address-grid">
+          <div class="field field-full">
+            <label class="field-label" for="addrName">Full Name</label>
+            <input class="field-input" id="addrName" type="text" placeholder="Jane Smith">
+          </div>
+          <div class="field field-full">
+            <label class="field-label" for="addrStreet">Street Address</label>
+            <input class="field-input" id="addrStreet" type="text" placeholder="123 Main St">
+          </div>
+          <div class="field">
+            <label class="field-label" for="addrCity">City</label>
+            <input class="field-input" id="addrCity" type="text" placeholder="Chicago">
+          </div>
+          <div class="field">
+            <label class="field-label" for="addrZip">ZIP Code</label>
+            <input class="field-input" id="addrZip" type="text" placeholder="60601">
+          </div>
+          <div class="field field-full">
+            <label class="field-label" for="addrEmail">Email (for tracking updates)</label>
+            <input class="field-input" id="addrEmail" type="email" placeholder="jane@example.com">
+          </div>
+        </div>
+
+        <button class="btn-primary btn-full" id="btnPlaceOrder">✦ Place Order — $14.99 ✦</button>
+        <p class="order-note">Payment powered by Stripe &bull; Ships in 1–2 business days</p>
+      </div>
+
+      <!-- ORDER CONFIRM -->
+      <div class="card card-confirm" id="card-confirm" style="display:none">
+        <div class="confirm-icon">📬</div>
+        <h2 class="confirm-title">Order Confirmed!</h2>
+        <p class="confirm-sub">Your collectible stub is heading to the printer on archival cardstock.</p>
+        <div class="tracking-badge" id="trackingBadge">STUB-000000</div>
+        <p class="confirm-sub">Estimated delivery: 3–5 business days<br>We'll email you when it ships.</p>
+        <button class="btn-secondary" id="btnViewCollection">View My Collection →</button>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         VIEW: COLLECTION
+    ═══════════════════════════════════════ -->
+    <section class="view" id="view-collection">
+      <div class="collection-header">
+        <div>
+          <h2 class="collection-title">My Collection</h2>
+          <p class="collection-sub">Your saved &amp; ordered stubs</p>
+        </div>
+        <div class="collection-stats">
+          <div class="stat">
+            <span class="stat-num" id="statTotal">0</span>
+            <span class="stat-lbl">Total Stubs</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num" id="statPrinting">0</span>
+            <span class="stat-lbl">In Production</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Concert">Concerts</button>
+        <button class="filter-btn" data-filter="Sports">Sports</button>
+        <button class="filter-btn" data-filter="Theatre">Theatre</button>
+        <button class="filter-btn" data-filter="Festival">Festivals</button>
+      </div>
+
+      <div class="stubs-grid" id="stubsGrid">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🎟</div>
+          <p class="empty-title">No stubs yet</p>
+          <p class="empty-sub">Print your first ticket to start your collection</p>
+          <button class="btn-secondary" id="btnGoCreate">Create Your First Stub →</button>
+        </div>
+      </div>
+    </section>
+  
+
+    </div>
+  </section>
+
   <!-- COLLECTION -->
   <section class="collection-section" id="collection">
     <div class="collection-inner">
@@ -1200,7 +2914,7 @@
         </div>
         <div style="display:flex;gap:10px;align-items:center">
           <button class="btn-hero-secondary" onclick="openAddEvent()" id="btnAddEvent" style="display:none">+ Log an Event</button>
-          <a href="app.html" class="btn-hero-primary">Create a Stub →</a>
+          <a onclick="document.getElementById('create').scrollIntoView({behavior:'smooth'})" href="#create" class="btn-hero-primary">Create a Stub →</a>
         </div>
       </div>
       <div class="collection-grid" id="collectionGrid">
@@ -1267,7 +2981,7 @@
     <h2 class="reveal">Don't let the memory<br>live only on your phone</h2>
     <p class="reveal" style="transition-delay:0.1s">Turn any digital ticket into something you can hold, frame, and keep forever.</p>
     <div class="reveal" style="transition-delay:0.2s">
-      <a href="app.html" class="btn-hero-primary">Create Your First Stub →</a>
+      <a onclick="document.getElementById('create').scrollIntoView({behavior:'smooth'})" href="#create" class="btn-hero-primary">Create Your First Stub →</a>
     </div>
   </section>
 
@@ -1277,7 +2991,7 @@
     <ul class="footer-links">
       <li><a href="#how">How it works</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><a href="app.html">Create a Stub</a></li>
+      <li><a href="#create">Create a Stub</a></li>
     </ul>
     <div class="footer-copy">© 2026 Inkstub</div>
   </footer>
@@ -1341,14 +3055,19 @@
 
     function renderCollection() {
       const grid = document.getElementById('collectionGrid');
+      if (!grid) return;
+
+      // Always clear first to prevent stale data showing
+      grid.innerHTML = '';
 
       // Not signed in — show auth prompt
       if (!currentUser) {
+        cloudCollection = [];
         grid.innerHTML = `
           <div class="auth-prompt">
             <div class="auth-prompt-icon">🎟</div>
             <div class="auth-prompt-title">Your memories, saved forever</div>
-            <div class="auth-prompt-sub">Sign in to see your collection and access it from any device. Every event you've ever been to, in one place.</div>
+            <div class="auth-prompt-sub">Sign in to see your collection and access it from any device.</div>
             <div class="auth-prompt-btns">
               <button class="btn-signup" onclick="openSignIn()">Sign In</button>
               <button class="btn-signin" onclick="openSignUp()">Get Started — It's Free</button>
@@ -1366,7 +3085,7 @@
             <div class="collection-empty-sub">Start building your collection — log any event or create a printed stub.</div>
             <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
               <button class="btn-signup" onclick="openAddEvent()">+ Log an Event</button>
-              <a href="app.html" class="btn-signin" style="display:inline-block;line-height:2">Create a Stub</a>
+              <a href="#create" class="btn-signin" style="display:inline-block;line-height:2">Create a Stub</a>
             </div>
           </div>`;
         return;
@@ -1386,7 +3105,7 @@
             ${item.price ? '<span>💰 ' + item.price + '</span>' : ''}
           </div>
           <div class="cc-actions">
-            <a href="app.html" class="cc-btn cc-btn-primary">Make a Stub</a>
+            <a href="#create" class="cc-btn cc-btn-primary">Make a Stub</a>
             <button class="cc-btn cc-btn-secondary" onclick="deleteItem('${item.id}')">Remove</button>
           </div>
         </div>`;
@@ -1441,6 +3160,737 @@
 
     // ── INIT ──
     initAuth(onUserChange);
+
+<script>
+/* tickets.js — Ticket HTML generation */
+
+function buildBarcode(color, vertical) {
+  const c = color || '#333';
+  const h = [16,10,18,8,13,20,11,15,8,19,11,16,10,20,13,10,17,8,14,19,12,16];
+  if (vertical) {
+    return h.map(v => `<span style="display:block;height:2px;width:${v}px;background:${c};margin-bottom:1.5px;border-radius:1px"></span>`).join('');
+  }
+  return h.map(v => `<span style="display:inline-block;width:2px;height:${v}px;background:${c};margin-right:1.5px;border-radius:1px"></span>`).join('');
+}
+
+function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function buildTicketHTML(data) {
+  const {name,type,venue,date,seat,price,style,logo,logoPlacement} = data;
+  const s = style || 'classic';
+  const sn = String(rnd(10000,99999));
+  const gate = ['A','B','C','D','E','F'][rnd(0,5)];
+  const pl = logoPlacement || 'left';
+
+  // Truncate safely
+  const nm = (name||'Event Name').substring(0,28);
+  const vn = (venue||'Venue').substring(0,34);
+  const dt = (date||'TBD');
+  const st = (seat||'GA');
+  const pr = (price||'$0.00');
+  const tp = (type||'Event');
+
+  // Logo placeholder shown when no logo uploaded
+  const logoBlock = logo
+    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
+    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
+  const logoBlockDk = logo
+    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
+    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(0,0,0,0.15);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
+
+  // Fixed ticket dimensions — 528x192
+  const W = '528px'; const H = '192px';
+  const OUTER = `position:relative;display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0`;
+
+  // Reusable detail cell
+  const dc = (label, val, lc, vc, maxW) =>
+    `<div style="overflow:hidden;min-width:0"><div style="font-size:6px;letter-spacing:1.5px;text-transform:uppercase;color:${lc};line-height:1">${label}</div><div style="font-size:10px;font-weight:700;color:${vc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${maxW||'120px'};line-height:1.3">${val}</div></div>`;
+
+  /* ══ THEATRE GOLD ══ */
+  if (s === 'theatre') {
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:528px;height:192px;background:#c8920a;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="flex:1;height:192px;padding:10px 14px 8px;overflow:hidden;box-sizing:border-box">
+          <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.65);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px">${vn}</div>
+          <div style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,10,0,0.5);text-align:center;margin-bottom:4px">${tp}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px">${nm}</div>
+          <div style="height:1px;background:rgba(26,10,0,0.25);margin-bottom:7px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px 10px">
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">DATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${dt}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">GATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${gate}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">PRICE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${pr}</div></div>
+            <div style="overflow:hidden;grid-column:span 2"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">SEAT</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${st}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">NO.</div><div style="font-size:9px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace;white-space:nowrap;line-height:1.2">${sn}</div></div>
+          </div>
+        </div>
+        <div style="width:96px;height:192px;background:#fffdf5;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;padding:10px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box;gap:6px">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#1a0a00;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-height:100px;flex-shrink:0">ADMIT ONE</div>
+          <div style="background:#c8920a;width:100%;padding:3px 0;text-align:center;flex-shrink:0">
+            <div style="font-size:6px;color:#1a0a00;letter-spacing:1px;text-transform:uppercase">TICKET NO</div>
+            <div style="font-size:7px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sn}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0;margin-top:auto">${buildBarcode('#1a0a00', true)}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ══ CINEMA RED ══ */
+  if (s === 'cinema') {
+    const parts = st.split(/[,·\s]+/).filter(Boolean);
+    const rowNum  = st.match(/row[\s:]*([^\s,]+)/i)?.[1] || parts[Math.max(0,parts.length-2)] || '—';
+    const seatNum = st.match(/seat[\s:]*([^\s,]+)/i)?.[1] || parts[parts.length-1] || '—';
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:100%;height:100%;background:#dd1a1a;border:3px solid #f0e0c8;font-family:'Special Elite',cursive;overflow:hidden;box-sizing:border-box">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:rgba(0,0,0,0.25);padding:10px;box-sizing:border-box">
+          ${logoBlock}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 12px;gap:5px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
+            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7);white-space:nowrap">${tp}</span>
+            <span style="font-size:8px;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px">${vn}</span>
+          </div>
+          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
+          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
+            ${dc('Date', dt, 'rgba(255,255,255,0.6)', '#fff', '110px')}
+            ${dc('Gate', gate, 'rgba(255,255,255,0.6)', '#fff', '40px')}
+            ${dc('Price', pr, 'rgba(255,255,255,0.6)', '#fff', '70px')}
+          </div>
+        </div>
+        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#111;border-left:2px dashed rgba(255,255,255,0.2);padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">ROW</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${rowNum}</div></div>
+          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">SEAT</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${seatNum}</div></div>
+          <div style="font-size:6px;color:#555;font-family:'Courier New',monospace;white-space:nowrap">No.${sn}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#dd1a1a', true)}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ══ BALLPARK ══ */
+  if (s === 'ballpark') {
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:100%;height:100%;background:#1a3a6a;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,#0d2040,#1a3a6a);padding:10px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
+          ${logoBlock}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:5px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;overflow:hidden">
+            <span style="color:#e05050;flex-shrink:0">★</span>
+            <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp} · ${vn}</span>
+            <span style="color:#e05050;flex-shrink:0">★</span>
+          </div>
+          <div style="flex-shrink:0;overflow:hidden">
+            <div style="font-family:'Playfair Display',serif;font-size:10px;font-style:italic;color:#e05050;white-space:nowrap;overflow:hidden">— Presents —</div>
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px 8px;border-top:1px solid rgba(255,255,255,0.15);padding-top:5px;flex-shrink:0">
+            ${dc('Date', dt, 'rgba(255,255,255,0.5)', '#fff', '100px')}
+            ${dc('Seat', st, 'rgba(255,255,255,0.5)', '#fff', '100px')}
+            ${dc('Gate', gate, 'rgba(255,255,255,0.5)', '#fff', '40px')}
+            ${dc('Price', pr, '#e8d090', '#e8d090', '80px')}
+            ${dc('Ticket No.', sn, 'rgba(255,255,255,0.4)', 'rgba(255,255,255,0.7)', '100px')}
+          </div>
+        </div>
+        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f5f0e0;border-left:2px dashed #8B6000;padding:10px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:#e05050;text-align:center;white-space:nowrap;flex-shrink:0">Admit One</div>
+          <div style="width:100%;overflow:hidden;flex-shrink:0">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 6px">
+              ${dc('Gate', gate, '#8B6000', '#1a3a6a', '40px')}
+              ${dc('Price', pr, '#8B6000', '#1a3a6a', '50px')}
+              <div style="grid-column:span 2;overflow:hidden">${dc('Seat', st, '#8B6000', '#1a3a6a', '90px')}</div>
+            </div>
+          </div>
+          <div style="font-size:6px;color:#8B6000;font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0">${sn}</div>
+          <div style="display:flex;gap:1.5px;flex-shrink:0">${buildBarcode('#1a3a6a')}</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ══ FESTIVAL / MODERN ══ */
+  if (s === 'festival') {
+    return `<div style="${OUTER}">
+      <div style="display:flex;width:100%;height:100%;background:#f0ece4;font-family:'Special Elite',cursive;overflow:hidden">
+        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#1a1a1a;padding:10px;box-sizing:border-box;overflow:hidden">
+          ${logoBlock}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:6px;overflow:hidden;box-sizing:border-box">
+          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
+            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#888;white-space:nowrap">${tp}</span>
+            <span style="font-size:8px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${vn}</span>
+          </div>
+          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
+          <div style="display:flex;gap:6px;flex-wrap:nowrap;flex-shrink:0;overflow:hidden">
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${dt}</span></div>
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">Gate ${gate}</span></div>
+            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${pr}</span></div>
+          </div>
+          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
+            ${dc('Seat', st, '#888', '#111', '110px')}
+            ${dc('Ticket No.', sn, '#888', '#555', '80px')}
+          </div>
+        </div>
+        <div style="width:84px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f0ece4;border-left:2px dashed #999;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;overflow:hidden;flex-shrink:0">
+            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/).pop()||'GA'}</div></div>
+            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Row</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/)[0]||'GA'}</div></div>
+          </div>
+          <div style="writing-mode:vertical-rl;font-size:6px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;max-height:40px;flex-shrink:0">TICKET NUMBER:</div>
+          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0">${buildBarcode('#111', true)}</div>
+          <div style="text-align:center;overflow:hidden;flex-shrink:0"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1">${gate}</div></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* ══ DEFAULT: classic / sport ══ */
+  const isLight = s !== 'sport';
+  const bg2 = isLight ? 'linear-gradient(160deg,#F0E8D0,#DCCFA8)' : 'linear-gradient(160deg,#0a1828,#0d1f3c)';
+  const bc  = isLight ? '#C8B078' : '#8B1A1A';
+  const tc  = isLight ? '#1a0a04' : '#F5EDD8';
+  const vc  = isLight ? '#6B4C2A' : '#a08060';
+  const lc  = isLight ? '#9a7040' : '#a08060';
+  const pc  = isLight ? '#8B1A1A' : '#e8a820';
+  const sc2 = isLight ? 'rgba(180,150,80,0.2)' : 'rgba(139,26,26,0.15)';
+  const bar = isLight ? '#2C1A0E' : '#c8a878';
+  const tp2 = isLight ? `linear-gradient(90deg,${pc},#C4862A)` : `linear-gradient(90deg,${pc},#c84020)`;
+  const logoImg2 = logo && pl==='left' ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;display:inline-block;margin-right:6px" alt="">` : '';
+
+  return `<div style="${OUTER}">
+    <div style="display:flex;width:100%;height:100%;background:${bg2};border:1px solid ${bc};overflow:hidden">
+      <div style="flex:1;display:flex;flex-direction:column;padding:12px 16px;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+        <div style="height:3px;background:${tp2};position:absolute;top:0;left:0;right:0"></div>
+        <div style="display:flex;justify-content:space-between;border-bottom:1px solid ${bc};padding-bottom:3px;flex-shrink:0;overflow:hidden;margin-top:2px">
+          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">${tp}</span>
+          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">Gate ${gate} · No.${sn}</span>
+        </div>
+        <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0">${logoImg2}<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
+        <div style="font-size:9px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted ${bc};padding-top:5px;flex-shrink:0">
+          <div style="border-right:1px solid ${bc};padding-right:8px;overflow:hidden">${dc('Date', dt, lc, tc, '100px')}</div>
+          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Seat', st, lc, tc, '80px')}</div>
+          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Gate', gate, lc, tc, '40px')}</div>
+          <div style="padding-left:8px;overflow:hidden">${dc('Price', pr, pc, pc, '70px')}</div>
+        </div>
+      </div>
+      <div style="width:64px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${sc2};padding:10px 7px;overflow:hidden;box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:90px;white-space:nowrap">${nm.substring(0,10)}</div>
+        <div style="font-size:7px;color:${lc};font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
+        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(bar, true)}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildCollectionEntryHTML(item) {
+  const badgeClass = {
+    'Saved':     'badge-saved',
+    'Printing':  'badge-printing',
+    'Shipped':   'badge-shipped',
+    'Delivered': 'badge-delivered'
+  }[item.status] || 'badge-saved';
+
+  return `
+    <div class="stub-entry">
+      <span class="stub-status-badge ${badgeClass}">${item.status}</span>
+      ${buildTicketHTML(item)}
+      <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center; padding: 0 4px; max-width:528px; margin-left:auto; margin-right:auto;">
+        <span style="font-family:var(--font-stamp); font-size:10px; letter-spacing:2px; color:#604030;">
+          ${item.tracking || ''}
+        </span>
+        <span style="font-family:var(--font-stamp); font-size:10px; letter-spacing:1px; color:var(--text-muted);">
+          Added ${item.addedDate || ''}
+        </span>
+      </div>
+    </div>
+  `;
+}
+
+/* app.js — Main application logic for Stub */
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let selectedStyle = 'ballpark';
+let collection = JSON.parse(localStorage.getItem('stub_collection') || '[]');
+let currentTicket = null;
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Sync selectedStyle with whichever card is marked selected in HTML
+  const preselected = document.querySelector('.style-card.selected');
+  if (preselected) selectedStyle = preselected.dataset.style;
+  initNav();
+  initUpload();
+  initStylePicker();
+  initButtons();
+  updateStats();
+});
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+function initNav() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const view = btn.dataset.view;
+      switchView(view);
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  document.getElementById('btnViewCollection')?.addEventListener('click', () => {
+    switchView('collection');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-view="collection"]').classList.add('active');
+  });
+
+  document.getElementById('btnGoCreate')?.addEventListener('click', () => {
+    switchView('create');
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-view="create"]').classList.add('active');
+  });
+}
+
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (name === 'collection') renderCollection('all');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ════════════════════════════════════════
+   FILE UPLOAD
+════════════════════════════════════════ */
+function initUpload() {
+  const zone = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+
+  // Click to open file picker
+  zone.addEventListener('click', () => input.click());
+
+  // File selected
+  input.addEventListener('change', () => {
+    if (input.files && input.files[0]) handleFile(input.files[0]);
+  });
+
+  // Drag & drop
+  zone.addEventListener('dragover', e => {
+    e.preventDefault();
+    zone.classList.add('drag-over');
+  });
+
+  zone.addEventListener('dragleave', e => {
+    if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+  });
+
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+}
+
+function handleFile(file) {
+  const zone = document.getElementById('uploadZone');
+  const inner = zone.querySelector('.upload-inner');
+  const success = document.getElementById('uploadSuccess');
+  const nameEl = document.getElementById('uploadFileName');
+
+  // Show uploaded state
+  zone.classList.add('has-file');
+  inner.style.display = 'none';
+  success.style.display = 'block';
+  nameEl.textContent = '✦ Reading your ticket...';
+
+  showToast('Reading your ticket with AI...');
+
+  // Read file as base64 and send to Claude
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const dataUrl = e.target.result;
+    const base64 = dataUrl.split(',')[1];
+    const mediaType = file.type || 'image/jpeg';
+
+    try {
+      const res = await fetch('/.netlify/functions/read-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageData: base64, mediaType }),
+      });
+
+      if (!res.ok) throw new Error('Function error: ' + res.status);
+
+      const data = await res.json();
+
+      if (data.error) throw new Error(data.error);
+
+      // Autofill the form
+      prefillForm(
+        data.name  || '',
+        data.type  || 'Concert',
+        data.venue || '',
+        data.date  || '',
+        data.seat  || '',
+        data.price || ''
+      );
+
+      nameEl.textContent = file.name;
+      showToast('✦ Ticket details filled in automatically!');
+
+    } catch (err) {
+      console.error('Autofill error:', err);
+      nameEl.textContent = file.name;
+      showToast('Uploaded! Fill in the details below.');
+    }
+  };
+
+  reader.onerror = () => {
+    nameEl.textContent = file.name;
+    showToast('Uploaded! Fill in the details below.');
+  };
+
+  // Read as data URL (base64)
+  reader.readAsDataURL(file);
+}
+
+function prefillForm(name, type, venue, date, seat, price) {
+  if (name)  document.getElementById('eventName').value   = name;
+  if (venue) document.getElementById('venue').value       = venue;
+  if (date)  document.getElementById('eventDate').value   = date;
+  if (seat)  document.getElementById('seatInfo').value    = seat;
+  if (price) document.getElementById('ticketPrice').value = price;
+
+  const select = document.getElementById('eventType');
+  for (let i = 0; i < select.options.length; i++) {
+    if (select.options[i].value === type) { select.selectedIndex = i; break; }
+  }
+}
+
+/* ════════════════════════════════════════
+   STYLE PICKER
+════════════════════════════════════════ */
+function initStylePicker() {
+  // Style cards — delegate to handle dynamically
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.style-card');
+    if (!card) return;
+    selectedStyle = card.dataset.style;
+    document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    if (currentTicket) {
+      currentTicket.style = selectedStyle;
+      renderTicketPreview();
+    }
+  });
+
+  // Category picker
+  document.querySelectorAll('.category-card').forEach(cat => {
+    cat.addEventListener('click', () => {
+      const category = cat.dataset.category;
+      // Update active category
+      document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+      cat.classList.add('active');
+      // Show correct style group
+      document.querySelectorAll('.style-group').forEach(g => g.classList.remove('active'));
+      const group = document.getElementById('group-' + category);
+      if (group) {
+        group.classList.add('active');
+        // Auto-select first style card in group
+        const firstCard = group.querySelector('.style-card');
+        if (firstCard) {
+          document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+          firstCard.classList.add('selected');
+          selectedStyle = firstCard.dataset.style;
+        }
+      }
+    });
+  });
+}
+
+/* ════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════ */
+function initButtons() {
+  document.getElementById('btnPreview').addEventListener('click', generatePreview);
+  document.getElementById('btnSave').addEventListener('click', saveToCollection);
+  document.getElementById('btnOrder').addEventListener('click', showOrderForm);
+  document.getElementById('btnPlaceOrder').addEventListener('click', placeOrder);
+}
+
+/* ════════════════════════════════════════
+   TICKET GENERATION
+════════════════════════════════════════ */
+function getFormData() {
+  return {
+    name:  document.getElementById('eventName').value.trim()  || 'The Event',
+    type:  document.getElementById('eventType').value         || 'Concert',
+    venue: document.getElementById('venue').value.trim()      || 'The Grand Venue',
+    date:  document.getElementById('eventDate').value.trim()  || 'TBD',
+    seat:  document.getElementById('seatInfo').value.trim()   || 'GA',
+    price: document.getElementById('ticketPrice').value.trim() || '$0.00',
+    style: selectedStyle,
+    logo:  selectedLogo || null,
+    logoPlacement: selectedPlacement || 'left',
+  };
+}
+
+function generatePreview() {
+  currentTicket = getFormData();
+  renderTicketPreview();
+
+  const wrap = document.getElementById('ticketWrap');
+  wrap.style.display = 'block';
+
+  // Hide order/confirm in case they were shown
+  document.getElementById('card-order').style.display   = 'none';
+  document.getElementById('card-confirm').style.display = 'none';
+
+  setTimeout(() => {
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function renderTicketPreview() {
+  document.getElementById('ticketEl').innerHTML = buildTicketHTML(currentTicket);
+}
+
+/* ════════════════════════════════════════
+   COLLECTION
+════════════════════════════════════════ */
+function saveToCollection() {
+  if (!currentTicket) return;
+  const entry = {
+    ...currentTicket,
+    status: 'Saved',
+    tracking: null,
+    addedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    id: Date.now(),
+  };
+  collection.push(entry);
+  persistCollection();
+  updateStats();
+  showToast('Saved to your collection!');
+}
+
+function persistCollection() {
+  localStorage.setItem('stub_collection', JSON.stringify(collection));
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent    = collection.length;
+  document.getElementById('statPrinting').textContent = collection.filter(c => c.status === 'Printing').length;
+}
+
+function renderCollection(filter) {
+  const grid = document.getElementById('stubsGrid');
+  const items = filter === 'all' ? collection : collection.filter(c => c.type === filter);
+
+  if (items.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🎟</div>
+        <p class="empty-title">No stubs yet</p>
+        <p class="empty-sub">Print your first ticket to start your collection</p>
+        <button class="btn-secondary" id="btnGoCreate">Create Your First Stub →</button>
+      </div>`;
+    document.getElementById('btnGoCreate')?.addEventListener('click', () => {
+      switchView('create');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-view="create"]').classList.add('active');
+    });
+    return;
+  }
+
+  // Newest first
+  const sorted = [...items].reverse();
+  grid.innerHTML = sorted.map(item => buildCollectionEntryHTML(item)).join('');
+}
+
+/* Filter bar */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCollection(btn.dataset.filter);
+  });
+});
+
+/* ════════════════════════════════════════
+   ORDER FLOW
+════════════════════════════════════════ */
+function showOrderForm() {
+  const card = document.getElementById('card-order');
+  card.style.display = 'block';
+  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function placeOrder() {
+  const name   = document.getElementById('addrName').value.trim();
+  const street = document.getElementById('addrStreet').value.trim();
+  const city   = document.getElementById('addrCity').value.trim();
+  const zip    = document.getElementById('addrZip').value.trim();
+  const email  = document.getElementById('addrEmail').value.trim();
+
+  if (!name || !street || !city || !zip || !email) {
+    showToast('Please fill in all address fields.');
+    return;
+  }
+
+  if (!currentTicket) return;
+
+  const trackId = 'STUB-' + Math.floor(Math.random() * 900000 + 100000);
+
+  // Add to collection as "Printing"
+  const entry = {
+    ...currentTicket,
+    status: 'Printing',
+    tracking: trackId,
+    addedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    id: Date.now(),
+    shippingName: name,
+    shippingAddress: `${street}, ${city} ${zip}`,
+    email,
+  };
+  collection.push(entry);
+  persistCollection();
+  updateStats();
+
+  // Show confirm
+  document.getElementById('trackingBadge').textContent = trackId;
+  document.getElementById('card-order').style.display   = 'none';
+  document.getElementById('card-confirm').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('card-confirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+/* ════════════════════════════════════════
+   TOAST
+════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ════════════════════════════════════════
+   LOGO SEARCH
+════════════════════════════════════════ */
+let selectedLogo = null;
+let selectedPlacement = 'left';
+
+document.getElementById('btnLogoSearch')?.addEventListener('click', searchLogos);
+document.getElementById('logoSearch')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') searchLogos();
+});
+document.getElementById('btnRemoveLogo')?.addEventListener('click', removeLogo);
+document.getElementById('btnSkipLogo')?.addEventListener('click', () => {
+  document.getElementById('card-style').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+document.querySelectorAll('.placement-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.placement-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedPlacement = btn.dataset.placement;
+    if (currentTicket) {
+      currentTicket.logoPlacement = selectedPlacement;
+      renderTicketPreview();
+    }
+  });
+});
+
+async function searchLogos() {
+  const query = document.getElementById('logoSearch').value.trim();
+  if (!query) return;
+
+  const grid = document.getElementById('logoResultsGrid');
+  const results = document.getElementById('logoResults');
+  grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">Searching...</div>';
+  results.style.display = 'block';
+
+  try {
+    const res = await fetch(`/.netlify/functions/search-logos?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    if (!res.ok || !data.teams) throw new Error(data.error || 'Search failed');
+
+    const matches = data.teams;
+
+    if (matches.length === 0) {
+      grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;letter-spacing:1px;">No teams found. Try a different name.</div>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    const seen = new Set();
+    matches.forEach(team => {
+      // Only show primary logo per team to avoid duplicates
+      const logos = team.logos.slice(0, 1);
+      logos.forEach((logoUrl) => {
+        // Deduplicate by team name
+        const key = team.name.toLowerCase().replace(/\s+/g,'');
+        if (seen.has(key)) return;
+        seen.add(key);
+        const div = document.createElement('div');
+        div.className = 'logo-result-item';
+        div.title = team.name + ' — ' + team.league;
+        div.innerHTML = `<img src="${logoUrl}" alt="${team.name}" onerror="this.parentElement.style.display='none'">`;
+        div.addEventListener('click', (e) => selectLogo(e, logoUrl, team.name));
+        grid.appendChild(div);
+      });
+    });
+
+  } catch(err) {
+    grid.innerHTML = '<div style="color:var(--text-muted);font-family:var(--font-stamp);font-size:11px;">Search failed. Try again.</div>';
+    console.error(err);
+  }
+}
+
+function selectLogo(e, url, name) {
+  selectedLogo = url;
+  document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
+  e.currentTarget.classList.add('selected');
+
+  document.getElementById('logoSelectedImg').src = url;
+  document.getElementById('logoSelectedName').textContent = name;
+  document.getElementById('logoSelected').style.display = 'block';
+
+  // Update preview if it exists, otherwise store for when they generate it
+  if (currentTicket) {
+    currentTicket.logo = url;
+    currentTicket.logoPlacement = selectedPlacement;
+    renderTicketPreview();
+  }
+
+  showToast('Logo selected! Click Generate Preview to see it on your ticket.');
+}
+
+function removeLogo() {
+  selectedLogo = null;
+  document.getElementById('logoSelected').style.display = 'none';
+  document.getElementById('logoResultsGrid').innerHTML = '';
+  document.getElementById('logoResults').style.display = 'none';
+  document.getElementById('logoSearch').value = '';
+  document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
+  if (currentTicket) {
+    currentTicket.logo = null;
+    renderTicketPreview();
+  }
+}
+
+  </script>
   </script>
 
 </body>
