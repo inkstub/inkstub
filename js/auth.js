@@ -138,7 +138,7 @@ function showAuthModal(mode) {
   modal.innerHTML = '<div style="background:#161616;border:1px solid #333;padding:32px;max-width:400px;width:100%;font-family:DM Sans,sans-serif">' +
     '<div style="font-size:22px;font-weight:700;color:#f0ede8;margin-bottom:8px">' + (mode === 'signin' ? 'Sign In' : 'Create Account') + '</div>' +
     '<div style="font-size:13px;color:#888;margin-bottom:24px">Auth is still loading. Please wait a moment and try again, or refresh the page.</div>' +
-    '<button onclick="document.getElementById('_clerkFallbackModal').remove()" style="width:100%;padding:12px;background:#C4862A;border:none;color:#0a0a0a;font-size:14px;font-weight:600;cursor:pointer">Close & Try Again</button>' +
+    '<button onclick="document.getElementById(&quot;_clerkFallbackModal&quot;).remove()" style="width:100%;padding:12px;background:#C4862A;border:none;color:#0a0a0a;font-size:14px;font-weight:600;cursor:pointer">Close &amp; Try Again</button>' +
     '</div>';
   document.body.appendChild(modal);
 }
