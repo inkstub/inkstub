@@ -80,8 +80,10 @@ Return only JSON like this example:
 
     const text = data.content?.[0]?.text || '';
 
+    // Parse the JSON response from Claude
     let ticketData;
     try {
+      // Strip any accidental markdown fences
       const clean = text.replace(/```json|```/g, '').trim();
       ticketData = JSON.parse(clean);
     } catch {
