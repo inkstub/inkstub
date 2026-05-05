@@ -1416,6 +1416,17 @@ nav {
     }
     .nav-cta:hover { background: var(--gold-lt) !important; }
 
+
+.qty-option {
+  border: 1px solid var(--border);
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.qty-option:hover { border-color: var(--gold); }
+.qty-option.selected { border-color: var(--gold); background: rgba(196,134,42,0.08); }
+
 .ticket-wrap { width: 100%; }
 #ticketEl { display:block; overflow-x:auto; overflow-y:hidden; padding: 8px 0 4px; }
 #ticketEl > div { margin: 0 auto; }
@@ -1676,46 +1687,46 @@ nav {
       <!-- ORDER SUMMARY -->
       <div class="card" id="card-order" style="display:none">
         <div class="step-label">Step 4 — Complete Your Order</div>
+
+        <!-- Quantity picker -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">How many stubs?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <div class="qty-option selected" data-qty="1" data-price="14.99" onclick="selectQty(this)">
+              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">1</div>
+              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stub</div>
+              <div style="font-size:16px;font-weight:700;color:var(--gold)">$14.99</div>
+              <div style="font-size:9px;color:var(--text-muted)">$14.99 each</div>
+            </div>
+            <div class="qty-option" data-qty="3" data-price="35.97" onclick="selectQty(this)">
+              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">3</div>
+              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stubs</div>
+              <div style="font-size:16px;font-weight:700;color:var(--gold)">$35.97</div>
+              <div style="font-size:9px;color:#6ab840">$11.99 each</div>
+            </div>
+            <div class="qty-option" data-qty="5" data-price="49.95" onclick="selectQty(this)">
+              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">5</div>
+              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stubs</div>
+              <div style="font-size:16px;font-weight:700;color:var(--gold)">$49.95</div>
+              <div style="font-size:9px;color:#6ab840">$9.99 each</div>
+            </div>
+          </div>
+        </div>
+
         <div class="order-lines">
           <div class="order-line">
-            <span>Premium stub print (5.5" × 2")</span><span>$9.99</span>
+            <span>Archival cardstock + UV gloss coating</span><span>Included</span>
           </div>
           <div class="order-line">
-            <span>Archival cardstock + UV gloss coating</span><span>$2.50</span>
-          </div>
-          <div class="order-line">
-            <span>Tracked first-class shipping (3–5 days)</span><span>$2.50</span>
+            <span>Tracked first-class shipping (3–5 days)</span><span>Included</span>
           </div>
           <div class="order-line order-total">
-            <span>Total</span><span>$14.99</span>
+            <span>Total</span><span id="orderTotal">$14.99</span>
           </div>
         </div>
 
-        <div class="address-grid">
-          <div class="field field-full">
-            <label class="field-label" for="addrName">Full Name</label>
-            <input class="field-input" id="addrName" type="text" placeholder="Jane Smith">
-          </div>
-          <div class="field field-full">
-            <label class="field-label" for="addrStreet">Street Address</label>
-            <input class="field-input" id="addrStreet" type="text" placeholder="123 Main St">
-          </div>
-          <div class="field">
-            <label class="field-label" for="addrCity">City</label>
-            <input class="field-input" id="addrCity" type="text" placeholder="Chicago">
-          </div>
-          <div class="field">
-            <label class="field-label" for="addrZip">ZIP Code</label>
-            <input class="field-input" id="addrZip" type="text" placeholder="60601">
-          </div>
-          <div class="field field-full">
-            <label class="field-label" for="addrEmail">Email (for tracking updates)</label>
-            <input class="field-input" id="addrEmail" type="email" placeholder="jane@example.com">
-          </div>
-        </div>
-
-        <button class="btn-primary btn-full" id="btnPlaceOrder">✦ Place Order — $14.99 ✦</button>
-        <p class="order-note">Payment powered by Stripe &bull; Ships in 1–2 business days</p>
+        <button class="btn-primary btn-full" id="btnPlaceOrder">✦ Checkout with Stripe ✦</button>
+        <p class="order-note">Secure payment via Stripe &bull; Shipping address collected at checkout &bull; Ships in 1–2 business days</p>
       </div>
 
       <!-- ORDER CONFIRM -->
@@ -2411,45 +2422,54 @@ function showOrderForm() {
   setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
-function placeOrder() {
-  const name   = document.getElementById('addrName').value.trim();
-  const street = document.getElementById('addrStreet').value.trim();
-  const city   = document.getElementById('addrCity').value.trim();
-  const zip    = document.getElementById('addrZip').value.trim();
-  const email  = document.getElementById('addrEmail').value.trim();
+function showOrderForm() {
+  if (!currentUser) { openSignIn(); return; }
+  const card = document.getElementById('card-order');
+  card.style.display = 'block';
+  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
 
-  if (!name || !street || !city || !zip || !email) {
-    showToast('Please fill in all address fields.');
-    return;
-  }
+let selectedQty = 1;
 
+function selectQty(el) {
+  document.querySelectorAll('.qty-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedQty = parseInt(el.dataset.qty);
+  document.getElementById('orderTotal').textContent = '$' + el.dataset.price;
+  document.getElementById('btnPlaceOrder').textContent = '✦ Checkout with Stripe — $' + el.dataset.price + ' ✦';
+}
+
+async function placeOrder() {
   if (!currentTicket) return;
+  if (!currentUser) { openSignIn(); return; }
 
-  const trackId = 'STUB-' + Math.floor(Math.random() * 900000 + 100000);
+  const btn = document.getElementById('btnPlaceOrder');
+  btn.textContent = 'Redirecting to Stripe...';
+  btn.disabled = true;
 
-  // Add to collection as "Printing"
-  const entry = {
-    ...currentTicket,
-    status: 'Printing',
-    tracking: trackId,
-    addedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-    id: Date.now(),
-    shippingName: name,
-    shippingAddress: `${street}, ${city} ${zip}`,
-    email,
-  };
-  collection.push(entry);
-  persistCollection();
-  updateStats();
+  try {
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        quantity: selectedQty,
+        ticketData: currentTicket,
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+      }),
+    });
 
-  // Show confirm
-  document.getElementById('trackingBadge').textContent = trackId;
-  document.getElementById('card-order').style.display   = 'none';
-  document.getElementById('card-confirm').style.display = 'block';
-
-  setTimeout(() => {
-    document.getElementById('card-confirm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 100);
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Checkout failed');
+    }
+  } catch (err) {
+    showToast('Checkout failed: ' + err.message);
+    btn.textContent = '✦ Checkout with Stripe ✦';
+    btn.disabled = false;
+  }
 }
 
 /* ════════════════════════════════════════

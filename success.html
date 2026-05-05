@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — inkstub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0A0A0A; color: #F0EDE8; font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 28px; color: #C8922A; text-decoration: none; margin-bottom: 48px; display: block; }
+    .card { background: #161616; border: 1px solid #242424; padding: 48px 40px; max-width: 520px; width: 100%; text-align: center; }
+    .icon { font-size: 48px; margin-bottom: 20px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 32px; color: #F0EDE8; margin-bottom: 12px; }
+    .sub { font-size: 15px; color: #888880; line-height: 1.7; margin-bottom: 32px; }
+    .order-details { background: #0A0A0A; border: 1px solid #242424; padding: 20px; margin-bottom: 32px; text-align: left; }
+    .order-row { display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #1a1a1a; }
+    .order-row:last-child { border-bottom: none; }
+    .order-label { color: #888880; }
+    .order-value { color: #F0EDE8; font-weight: 500; }
+    .btn-primary { display: inline-block; background: #C8922A; color: #0A0A0A; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 32px; text-decoration: none; transition: background 0.2s; cursor: pointer; border: none; width: 100%; margin-bottom: 12px; }
+    .btn-primary:hover { background: #E0A840; }
+    .btn-secondary { display: inline-block; background: transparent; color: #888880; font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 12px 32px; text-decoration: none; border: 1px solid #2e2e2e; transition: all 0.2s; width: 100%; text-align: center; }
+    .btn-secondary:hover { color: #F0EDE8; border-color: #888880; }
+    .steps { margin: 32px 0; text-align: left; }
+    .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: #C8922A; color: #0A0A0A; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    .step-text { font-size: 14px; color: #888880; line-height: 1.6; }
+    .step-text strong { color: #F0EDE8; display: block; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="logo">inkstub</a>
+
+  <div class="card">
+    <div class="icon">🎉</div>
+    <h1>Order Confirmed!</h1>
+    <p class="sub">Your collectible stub is on its way. We'll print it on archival cardstock and mail it to you within 3–5 business days.</p>
+
+    <div class="order-details" id="orderDetails">
+      <div class="order-row">
+        <span class="order-label">Order ID</span>
+        <span class="order-value" id="orderId">Loading...</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Quantity</span>
+        <span class="order-value" id="orderQty">—</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Amount Paid</span>
+        <span class="order-value" id="orderAmount">—</span>
+      </div>
+      <div class="order-row">
+        <span class="order-label">Shipping To</span>
+        <span class="order-value" id="orderShipping">—</span>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Order Received</strong>We've received your order and payment.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Printing (1–2 days)</strong>Your stub is printed on premium archival cardstock.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Mailed to You (2–3 days)</strong>Shipped in a protective sleeve via USPS First Class.</div>
+      </div>
+    </div>
+
+    <a href="app.html" class="btn-primary">Back to inkstub</a>
+    <a href="index.html#collection" class="btn-secondary">View My Collection</a>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Parse session ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+
+    if (sessionId) {
+      // Fetch session details from Stripe via Netlify function
+      fetch('/.netlify/functions/get-order?session_id=' + sessionId)
+        .then(r => r.json())
+        .then(data => {
+          if (data.error) return;
+          document.getElementById('orderId').textContent = sessionId.substring(0, 24) + '...';
+          document.getElementById('orderQty').textContent = data.quantity + (data.quantity === 1 ? ' stub' : ' stubs');
+          document.getElementById('orderAmount').textContent = '$' + (data.amount / 100).toFixed(2);
+          if (data.shipping) {
+            const s = data.shipping;
+            document.getElementById('orderShipping').textContent = s.city + ', ' + s.state + ' ' + s.postal_code;
+          }
+        })
+        .catch(() => {
+          document.getElementById('orderId').textContent = sessionId.substring(0, 24) + '...';
+        });
+    }
+
+    // Auth state for nav (not shown on this page but needed for collection sync)
+    function onUserChange(user) {}
+    initAuth(onUserChange);
+  </script>
+</body>
+</html>
