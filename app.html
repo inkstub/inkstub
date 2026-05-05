@@ -1830,9 +1830,8 @@ function buildTicketHTML(data) {
         </div>
         ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${c.detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
       </div>
-      <div style="width:72px;border-left:1px dashed ${c.stubBorder};padding:16px 0 16px 0;display:flex;flex-direction:column;justify-content:space-between;align-items:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:16px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
-        <div style="display:flex;gap:1.5px;align-items:flex-end">${buildBarcode(bars, c.barC)}</div>
+      <div style="width:72px;border-left:1px dashed ${c.stubBorder};display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:18px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
       </div>
     </div>
   </div>`;
