@@ -1433,6 +1433,9 @@ nav {
 .ticket-wrap-outer > div { width: 100%; }
 
 
+    /* Style picker click fix */
+    #style-classic *, #style-sport *, #style-concert * { pointer-events: none; }
+
     /* ══ TICKET TEMPLATES — exact match to homepage ══ */
     .ht-classic { background: linear-gradient(160deg, #F0E8D0, #DCCFA8); }
     .ht-sport   { background: linear-gradient(160deg, #0a1828, #0d1f3c); }
@@ -1605,7 +1608,7 @@ nav {
             <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Aged cream · gold</div>
           </div>
 
-          <div id="style-sport" onclick="selectStyle('sport')" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s">
+          <div id="style-sport" onclick="selectStyle('sport')" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s;user-select:none">
             <div class="ht-sport" style="height:80px;overflow:hidden;margin-bottom:10px;border-radius:2px">
               <div style="padding:10px 12px;display:flex;justify-content:space-between;height:100%">
                 <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase;font-family:DM Sans,sans-serif">Sports</div><div style="font-family:'DM Serif Display',serif;font-size:16px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:2px">Chicago<br>Bulls</div></div>
@@ -1616,7 +1619,7 @@ nav {
             <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Navy · crimson</div>
           </div>
 
-          <div id="style-concert" onclick="selectStyle('concert')" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s">
+          <div id="style-concert" onclick="selectStyle('concert')" style="cursor:pointer;border:1px solid var(--border);padding:12px;transition:all 0.2s;user-select:none">
             <div class="ht-concert" style="height:80px;overflow:hidden;margin-bottom:10px;border-radius:2px">
               <div style="padding:10px 12px;display:flex;justify-content:space-between;height:100%">
                 <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase;font-family:DM Sans,sans-serif">Concert</div><div style="font-family:'DM Serif Display',serif;font-size:16px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:2px">David<br>Bowie</div></div>
