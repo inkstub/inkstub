@@ -1553,122 +1553,57 @@ nav {
       <div class="card" id="card-style">
         <div class="step-label">Step 3 — Choose Your Style</div>
 
-        <!-- CATEGORY PICKER -->
-        <div class="category-grid" id="categoryPicker">
-          <div class="category-card active" data-category="sports">
-            <div class="category-icon">🏟</div>
-            <div class="category-name">Sports</div>
-            <div class="category-desc">Baseball, Arena, Football</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
+
+          <!-- Classic -->
+          <div class="style-btn selected" data-style="classic" onclick="selectStyle(this)" style="cursor:pointer;border:2px solid var(--gold);background:rgba(196,134,42,0.08);padding:16px 12px;transition:all 0.2s">
+            <div style="height:70px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:10px;display:flex;overflow:hidden">
+              <div style="flex:1;padding:8px 10px">
+                <div style="font-size:6px;letter-spacing:2px;text-transform:uppercase;color:#7a5020;margin-bottom:3px">Concert</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:14px;color:#1a0a04;text-transform:uppercase;line-height:1">Rolling<br>Stones</div>
+              </div>
+              <div style="width:20px;border-left:1px dashed #C8B078;display:flex;flex-direction:column;justify-content:flex-end;padding:4px 3px">
+                <div style="display:flex;flex-direction:column;gap:1px">${Array(8).fill(0).map((_,i)=>`<span style="height:2px;width:${[12,8,14,9,11,15,10,13][i]}px;background:#2C1A0E;display:block"></span>`).join('')}</div>
+              </div>
+            </div>
+            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream);margin-bottom:2px">Classic</div>
+            <div style="font-size:10px;color:var(--text-muted)">Aged cream · gold</div>
           </div>
-          <div class="category-card" data-category="concerts">
-            <div class="category-icon">🎸</div>
-            <div class="category-name">Concerts</div>
-            <div class="category-desc">Festival, Music, Shows</div>
+
+          <!-- Sport -->
+          <div class="style-btn" data-style="sport" onclick="selectStyle(this)" style="cursor:pointer;border:1px solid var(--border);padding:16px 12px;transition:all 0.2s">
+            <div style="height:70px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:10px;display:flex;overflow:hidden">
+              <div style="flex:1;padding:8px 10px">
+                <div style="font-size:6px;letter-spacing:2px;text-transform:uppercase;color:#e8b870;margin-bottom:3px">Sports</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:14px;color:#F5EDD8;text-transform:uppercase;line-height:1">Chicago<br>Bulls</div>
+              </div>
+              <div style="width:20px;border-left:1px dashed #8B1A1A;display:flex;flex-direction:column;justify-content:flex-end;padding:4px 3px">
+                <div style="display:flex;flex-direction:column;gap:1px">${Array(8).fill(0).map((_,i)=>`<span style="height:2px;width:${[12,8,14,9,11,15,10,13][i]}px;background:#c8a878;display:block"></span>`).join('')}</div>
+              </div>
+            </div>
+            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream);margin-bottom:2px">Gameday</div>
+            <div style="font-size:10px;color:var(--text-muted)">Navy · crimson</div>
           </div>
-          <div class="category-card" data-category="theatre">
-            <div class="category-icon">🎭</div>
-            <div class="category-name">Theatre</div>
-            <div class="category-desc">Broadway, Cinema, Arts</div>
+
+          <!-- Concert -->
+          <div class="style-btn" data-style="concert" onclick="selectStyle(this)" style="cursor:pointer;border:1px solid var(--border);padding:16px 12px;transition:all 0.2s">
+            <div style="height:70px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:10px;display:flex;overflow:hidden">
+              <div style="flex:1;padding:8px 10px">
+                <div style="font-size:6px;letter-spacing:2px;text-transform:uppercase;color:#c090e8;margin-bottom:3px">Concert</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:14px;color:#f5e8ff;text-transform:uppercase;line-height:1">David<br>Bowie</div>
+              </div>
+              <div style="width:20px;border-left:1px dashed #6a3a8a;display:flex;flex-direction:column;justify-content:flex-end;padding:4px 3px">
+                <div style="display:flex;flex-direction:column;gap:1px">${Array(8).fill(0).map((_,i)=>`<span style="height:2px;width:${[12,8,14,9,11,15,10,13][i]}px;background:#b080d8;display:block"></span>`).join('')}</div>
+              </div>
+            </div>
+            <div style="font-family:'DM Serif Display',serif;font-size:14px;color:var(--cream);margin-bottom:2px">Midnight</div>
+            <div style="font-size:10px;color:var(--text-muted)">Dark · purple</div>
           </div>
-          <div class="category-card" data-category="other">
-            <div class="category-icon">✦</div>
-            <div class="category-name">Other</div>
-            <div class="category-desc">Classic, Custom</div>
-          </div>
+
         </div>
-
-        <div class="style-divider">— Select a style below —</div>
-
-        <!-- SPORTS -->
-        <div class="style-group active" id="group-sports">
-          <div class="style-grid" id="stylePicker">
-            <div class="style-card selected" data-style="ballpark">
-              <div class="style-preview" style="background:#1a3a6a;display:flex;align-items:stretch;overflow:hidden">
-                <div style="width:28px;background:linear-gradient(135deg,#0d2040,#1a3a6a);display:flex;align-items:center;justify-content:center;font-size:16px">⚾</div>
-                <div class="sp-main"><div class="sp-type" style="color:rgba(255,255,255,0.6)">SPORTS</div><div class="sp-title" style="color:#fff">BALLPARK</div><div class="sp-detail" style="color:rgba(255,255,255,0.5)">Logo · Script · Cream stub</div></div>
-              </div>
-              <div class="style-name">Ballpark</div><div class="style-era">Navy · logo zone · details stub</div>
-            </div>
-            <div class="style-card" data-style="sport">
-              <div class="style-preview" style="background:linear-gradient(135deg,#0a1828,#0d1f3c)">
-                <div class="sp-edge sp-edge-left" style="background:#8B1A1A"></div>
-                <div class="sp-main"><div class="sp-type" style="color:#e8b870">ARENA</div><div class="sp-title" style="color:#F5EDD8">GAMEDAY</div><div class="sp-detail" style="color:#8a7060">Dark navy + crimson</div></div>
-                <div class="sp-edge sp-edge-right" style="background:#8B1A1A"></div>
-              </div>
-              <div class="style-name">Gameday</div><div class="style-era">Navy · crimson · classic</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CONCERTS -->
-        <div class="style-group" id="group-concerts">
-          <div class="style-grid">
-            <div class="style-card" data-style="festival">
-              <div class="style-preview" style="background:#f0ece4;display:flex;align-items:stretch;overflow:hidden">
-                <div style="width:28px;background:#222;display:flex;align-items:center;justify-content:center;font-size:14px">🎵</div>
-                <div class="sp-main"><div class="sp-type" style="color:#888">FESTIVAL</div><div class="sp-title" style="color:#111">MODERN</div><div class="sp-detail" style="color:#888">Cream · pill buttons · barcode</div></div>
-              </div>
-              <div class="style-name">Festival</div><div class="style-era">Clean · modern · minimal</div>
-            </div>
-            <div class="style-card" data-style="classic">
-              <div class="style-preview" style="background:linear-gradient(135deg,#F0E8D0,#DCCFA8)">
-                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
-                <div class="sp-main"><div class="sp-type" style="color:#7a5020">CONCERT</div><div class="sp-title" style="color:#1a0a04">CLASSIC</div><div class="sp-detail" style="color:#9a7040">Aged paper · warm gold</div></div>
-                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
-              </div>
-              <div class="style-name">Classic</div><div class="style-era">Aged paper · vintage</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- THEATRE -->
-        <div class="style-group" id="group-theatre">
-          <div class="style-grid">
-            <div class="style-card" data-style="theatre">
-              <div class="style-preview" style="background:#c8920a;display:flex;align-items:stretch;overflow:hidden">
-                <div class="sp-main"><div class="sp-type" style="color:#1a0a00">THEATRE</div><div class="sp-title" style="color:#1a0a00">GOLD</div><div class="sp-detail" style="color:rgba(26,10,0,0.6)">Gold · big title · ADMIT ONE stub</div></div>
-                <div style="width:28px;background:rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:9px;font-weight:700;color:#1a0a00;letter-spacing:2px;text-transform:uppercase">ADMIT ONE</div>
-              </div>
-              <div class="style-name">Theatre Gold</div><div class="style-era">Gold · ornate · ADMIT ONE stub</div>
-            </div>
-            <div class="style-card" data-style="cinema">
-              <div class="style-preview" style="background:#dd1a1a;display:flex;align-items:stretch;overflow:hidden">
-                <div style="width:28px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:16px">🎬</div>
-                <div class="sp-main"><div class="sp-type" style="color:rgba(255,255,255,0.7)">CINEMA</div><div class="sp-title" style="color:#fff">RED</div><div class="sp-detail" style="color:rgba(255,255,255,0.5)">Red · logo · seat boxes</div></div>
-                <div style="width:28px;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px">
-                  <div style="font-size:6px;color:#aaa">ROW</div>
-                  <div style="background:#dd1a1a;width:100%;text-align:center;font-size:10px;font-weight:700;color:#fff">02</div>
-                </div>
-              </div>
-              <div class="style-name">Cinema Red</div><div class="style-era">Red · logo zone · seat boxes</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- OTHER -->
-        <div class="style-group" id="group-other">
-          <div class="style-grid">
-            <div class="style-card" data-style="classic">
-              <div class="style-preview" style="background:linear-gradient(135deg,#F0E8D0,#DCCFA8)">
-                <div class="sp-edge sp-edge-left" style="background:#8B6914"></div>
-                <div class="sp-main"><div class="sp-type" style="color:#7a5020">GENERAL</div><div class="sp-title" style="color:#1a0a04">CLASSIC</div><div class="sp-detail" style="color:#9a7040">Aged cream paper</div></div>
-                <div class="sp-edge sp-edge-right" style="background:#8B6914"></div>
-              </div>
-              <div class="style-name">Classic</div><div class="style-era">Gold · aged paper</div>
-            </div>
-            <div class="style-card" data-style="festival">
-              <div class="style-preview" style="background:#f0ece4;display:flex;align-items:stretch">
-                <div style="width:28px;background:#222"></div>
-                <div class="sp-main"><div class="sp-type" style="color:#888">MODERN</div><div class="sp-title" style="color:#111">MINIMAL</div><div class="sp-detail" style="color:#888">Clean · pill dates</div></div>
-              </div>
-              <div class="style-name">Modern</div><div class="style-era">Clean · minimal</div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- STEP 3: PREVIEW -->
+      <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->
       <div class="card" id="card-preview" style="padding-bottom:20px;overflow:hidden">
         <div class="step-label">Step 4 — Preview &amp; Order</div>
         <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
@@ -1844,207 +1779,103 @@ function buildTicketHTML(data) {
   const gate = ['A','B','C','D','E','F'][rnd(0,5)];
   const pl = logoPlacement || 'left';
 
-  // Truncate safely
-  const nm = (name||'Event Name').substring(0,28);
-  const vn = (venue||'Venue').substring(0,34);
-  const dt = (date||'TBD');
-  const st = (seat||'GA');
-  const pr = (price||'$0.00');
-  const tp = (type||'Event');
+  const nm  = (name||'Event Name').substring(0,30);
+  const vn  = (venue||'Venue').substring(0,36);
+  const dt  = (date||'TBD');
+  const st  = (seat||'GA');
+  const pr  = (price||'$0.00');
+  const tp  = (type||'Event');
 
-  // Logo placeholder shown when no logo uploaded
-  const logoBlock = logo
-    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
-    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
-  const logoBlockDk = logo
-    ? `<img src="${logo}" style="max-width:100%;max-height:100%;object-fit:contain;display:block" alt="">`
-    : `<div style="font-size:8px;font-family:'Special Elite',cursive;color:rgba(0,0,0,0.15);letter-spacing:2px;text-transform:uppercase;text-align:center;line-height:1.6">YOUR<br>LOGO</div>`;
-
-  // Fixed ticket dimensions — 528x192
   const W = '528px'; const H = '192px';
-  const OUTER = `position:relative;display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0`;
+  const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.6);flex-shrink:0`;
 
-  // Reusable detail cell
-  const dc = (label, val, lc, vc, maxW) =>
-    `<div style="overflow:hidden;min-width:0"><div style="font-size:6px;letter-spacing:1.5px;text-transform:uppercase;color:${lc};line-height:1">${label}</div><div style="font-size:10px;font-weight:700;color:${vc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${maxW||'120px'};line-height:1.3">${val}</div></div>`;
+  const logoImg = logo
+    ? `<img src="${logo}" style="width:34px;height:34px;object-fit:contain;flex-shrink:0;display:inline-block;margin-right:8px" alt="">`
+    : '';
 
-  /* ══ THEATRE GOLD ══ */
-  if (s === 'theatre') {
+  /* ══ CLASSIC (Rolling Stones style) — aged cream/gold ══ */
+  if (s === 'classic') {
     return `<div style="${OUTER}">
-      <div style="display:flex;width:528px;height:192px;background:#c8920a;font-family:'Special Elite',cursive;overflow:hidden">
-        <div style="flex:1;height:192px;padding:10px 14px 8px;overflow:hidden;box-sizing:border-box">
-          <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.65);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px">${vn}</div>
-          <div style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,10,0,0.5);text-align:center;margin-bottom:4px">${tp}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px">${nm}</div>
-          <div style="height:1px;background:rgba(26,10,0,0.25);margin-bottom:7px"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px 10px">
-            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">DATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${dt}</div></div>
-            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">GATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${gate}</div></div>
-            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">PRICE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${pr}</div></div>
-            <div style="overflow:hidden;grid-column:span 2"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">SEAT</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${st}</div></div>
-            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">NO.</div><div style="font-size:9px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace;white-space:nowrap;line-height:1.2">${sn}</div></div>
+      <div style="display:flex;width:100%;height:100%;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);overflow:hidden">
+        <div style="flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+          <div style="height:3px;background:linear-gradient(90deg,#8B1A1A,#C4862A);position:absolute;top:0;left:0;right:0"></div>
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#7a5020;border-bottom:1px solid #C8B078;padding-bottom:4px;margin-top:4px;display:flex;justify-content:space-between;flex-shrink:0">
+            <span>${tp}</span><span>Gate ${gate}</span><span>No.${sn}</span>
+          </div>
+          <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0;margin-top:2px">${logoImg}<div style="font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:#1a0a04;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
+          <div style="font-size:9px;letter-spacing:1.5px;color:#6B4C2A;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted #C8B078;padding-top:6px;margin-top:auto;flex-shrink:0">
+            <div style="border-right:1px solid #C8B078;padding-right:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#9a7040;text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:600;color:#1a0a04;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="border-right:1px solid #C8B078;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#9a7040;text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:600;color:#1a0a04;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="border-right:1px solid #C8B078;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#9a7040;text-transform:uppercase">Gate</div><div style="font-size:10px;font-weight:600;color:#1a0a04;white-space:nowrap">${gate}</div></div>
+            <div style="padding-left:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8B1A1A;text-transform:uppercase">Price</div><div style="font-family:'DM Serif Display',serif;font-size:13px;font-weight:700;color:#8B1A1A;white-space:nowrap">${pr}</div></div>
           </div>
         </div>
-        <div style="width:96px;height:192px;background:#fffdf5;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;padding:10px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box;gap:6px">
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:#1a0a00;letter-spacing:3px;text-transform:uppercase;white-space:nowrap;overflow:hidden;max-height:100px;flex-shrink:0">ADMIT ONE</div>
-          <div style="background:#c8920a;width:100%;padding:3px 0;text-align:center;flex-shrink:0">
-            <div style="font-size:6px;color:#1a0a00;letter-spacing:1px;text-transform:uppercase">TICKET NO</div>
-            <div style="font-size:7px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sn}</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0;margin-top:auto">${buildBarcode('#1a0a00', true)}</div>
+        <div style="width:68px;background:rgba(180,150,80,0.15);border-left:2px dashed #C8B078;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;flex-shrink:0">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:10px;color:#1a0a04;text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:100px;white-space:nowrap">${nm.substring(0,12)}</div>
+          <div style="font-size:7px;color:#9a7040;font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#2C1A0E', true)}</div>
         </div>
       </div>
     </div>`;
   }
 
-  /* ══ CINEMA RED ══ */
-  if (s === 'cinema') {
-    const parts = st.split(/[,·\s]+/).filter(Boolean);
-    const rowNum  = st.match(/row[\s:]*([^\s,]+)/i)?.[1] || parts[Math.max(0,parts.length-2)] || '—';
-    const seatNum = st.match(/seat[\s:]*([^\s,]+)/i)?.[1] || parts[parts.length-1] || '—';
+  /* ══ SPORT (Chicago Bulls style) — dark navy/crimson ══ */
+  if (s === 'sport') {
     return `<div style="${OUTER}">
-      <div style="display:flex;width:100%;height:100%;background:#dd1a1a;border:3px solid #f0e0c8;font-family:'Special Elite',cursive;overflow:hidden;box-sizing:border-box">
-        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:rgba(0,0,0,0.25);padding:10px;box-sizing:border-box">
-          ${logoBlock}
-        </div>
-        <div style="flex:1;display:flex;flex-direction:column;padding:10px 12px;gap:5px;overflow:hidden;box-sizing:border-box">
-          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
-            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7);white-space:nowrap">${tp}</span>
-            <span style="font-size:8px;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px">${vn}</span>
+      <div style="display:flex;width:100%;height:100%;background:linear-gradient(160deg,#0a1828,#0d1f3c);overflow:hidden">
+        <div style="flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+          <div style="height:3px;background:linear-gradient(90deg,#8B1A1A,#c84020);position:absolute;top:0;left:0;right:0"></div>
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#e8b870;border-bottom:1px solid #8B1A1A;padding-bottom:4px;margin-top:4px;display:flex;justify-content:space-between;flex-shrink:0">
+            <span>${tp}</span><span>Gate ${gate}</span><span>No.${sn}</span>
           </div>
-          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
-          <div style="display:flex;gap:3px;flex-shrink:0">${Array(20).fill('<span style="width:4px;height:4px;background:rgba(255,255,255,0.4);border-radius:50%;display:inline-block;flex-shrink:0"></span>').join('')}</div>
-          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
-            ${dc('Date', dt, 'rgba(255,255,255,0.6)', '#fff', '110px')}
-            ${dc('Gate', gate, 'rgba(255,255,255,0.6)', '#fff', '40px')}
-            ${dc('Price', pr, 'rgba(255,255,255,0.6)', '#fff', '70px')}
+          <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0;margin-top:2px">${logoImg}<div style="font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:#F5EDD8;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
+          <div style="font-size:9px;letter-spacing:1.5px;color:#a08060;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted #8B1A1A;padding-top:6px;margin-top:auto;flex-shrink:0">
+            <div style="border-right:1px solid #8B1A1A;padding-right:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#a08060;text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:600;color:#F5EDD8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="border-right:1px solid #8B1A1A;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#a08060;text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:600;color:#F5EDD8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="border-right:1px solid #8B1A1A;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#a08060;text-transform:uppercase">Gate</div><div style="font-size:10px;font-weight:600;color:#F5EDD8;white-space:nowrap">${gate}</div></div>
+            <div style="padding-left:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#e8a820;text-transform:uppercase">Price</div><div style="font-family:'DM Serif Display',serif;font-size:13px;font-weight:700;color:#e8a820;white-space:nowrap">${pr}</div></div>
           </div>
         </div>
-        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#111;border-left:2px dashed rgba(255,255,255,0.2);padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">ROW</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${rowNum}</div></div>
-          <div style="width:100%;text-align:center"><div style="font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#aaa">SEAT</div><div style="background:#dd1a1a;color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;text-align:center;padding:1px 0;white-space:nowrap;overflow:hidden">${seatNum}</div></div>
-          <div style="font-size:6px;color:#555;font-family:'Courier New',monospace;white-space:nowrap">No.${sn}</div>
-          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#dd1a1a', true)}</div>
+        <div style="width:68px;background:rgba(139,26,26,0.15);border-left:2px dashed #8B1A1A;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;flex-shrink:0">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:10px;color:#F5EDD8;text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:100px;white-space:nowrap">${nm.substring(0,12)}</div>
+          <div style="font-size:7px;color:#a08060;font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#c8a878', true)}</div>
         </div>
       </div>
     </div>`;
   }
 
-  /* ══ BALLPARK ══ */
-  if (s === 'ballpark') {
+  /* ══ CONCERT (David Bowie style) — dark purple/violet ══ */
+  if (s === 'concert') {
     return `<div style="${OUTER}">
-      <div style="display:flex;width:100%;height:100%;background:#1a3a6a;font-family:'Special Elite',cursive;overflow:hidden">
-        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,#0d2040,#1a3a6a);padding:10px;box-sizing:border-box;border-right:1px solid rgba(255,255,255,0.1)">
-          ${logoBlock}
-        </div>
-        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:5px;overflow:hidden;box-sizing:border-box">
-          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;overflow:hidden">
-            <span style="color:#e05050;flex-shrink:0">★</span>
-            <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tp} · ${vn}</span>
-            <span style="color:#e05050;flex-shrink:0">★</span>
+      <div style="display:flex;width:100%;height:100%;background:linear-gradient(160deg,#080812,#0d0d20);overflow:hidden">
+        <div style="flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+          <div style="height:3px;background:linear-gradient(90deg,#6a3a8a,#c090e8);position:absolute;top:0;left:0;right:0"></div>
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#c090e8;border-bottom:1px solid #3a1a5a;padding-bottom:4px;margin-top:4px;display:flex;justify-content:space-between;flex-shrink:0">
+            <span>${tp}</span><span>Gate ${gate}</span><span>No.${sn}</span>
           </div>
-          <div style="flex-shrink:0;overflow:hidden">
-            <div style="font-family:'Playfair Display',serif;font-size:10px;font-style:italic;color:#e05050;white-space:nowrap;overflow:hidden">— Presents —</div>
-            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px 8px;border-top:1px solid rgba(255,255,255,0.15);padding-top:5px;flex-shrink:0">
-            ${dc('Date', dt, 'rgba(255,255,255,0.5)', '#fff', '100px')}
-            ${dc('Seat', st, 'rgba(255,255,255,0.5)', '#fff', '100px')}
-            ${dc('Gate', gate, 'rgba(255,255,255,0.5)', '#fff', '40px')}
-            ${dc('Price', pr, '#e8d090', '#e8d090', '80px')}
-            ${dc('Ticket No.', sn, 'rgba(255,255,255,0.4)', 'rgba(255,255,255,0.7)', '100px')}
+          <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0;margin-top:2px">${logoImg}<div style="font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;color:#f5e8ff;text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
+          <div style="font-size:9px;letter-spacing:1.5px;color:#8060a0;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted #3a1a5a;padding-top:6px;margin-top:auto;flex-shrink:0">
+            <div style="border-right:1px solid #3a1a5a;padding-right:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8060a0;text-transform:uppercase">Date</div><div style="font-size:10px;font-weight:600;color:#f5e8ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div></div>
+            <div style="border-right:1px solid #3a1a5a;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8060a0;text-transform:uppercase">Seat</div><div style="font-size:10px;font-weight:600;color:#f5e8ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${st}</div></div>
+            <div style="border-right:1px solid #3a1a5a;padding:0 8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#8060a0;text-transform:uppercase">Gate</div><div style="font-size:10px;font-weight:600;color:#f5e8ff;white-space:nowrap">${gate}</div></div>
+            <div style="padding-left:8px;overflow:hidden"><div style="font-size:6px;letter-spacing:1px;color:#c090e8;text-transform:uppercase">Price</div><div style="font-family:'DM Serif Display',serif;font-size:13px;font-weight:700;color:#c090e8;white-space:nowrap">${pr}</div></div>
           </div>
         </div>
-        <div style="width:100px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f5f0e0;border-left:2px dashed #8B6000;padding:10px 8px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-          <div style="font-family:'Playfair Display',serif;font-size:11px;font-style:italic;color:#e05050;text-align:center;white-space:nowrap;flex-shrink:0">Admit One</div>
-          <div style="width:100%;overflow:hidden;flex-shrink:0">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 6px">
-              ${dc('Gate', gate, '#8B6000', '#1a3a6a', '40px')}
-              ${dc('Price', pr, '#8B6000', '#1a3a6a', '50px')}
-              <div style="grid-column:span 2;overflow:hidden">${dc('Seat', st, '#8B6000', '#1a3a6a', '90px')}</div>
-            </div>
-          </div>
-          <div style="font-size:6px;color:#8B6000;font-family:'Courier New',monospace;white-space:nowrap;flex-shrink:0">${sn}</div>
-          <div style="display:flex;gap:1.5px;flex-shrink:0">${buildBarcode('#1a3a6a')}</div>
+        <div style="width:68px;background:rgba(106,58,138,0.15);border-left:2px dashed #6a3a8a;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;flex-shrink:0">
+          <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:10px;color:#f5e8ff;text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:100px;white-space:nowrap">${nm.substring(0,12)}</div>
+          <div style="font-size:7px;color:#8060a0;font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
+          <div style="display:flex;flex-direction:column;gap:0">${buildBarcode('#b080d8', true)}</div>
         </div>
       </div>
     </div>`;
   }
 
-  /* ══ FESTIVAL / MODERN ══ */
-  if (s === 'festival') {
-    return `<div style="${OUTER}">
-      <div style="display:flex;width:100%;height:100%;background:#f0ece4;font-family:'Special Elite',cursive;overflow:hidden">
-        <div style="width:110px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#1a1a1a;padding:10px;box-sizing:border-box;overflow:hidden">
-          ${logoBlock}
-        </div>
-        <div style="flex:1;display:flex;flex-direction:column;padding:10px 14px;gap:6px;overflow:hidden;box-sizing:border-box">
-          <div style="display:flex;justify-content:space-between;flex-shrink:0;overflow:hidden">
-            <span style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#888;white-space:nowrap">${tp}</span>
-            <span style="font-size:8px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${vn}</span>
-          </div>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#111;text-transform:capitalize;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${nm}</div>
-          <div style="display:flex;gap:6px;flex-wrap:nowrap;flex-shrink:0;overflow:hidden">
-            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${dt}</span></div>
-            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">Gate ${gate}</span></div>
-            <div style="border:1.5px solid #111;border-radius:20px;padding:3px 10px;flex-shrink:0"><span style="font-size:8px;font-weight:700;color:#111;white-space:nowrap">${pr}</span></div>
-          </div>
-          <div style="display:flex;gap:12px;flex-shrink:0;overflow:hidden">
-            ${dc('Seat', st, '#888', '#111', '110px')}
-            ${dc('Ticket No.', sn, '#888', '#555', '80px')}
-          </div>
-        </div>
-        <div style="width:84px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:#f0ece4;border-left:2px dashed #999;padding:8px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;width:100%;overflow:hidden;flex-shrink:0">
-            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Seat</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/).pop()||'GA'}</div></div>
-            <div style="text-align:center;overflow:hidden"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Row</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1;white-space:nowrap;overflow:hidden">${st.split(/[,\s·]+/)[0]||'GA'}</div></div>
-          </div>
-          <div style="writing-mode:vertical-rl;font-size:6px;color:#888;letter-spacing:2px;text-transform:uppercase;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;max-height:40px;flex-shrink:0">TICKET NUMBER:</div>
-          <div style="display:flex;flex-direction:column;gap:0;flex-shrink:0">${buildBarcode('#111', true)}</div>
-          <div style="text-align:center;overflow:hidden;flex-shrink:0"><div style="font-size:6px;color:#888;text-transform:uppercase;letter-spacing:1px">Gate</div><div style="font-size:16px;font-weight:900;color:#111;font-family:'Playfair Display',serif;line-height:1">${gate}</div></div>
-        </div>
-      </div>
-    </div>`;
-  }
-
-  /* ══ DEFAULT: classic / sport ══ */
-  const isLight = s !== 'sport';
-  const bg2 = isLight ? 'linear-gradient(160deg,#F0E8D0,#DCCFA8)' : 'linear-gradient(160deg,#0a1828,#0d1f3c)';
-  const bc  = isLight ? '#C8B078' : '#8B1A1A';
-  const tc  = isLight ? '#1a0a04' : '#F5EDD8';
-  const vc  = isLight ? '#6B4C2A' : '#a08060';
-  const lc  = isLight ? '#9a7040' : '#a08060';
-  const pc  = isLight ? '#8B1A1A' : '#e8a820';
-  const sc2 = isLight ? 'rgba(180,150,80,0.2)' : 'rgba(139,26,26,0.15)';
-  const bar = isLight ? '#2C1A0E' : '#c8a878';
-  const tp2 = isLight ? `linear-gradient(90deg,${pc},#C4862A)` : `linear-gradient(90deg,${pc},#c84020)`;
-  const logoImg2 = logo && pl==='left' ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;display:inline-block;margin-right:6px" alt="">` : '';
-
-  return `<div style="${OUTER}">
-    <div style="display:flex;width:100%;height:100%;background:${bg2};border:1px solid ${bc};overflow:hidden">
-      <div style="flex:1;display:flex;flex-direction:column;padding:12px 16px;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
-        <div style="height:3px;background:${tp2};position:absolute;top:0;left:0;right:0"></div>
-        <div style="display:flex;justify-content:space-between;border-bottom:1px solid ${bc};padding-bottom:3px;flex-shrink:0;overflow:hidden;margin-top:2px">
-          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">${tp}</span>
-          <span style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:${isLight?'#7a5020':'#e8b870'};white-space:nowrap">Gate ${gate} · No.${sn}</span>
-        </div>
-        <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0">${logoImg2}<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:${tc};text-transform:uppercase;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm}</div></div>
-        <div style="font-size:9px;letter-spacing:1px;color:${vc};text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0">${vn}</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px dotted ${bc};padding-top:5px;flex-shrink:0">
-          <div style="border-right:1px solid ${bc};padding-right:8px;overflow:hidden">${dc('Date', dt, lc, tc, '100px')}</div>
-          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Seat', st, lc, tc, '80px')}</div>
-          <div style="border-right:1px solid ${bc};padding:0 8px;overflow:hidden">${dc('Gate', gate, lc, tc, '40px')}</div>
-          <div style="padding-left:8px;overflow:hidden">${dc('Price', pr, pc, pc, '70px')}</div>
-        </div>
-      </div>
-      <div style="width:64px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${sc2};padding:10px 7px;overflow:hidden;box-sizing:border-box">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px;overflow:hidden;max-height:90px;white-space:nowrap">${nm.substring(0,10)}</div>
-        <div style="font-size:7px;color:${lc};font-family:'Courier New',monospace;white-space:nowrap">${sn}</div>
-        <div style="display:flex;flex-direction:column;gap:0">${buildBarcode(bar, true)}</div>
-      </div>
-    </div>
-  </div>`;
+  // Fallback to classic
+  return buildTicketHTML({...data, style:'classic'});
 }
 
 function buildCollectionEntryHTML(item) {
@@ -2076,7 +1907,7 @@ function buildCollectionEntryHTML(item) {
 /* ════════════════════════════════════════
    STATE
 ════════════════════════════════════════ */
-let selectedStyle = 'ballpark';
+let selectedStyle = 'classic';
 let collection = [];
 let currentTicket = null;
 
@@ -2084,9 +1915,22 @@ let currentTicket = null;
    INIT
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Sync selectedStyle with whichever card is marked selected in HTML
-  const preselected = document.querySelector('.style-card.selected');
-  if (preselected) selectedStyle = preselected.dataset.style;
+function selectStyle(el) {
+  document.querySelectorAll('.style-btn').forEach(b => {
+    b.style.border = '1px solid var(--border)';
+    b.style.background = 'transparent';
+  });
+  el.style.border = '2px solid var(--gold)';
+  el.style.background = 'rgba(196,134,42,0.08)';
+  selectedStyle = el.dataset.style;
+  if (currentTicket) {
+    currentTicket.style = selectedStyle;
+    renderTicketPreview();
+  }
+}
+
+
+  // Style is already defaulted to 'classic'
   initNav();
   initUpload();
   initStylePicker();
