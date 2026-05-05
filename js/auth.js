@@ -85,7 +85,9 @@ function initAuth(onUserChange) {
   script.async = true;
   script.onload = function() {
     clerkInstance = new window.Clerk(CLERK_KEY);
+    console.log('Clerk script loaded, initializing...');
     clerkInstance.load().then(function() {
+      console.log('Clerk ready, user:', clerkInstance.user ? clerkInstance.user.id : 'none');
       currentUser = clerkInstance.user || null;
       onUserChange(currentUser);
       clerkInstance.addListener(function(resources) {
@@ -105,30 +107,21 @@ function initAuth(onUserChange) {
 }
 
 function openSignIn() {
-  if (!clerkInstance) {
-    // Wait up to 5s for Clerk to load
-    var attempts = 0;
-    var wait = setInterval(function() {
-      attempts++;
-      if (clerkInstance) { clearInterval(wait); clerkInstance.openSignIn(); }
-      else if (attempts > 10) { clearInterval(wait); alert('Sign in unavailable. Please refresh the page.'); }
-    }, 500);
-    return;
+  if (clerkInstance) {
+    clerkInstance.openSignIn();
+  } else {
+    // Fallback: redirect to Clerk hosted sign-in page
+    window.location.href = 'https://accounts.inkstub.com/sign-in';
   }
-  clerkInstance.openSignIn();
 }
 
 function openSignUp() {
-  if (!clerkInstance) {
-    var attempts = 0;
-    var wait = setInterval(function() {
-      attempts++;
-      if (clerkInstance) { clearInterval(wait); clerkInstance.openSignUp(); }
-      else if (attempts > 10) { clearInterval(wait); alert('Sign up unavailable. Please refresh the page.'); }
-    }, 500);
-    return;
+  if (clerkInstance) {
+    clerkInstance.openSignUp();
+  } else {
+    // Fallback: redirect to Clerk hosted sign-up page
+    window.location.href = 'https://accounts.inkstub.com/sign-up';
   }
-  clerkInstance.openSignUp();
 }
 
 function signOut() {
