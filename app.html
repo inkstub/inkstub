@@ -1804,7 +1804,7 @@ function buildTicketHTML(data) {
   const safeStyle = style || 'classic';
   const sn = String(rnd(10000,99999));
   const gate = ['A','B','C','D','E','F','G'][rnd(0,6)];
-  const shortName = name.length > 12 ? name.substring(0,10)+'…' : name;
+  const shortName = name.length > 10 ? name.substring(0,8)+'…' : name;
   const pl = logoPlacement || 'left';
   const logoImg = logo ? `<img src="${logo}" style="width:38px;height:38px;object-fit:contain;flex-shrink:0;display:block" alt="">` : '';
   const wm = (logo && pl==='watermark') ? `<img src="${logo}" style="position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);width:120px;height:120px;object-fit:contain;opacity:0.07;pointer-events:none;z-index:0" alt="">` : '';
@@ -2024,9 +2024,9 @@ function buildTicketHTML(data) {
 
   /* ══ 8. CONSTRUCTIVIST ══ */
   if (safeStyle === 'constructivist') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="background:#e8e0d0;border:none;font-family:'Special Elite',cursive;overflow:hidden;position:relative">
-      <div style="position:absolute;top:0;left:0;width:52%;height:100%;background:#cc1a00;clip-path:polygon(0 0,88% 0,68% 100%,0 100%)"></div>
+    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5);height:auto">
+    <div style="background:#e8e0d0;border:none;font-family:'Special Elite',cursive;overflow:hidden;position:relative;height:fit-content;display:block;display:flex;align-items:flex-start">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;width:52%;background:#cc1a00;clip-path:polygon(0 0,88% 0,68% 100%,0 100%)"></div>
       <div style="display:flex;position:relative;z-index:1">
         <div style="width:52%;padding:8px 12px;display:flex;flex-direction:column;justify-content:flex-start;gap:6px">
           <div>
@@ -2044,7 +2044,7 @@ function buildTicketHTML(data) {
             <div><div style="font-size:6px;color:#cc1a00;text-transform:uppercase;letter-spacing:1px">Price</div><div style="font-size:10px;color:#cc1a00;font-weight:700">${price||'$0.00'}</div></div>
           </div>
         </div>
-        <div style="width:52px;background:#1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 6px;border-left:2px dashed rgba(255,255,255,0.2);flex-shrink:0">
+        <div style="width:52px;background:#1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:8px 6px;border-left:2px dashed rgba(255,255,255,0.2);flex-shrink:0;overflow:hidden;max-height:120px">
           <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;color:#c89060;font-family:'Playfair Display',serif;font-weight:900;text-transform:uppercase">${shortName}</div>
           <div style="font-size:13px;font-weight:700;color:#cc1a00;font-family:'Playfair Display',serif">${priceDollars}</div>
           <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode('#c89060')}</div>
@@ -2055,10 +2055,10 @@ function buildTicketHTML(data) {
 
   /* ══ 9. RACING FORM ══ */
   if (safeStyle === 'racing') {
-    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5)">
-    <div style="background:#f0f8ff;border:1px solid #0a3a6a;font-family:'Courier New',monospace;overflow:hidden">
+    return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.5);height:auto">
+    <div style="background:#f0f8ff;border:1px solid #0a3a6a;font-family:'Courier New',monospace;overflow:hidden;display:flex;flex-direction:column">
       <div style="display:flex">
-        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0"></div>
+        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0;align-self:stretch"></div>
         <div style="flex:1;padding:6px 10px;border-left:1px solid #0a3a6a">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;border-bottom:2px solid #0a3a6a;padding-bottom:3px">
             ${logo&&pl==='left'?`<div style="display:flex;align-items:center;gap:6px">${logoImg}<div style="font-size:15px;font-weight:700;color:#0a0a2a;text-transform:uppercase;font-family:Georgia,serif">${name}</div></div>`:`<div style="font-size:15px;font-weight:700;color:#0a0a2a;text-transform:uppercase;font-family:Georgia,serif">${name}</div>`}
@@ -2076,8 +2076,8 @@ function buildTicketHTML(data) {
             <span style="font-size:7px;color:#90b8e0;letter-spacing:1px">VALID FOR ONE ENTRY</span>
           </div>
         </div>
-        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0"></div>
-        <div style="width:60px;background:#0a3a6a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:8px 6px;flex-shrink:0">
+        <div style="width:14px;background:repeating-linear-gradient(180deg,#0a3a6a 0,#0a3a6a 9px,#f0f8ff 9px,#f0f8ff 18px);flex-shrink:0;align-self:stretch"></div>
+        <div style="width:60px;background:#0a3a6a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;padding:8px 6px;flex-shrink:0;overflow:hidden;align-self:flex-start">
           <div style="font-size:7px;color:#90b8e0;letter-spacing:1px;text-align:center;text-transform:uppercase">Admit</div>
           <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#fff">${priceDollars}</div>
           <div style="font-size:7px;color:#90b8e0;font-family:'Courier New',monospace">No.${sn}</div>
@@ -2125,8 +2125,8 @@ function buildTicketHTML(data) {
   const pc = isLight ? '#8B1A1A' : '#e8a820';
   const sc = isLight ? 'rgba(180,150,80,0.15)' : 'rgba(139,26,26,0.12)';
   const bar = isLight ? '#2C1A0E' : '#c8a878';
-  return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6)">
-  <div style="display:flex;background:${bg};border:1px solid ${bc};font-family:'Special Elite',cursive;overflow:hidden">
+  return `<div style="display:block;width:100%;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.6);height:auto">
+  <div style="display:flex;align-items:flex-start;background:${bg};border:1px solid ${bc};font-family:'Special Elite',cursive;overflow:hidden">
     ${wm}
     <div style="flex:1;padding:16px 18px;border-right:2px dashed ${bc};position:relative">
       <div style="height:4px;background:linear-gradient(90deg,${pc},${isLight?'#C4862A':'#c84020'});position:absolute;top:0;left:0;right:0"></div>
@@ -2141,7 +2141,7 @@ function buildTicketHTML(data) {
         <div style="padding-left:8px"><div style="font-size:6px;letter-spacing:2px;color:${pc};text-transform:uppercase">Price</div><div style="font-family:'Playfair Display',serif;font-size:13px;font-weight:900;color:${pc}">${price||'$0.00'}</div></div>
       </div>
     </div>
-    <div style="width:74px;background:${sc};padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px">
+    <div style="width:74px;background:${sc};padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;overflow:hidden;max-height:120px;overflow:hidden;align-self:stretch">
       <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Playfair Display',serif;font-size:9px;font-weight:900;color:${tc};text-transform:uppercase;letter-spacing:1px">${shortName}</div>
       <div style="font-size:8px;color:${lc};letter-spacing:1px">No.${sn}</div>
       <div style="display:flex;flex-direction:column;gap:1px">${buildBarcode(bar)}</div>
