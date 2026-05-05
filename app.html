@@ -1369,7 +1369,8 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
 }
 
 .ticket-wrap { width: 100%; }
-#ticketEl { display:flex; justify-content:center; overflow-x:auto; padding: 12px 0; }
+#ticketEl { display:block; overflow-x:auto; overflow-y:hidden; padding: 8px 0 4px; }
+#ticketEl > div { margin: 0 auto; }
 .ticket-wrap-outer > div { width: 100%; }
 </style>
 </head>
@@ -1613,13 +1614,13 @@ main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
       </div>
 
       <!-- STEP 3: PREVIEW -->
-      <div class="card" id="card-preview" style="padding-bottom:20px;height:fit-content">
+      <div class="card" id="card-preview" style="padding-bottom:20px;overflow:hidden">
         <div class="step-label">Step 4 — Preview &amp; Order</div>
         <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
 
         <div class="ticket-wrap" id="ticketWrap" style="display:none;overflow:visible">
           <div class="preview-label">Your Collectible Stub — Printed Size: 5.5" × 2" (528 × 192px)</div>
-          <div id="ticketEl" style="line-height:0;display:block;height:fit-content"></div>
+          <div id="ticketEl" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
 
           <div class="action-row">
             <button class="btn-secondary" id="btnSave">Save to Collection</button>
@@ -1777,17 +1778,17 @@ function buildTicketHTML(data) {
   if (s === 'theatre') {
     return `<div style="${OUTER}">
       <div style="display:flex;width:528px;height:192px;background:#c8920a;font-family:'Special Elite',cursive;overflow:hidden">
-        <div style="flex:1;height:192px;padding:10px 16px;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column;gap:0">
-          <div style="font-size:7px;letter-spacing:4px;text-transform:uppercase;color:rgba(26,10,0,0.65);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1;padding-bottom:3px">${vn}</div>
-          <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.55);text-align:center;line-height:1;padding-bottom:4px">${tp}</div>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-bottom:8px">${nm}</div>
-          <div style="height:1px;background:rgba(26,10,0,0.25);margin-bottom:7px;flex-shrink:0"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px 10px;flex-shrink:0">
-            <div style="overflow:hidden;white-space:nowrap"><span style="font-size:7px;font-weight:700;color:#1a0a00">DATE: </span><span style="font-size:7px;color:#1a0a00">${dt}</span></div>
-            <div style="overflow:hidden;white-space:nowrap"><span style="font-size:7px;font-weight:700;color:#1a0a00">GATE: </span><span style="font-size:7px;color:#1a0a00">${gate}</span></div>
-            <div style="overflow:hidden;white-space:nowrap"><span style="font-size:7px;font-weight:700;color:#1a0a00">PRICE: </span><span style="font-size:7px;color:#1a0a00">${pr}</span></div>
-            <div style="overflow:hidden;white-space:nowrap;grid-column:span 2"><span style="font-size:7px;font-weight:700;color:#1a0a00">SEAT: </span><span style="font-size:7px;color:#1a0a00">${st}</span></div>
-            <div style="overflow:hidden;white-space:nowrap"><span style="font-size:7px;font-weight:700;color:#1a0a00">NO: </span><span style="font-size:7px;color:#1a0a00;font-family:'Courier New',monospace">${sn}</span></div>
+        <div style="flex:1;height:192px;padding:10px 14px 8px;overflow:hidden;box-sizing:border-box">
+          <div style="font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(26,10,0,0.65);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px">${vn}</div>
+          <div style="font-size:7px;letter-spacing:2px;text-transform:uppercase;color:rgba(26,10,0,0.5);text-align:center;margin-bottom:4px">${tp}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:#1a0a00;text-transform:uppercase;text-align:center;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px">${nm}</div>
+          <div style="height:1px;background:rgba(26,10,0,0.25);margin-bottom:7px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px 10px">
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">DATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${dt}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">GATE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${gate}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">PRICE</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;line-height:1.2">${pr}</div></div>
+            <div style="overflow:hidden;grid-column:span 2"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">SEAT</div><div style="font-size:9px;font-weight:700;color:#1a0a00;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2">${st}</div></div>
+            <div style="overflow:hidden"><div style="font-size:6px;color:rgba(26,10,0,0.5);text-transform:uppercase;letter-spacing:1px;line-height:1">NO.</div><div style="font-size:9px;font-weight:700;color:#1a0a00;font-family:'Courier New',monospace;white-space:nowrap;line-height:1.2">${sn}</div></div>
           </div>
         </div>
         <div style="width:96px;height:192px;background:#fffdf5;border-left:2px dashed #1a0a00;display:flex;flex-direction:column;align-items:center;padding:10px 6px;flex-shrink:0;overflow:hidden;box-sizing:border-box;gap:6px">
