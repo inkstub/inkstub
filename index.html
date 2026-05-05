@@ -1124,7 +1124,7 @@
           <a href="app.html" class="btn-hero-primary">Create a Stub →</a>
         </div>
       </div>
-      <div class="collection-grid" id="collectionGrid"></div>
+      <div class="collection-grid" id="collectionGrid"><div style="grid-column:1/-1;text-align:center;padding:60px 20px;font-family:'DM Sans',sans-serif;font-size:13px;color:#444">Loading...</div></div>
     </div>
   </section>
 
@@ -1300,7 +1300,6 @@
       document.getElementById('collection').scrollIntoView({behavior:'smooth'});
     }
 
-    renderCollection(); // Show auth prompt immediately before auth loads
     initAuth(onUserChange);
   </script>
 
