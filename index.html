@@ -1449,10 +1449,7 @@
     }
 
     // ── INIT ──
-    initAuth(onUserChange).catch(err => {
-      console.warn('Auth init failed (keys not set):', err.message);
-      onUserChange(null);
-    });
+    initAuth(onUserChange);
   </script>
 
 </body>
