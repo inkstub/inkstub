@@ -1125,17 +1125,7 @@
           <a href="app.html" class="btn-hero-primary">Create a Stub →</a>
         </div>
       </div>
-      <div class="collection-grid" id="collectionGrid">
-        <div class="auth-prompt">
-          <div class="auth-prompt-icon">🎟</div>
-          <div class="auth-prompt-title">Your memories, saved forever</div>
-          <div class="auth-prompt-sub">Sign in to see your collection and access it from any device.</div>
-          <div class="auth-prompt-btns">
-            <button class="btn-signup" onclick="openSignIn()">Sign In</button>
-            <button class="btn-signin" onclick="openSignUp()">Get Started — It's Free</button>
-          </div>
-        </div>
-      </div>
+      <div class="collection-grid" id="collectionGrid"></div>
     </div>
   </section>
 
@@ -1311,6 +1301,7 @@
       document.getElementById('collection').scrollIntoView({behavior:'smooth'});
     }
 
+    renderCollection(); // Show auth prompt immediately before auth loads
     initAuth(onUserChange);
   </script>
 
