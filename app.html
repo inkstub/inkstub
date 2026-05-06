@@ -269,6 +269,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px; }
 }
 
 .field { display: flex; flex-direction: column; gap: 6px; }
+.fields-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
 .field-full { grid-column: 1 / -1; }
 
 .field-label {
@@ -1499,7 +1500,7 @@ nav {
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
             <div class="upload-zone" id="uploadZone">
-              <div class="upload-icon">↑</div>
+              <div class="upload-icon">⬆</div>
               <div class="upload-title">Drop your e-ticket here</div>
               <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer">browse files</label> — JPG, PNG, PDF</div>
               <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
@@ -1533,17 +1534,17 @@ nav {
                 <label class="field-label" for="eventDate">Date</label>
                 <input class="field-input" id="eventDate" type="text" placeholder="e.g. June 2, 2024">
               </div>
+              <div class="field">
+                <label class="field-label" for="ticketPrice">Ticket Price</label>
+                <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00">
+              </div>
               <div class="field field-full">
                 <label class="field-label" for="venue">Venue</label>
                 <input class="field-input" id="venue" type="text" placeholder="e.g. Wrigley Field, Chicago, IL">
               </div>
-              <div class="field">
+              <div class="field field-full">
                 <label class="field-label" for="seatInfo">Section / Row / Seat</label>
                 <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
-              </div>
-              <div class="field">
-                <label class="field-label" for="ticketPrice">Ticket Price</label>
-                <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00">
               </div>
             </div>
           </div>
