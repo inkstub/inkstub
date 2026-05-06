@@ -1484,8 +1484,8 @@ nav {
   <nav>
     <a href="index.html" class="nav-logo">inkstub</a>
     <ul class="nav-links">
-      <li><button data-view="create" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">Print a Stub</button></li>
-      <li><button data-view="collection" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">My Collection</button></li>
+      <li><button onclick="switchView('create')" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">Print a Stub</button></li>
+      <li><button onclick="switchView('collection')" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">My Collection</button></li>
     </ul>
     <div id="appNavAuth" style="display:flex;align-items:center;gap:10px"></div>
   </nav>
@@ -1499,7 +1499,7 @@ nav {
 
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
-            <div class="upload-zone" id="uploadZone">
+            <div class="upload-zone" id="uploadZone" onclick="if(event.target.tagName!=='LABEL')document.getElementById('fileInput').click()">
               <div class="upload-inner">
                 <div class="upload-icon">⬆</div>
                 <div class="upload-title">Drop your e-ticket here</div>
@@ -1940,11 +1940,7 @@ function initUpload() {
   const zone = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
 
-  // Click zone to open file picker (but not when clicking the label)
-  zone.addEventListener('click', (e) => {
-    if (e.target.tagName === 'LABEL' || e.target.tagName === 'INPUT') return;
-    input.click();
-  });
+  // Click handled via onclick on the zone element directly
 
   // File selected via picker
   input.addEventListener('change', () => {
