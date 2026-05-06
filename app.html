@@ -2472,6 +2472,33 @@ function animateCartAdd() {
   }, 600);
 }
 
+function buildCartItemPreview(item) {
+  // Build a scaled-down ticket preview (scale to fit drawer width ~370px from 528px)
+  const scale = 0.65;
+  const html = buildTicketHTML({
+    name: item.name,
+    type: item.type,
+    venue: item.venue,
+    date: item.date,
+    seat: item.seat,
+    price: item.price,
+    style: item.style,
+    logo: item.logo,
+  });
+  return `<div style="transform:scale(${scale});transform-origin:top left;width:${Math.round(528*scale)}px;height:${Math.round(192*scale)}px;pointer-events:none">${html}</div>`;
+}
+
+function toggleCartPreview(id) {
+  const preview = document.getElementById('cartPreview-' + id);
+  const btn = document.getElementById('previewBtn-' + id);
+  if (!preview || !btn) return;
+  const isHidden = preview.style.display === 'none';
+  preview.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? 'Hide Preview' : 'Show Preview';
+  btn.style.borderColor = isHidden ? '#C8922A' : '#2e2e2e';
+  btn.style.color = isHidden ? '#C8922A' : '#888880';
+}
+
 function removeFromCart(id) {
   cart = cart.filter(item => item.id !== id);
   renderCart();
@@ -2528,7 +2555,13 @@ function renderCart() {
         </div>
         <div class="cart-item-price">$${(item.qty * priceEach).toFixed(2)}</div>
       </div>
-      <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕ Remove</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕ Remove</button>
+        <button onclick="toggleCartPreview(${item.id})" id="previewBtn-${item.id}" style="background:none;border:1px solid #2e2e2e;color:#888880;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-family:'DM Sans',sans-serif;padding:4px 10px;cursor:pointer;transition:all 0.2s">Show Preview</button>
+      </div>
+      <div id="cartPreview-${item.id}" style="display:none;margin-top:12px;overflow-x:auto">
+        ${buildCartItemPreview(item)}
+      </div>
     </div>
   `).join('');
 
