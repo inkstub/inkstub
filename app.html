@@ -2339,12 +2339,9 @@ document.getElementById('btnSkipLogo')?.addEventListener('click', () => {
 document.querySelectorAll('.placement-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.placement-btn').forEach(b => b.classList.remove('active'));
-    btn.style.color='#F0EDE8';
+    btn.classList.add('active');
     selectedPlacement = btn.dataset.placement;
-    if (currentTicket) {
-      currentTicket.logoPlacement = selectedPlacement;
-      renderTicketPreview();
-    }
+    if (window.autoPreview) window.autoPreview();
   });
 });
 
@@ -2404,14 +2401,7 @@ function selectLogo(e, url, name) {
   document.getElementById('logoSelectedName').textContent = name;
   document.getElementById('logoSelected').style.display = 'block';
 
-  // Update preview if it exists, otherwise store for when they generate it
-  if (currentTicket) {
-    currentTicket.logo = url;
-    currentTicket.logoPlacement = selectedPlacement;
-    renderTicketPreview();
-  }
-
-  showToast('Logo selected! Click Generate Preview to see it on your ticket.');
+  if (window.autoPreview) window.autoPreview();
 }
 
 function removeLogo() {
@@ -2421,8 +2411,7 @@ function removeLogo() {
   document.getElementById('logoResults').style.display = 'none';
   document.getElementById('logoSearch').value = '';
   document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
-  if (currentTicket) {
-    currentTicket.logo = null;
+  if (window.autoPreview) window.autoPreview();
     renderTicketPreview();
   }
 }
