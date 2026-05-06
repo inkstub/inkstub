@@ -1513,13 +1513,13 @@ function switchView(name) {
 
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
-            <div class="upload-zone" id="uploadZone" onclick="if(event.target.tagName!=='LABEL')document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
               <div class="upload-inner">
                 <div class="upload-icon">⬆</div>
                 <div class="upload-title">Drop your e-ticket here</div>
-                <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer" onclick="event.stopPropagation()">browse files</label> — JPG, PNG, PDF</div>
+                <div class="upload-sub">or <span style="color:var(--gold);cursor:pointer">browse files</span> — JPG, PNG, PDF</div>
               </div>
-              <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="if(this.files&&this.files[0])handleFile(this.files[0])">
             </div>
             <div class="upload-success" id="uploadSuccess" style="display:none">
               <div class="upload-success-icon">✓</div>
@@ -1956,8 +1956,9 @@ function initUpload() {
 
   // Click handled via onclick on the zone element directly
 
-  // File selected via picker
-  input.addEventListener('change', () => {
+  // File selected via picker  
+  input.addEventListener('change', function() {
+    console.log('File selected:', input.files);
     if (input.files && input.files[0]) handleFile(input.files[0]);
   });
 
