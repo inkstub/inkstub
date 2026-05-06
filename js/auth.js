@@ -9,7 +9,7 @@ let _onUserChange = null;
 
 // ── INIT SUPABASE ──
 function initAuth(onUserChange) {
-  _onUserChange = onUserChange;
+  _onUserChange = onUserChange || window.onUserChange;
 
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
