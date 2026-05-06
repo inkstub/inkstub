@@ -1503,7 +1503,7 @@ nav {
               <div class="upload-inner">
                 <div class="upload-icon">⬆</div>
                 <div class="upload-title">Drop your e-ticket here</div>
-                <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer">browse files</label> — JPG, PNG, PDF</div>
+                <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer" onclick="event.stopPropagation()">browse files</label> — JPG, PNG, PDF</div>
               </div>
               <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
             </div>
@@ -1874,6 +1874,12 @@ function selectStyle(styleName) {
   // Initial preview render on page load
   autoPreview();
 
+  // Wire qty buttons
+  [1,3,5].forEach(function(q) {
+    var el = document.getElementById('qty-' + q);
+    if (el) el.addEventListener('click', function() { selectQty(el); });
+  });
+
   // Attach style button clicks
   ['classic','sport','concert'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
@@ -1934,8 +1940,11 @@ function initUpload() {
   const zone = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
 
-  // Click zone to open file picker
-  zone.addEventListener('click', () => input.click());
+  // Click zone to open file picker (but not when clicking the label)
+  zone.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LABEL' || e.target.tagName === 'INPUT') return;
+    input.click();
+  });
 
   // File selected via picker
   input.addEventListener('change', () => {
@@ -2271,12 +2280,6 @@ function selectQty(el) {
 }
 
 // Wire qty clicks
-document.addEventListener('DOMContentLoaded', function() {
-  [1,3,5].forEach(function(q) {
-    var el = document.getElementById('qty-' + q);
-    if (el) el.addEventListener('click', function() { selectQty(el); });
-  });
-});
 
 async function placeOrder() {
   if (!currentTicket) return;
@@ -2420,82 +2423,6 @@ function removeLogo() {
 
 <script>
 // Re-wire everything cleanly after DOM loads
-document.addEventListener('DOMContentLoaded', function() {
-
-  // Live preview - runs on any field change
-  function updatePreview() {
-    var data = {
-      name:  (document.getElementById('eventName') ? document.getElementById('eventName').value.trim() : ''),
-      type:  (document.getElementById('eventType') ? document.getElementById('eventType').value : 'Concert'),
-      venue: (document.getElementById('venue') ? document.getElementById('venue').value.trim() : ''),
-      date:  (document.getElementById('eventDate') ? document.getElementById('eventDate').value.trim() : ''),
-      seat:  (document.getElementById('seatInfo') ? document.getElementById('seatInfo').value.trim() : ''),
-      price: (document.getElementById('ticketPrice') ? document.getElementById('ticketPrice').value.trim() : ''),
-      style: window.selectedStyle || 'classic',
-      logo:  window.selectedLogo || null,
-      logoPlacement: window.selectedPlacement || 'left',
-    };
-    window.currentTicket = data;
-    var el = document.getElementById('ticketEl');
-    if (el && typeof buildTicketHTML === 'function') {
-      el.innerHTML = buildTicketHTML(data);
-    }
-  }
-
-  window.autoPreview = updatePreview;
-
-  // Attach to all fields
-  ['eventName','eventType','venue','eventDate','seatInfo','ticketPrice'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', updatePreview);
-      el.addEventListener('change', updatePreview);
-    }
-  });
-
-  // Style buttons
-  ['classic','sport','concert'].forEach(function(s) {
-    var el = document.getElementById('style-' + s);
-    if (el) {
-      el.addEventListener('click', function() {
-        window.selectedStyle = s;
-        ['classic','sport','concert'].forEach(function(x) {
-          var b = document.getElementById('style-' + x);
-          if (b) {
-            b.style.border = x === s ? '2px solid #C8922A' : '1px solid #242424';
-            b.style.background = x === s ? 'rgba(196,134,42,0.08)' : 'transparent';
-          }
-        });
-        updatePreview();
-      });
-    }
-  });
-
-  // Qty buttons
-  [1,3,5].forEach(function(q) {
-    var el = document.getElementById('qty-' + q);
-    if (el) {
-      el.addEventListener('click', function() {
-        [1,3,5].forEach(function(x) {
-          var b = document.getElementById('qty-' + x);
-          if (b) {
-            b.style.border = x === q ? '2px solid #C8922A' : '1px solid #242424';
-            b.style.background = x === q ? 'rgba(196,134,42,0.08)' : 'transparent';
-          }
-        });
-        window.selectedQty = q;
-        var price = {1:'14.99',3:'35.97',5:'49.95'}[q];
-        var t = document.getElementById('orderTotal');
-        var b = document.getElementById('btnPlaceOrder');
-        if (t) t.textContent = '$' + price;
-        if (b) b.textContent = '✦ Checkout with Stripe — $' + price + ' ✦';
-      });
-    }
-  });
-
-  // Initial render
-  updatePreview();
-});
 </script>
 </body>
 </html>
