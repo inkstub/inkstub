@@ -1513,7 +1513,7 @@ function switchView(name) {
 
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
-            <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
+            <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="handleFile(this.files[0])">
             <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
               <div class="upload-inner">
                 <div class="upload-icon">⬆</div>
@@ -1707,7 +1707,6 @@ function switchView(name) {
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <script src="js/auth.js"></script>
   <script>
 
   // ── AUTH STATE FOR APP PAGE ──
@@ -1958,7 +1957,6 @@ function initUpload() {
 
   // File selected via picker  
   input.addEventListener('change', function() {
-    console.log('File selected:', input.files);
     if (input.files && input.files[0]) handleFile(input.files[0]);
   });
 
@@ -2418,8 +2416,6 @@ function removeLogo() {
 
   </script>
 
-<script>
-// Re-wire everything cleanly after DOM loads
-</script>
+  <script src="js/auth.js"></script>
 </body>
 </html>
