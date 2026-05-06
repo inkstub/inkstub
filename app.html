@@ -57,7 +57,7 @@ body {
 }
 
 .header-inner {
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 14px 24px;
   display: flex;
@@ -103,7 +103,7 @@ body {
 .nav-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 700; }
 
 /* ── LAYOUT ── */
-main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+main { max-width: 1100px; margin: 0 auto; padding: 32px 40px 80px; }
 
 .view { display: none; }
 .view.active { display: block; }
@@ -1493,10 +1493,8 @@ nav {
   ═══════════════════════════════════════ -->
   <main style="padding-top:64px">
     <section class="view active" id="view-create">
-      <div style="max-width:1200px;margin:0 auto;padding:32px 32px 60px;display:grid;grid-template-columns:1fr 480px;gap:32px;align-items:start">
+      <div>
 
-        <!-- LEFT: Steps -->
-        <div style="display:flex;flex-direction:column;gap:20px">
 
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
@@ -1608,10 +1606,6 @@ nav {
             </div>
           </div>
 
-        </div>
-
-        <!-- RIGHT: Live Preview + Order -->
-        <div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:20px">
 
           <div class="card" id="card-preview" style="padding-bottom:16px">
             <div class="step-label">Live Preview — 5.5" × 2"</div>
@@ -1651,7 +1645,6 @@ nav {
             <p class="order-note">Secure payment via Stripe · Ships in 1–2 business days</p>
           </div>
 
-        </div>
       </div>
     </section>
 
@@ -1690,7 +1683,6 @@ nav {
           <p class="empty-title">No stubs yet</p>
           <p class="empty-sub">Print your first ticket to start your collection</p>
           <button class="btn-secondary" id="btnGoCreate">Create Your First Stub →</button>
-        </div>
       </div>
     </section>
   </main>
