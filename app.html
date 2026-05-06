@@ -1477,6 +1477,20 @@ nav {
     .ht-concert .ht-stub-text { color: #e8d0ff; }
     .ht-concert .ht-barcode span { background: #b080d8; }
 </style>
+<script>
+function switchView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (name === 'collection') {
+    if (currentUser) {
+      renderCollection('all');
+    } else {
+      renderCollection('all'); // renderCollection handles the auth prompt when not logged in
+    }
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
 </head>
 <body>
 
@@ -1505,7 +1519,7 @@ nav {
                 <div class="upload-title">Drop your e-ticket here</div>
                 <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer" onclick="event.stopPropagation()">browse files</label> — JPG, PNG, PDF</div>
               </div>
-              <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
+              <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="if(this.files&&this.files[0])handleFile(this.files[0])">
             </div>
             <div class="upload-success" id="uploadSuccess" style="display:none">
               <div class="upload-success-icon">✓</div>
