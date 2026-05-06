@@ -1744,7 +1744,6 @@ function switchView(name) {
       }
     }
   }
-  initAuth(window.onUserChange);
 
 /* tickets.js — Ticket HTML generation */
 
@@ -1931,19 +1930,6 @@ function initNav() {
     document.querySelectorAll('.app-nav-link').forEach(b => b.style.color='#888880');
     document.querySelector('[data-view="create"]').classList.add('active');
   });
-}
-
-function switchView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  if (name === 'collection') {
-    if (currentUser) {
-      renderCollection('all');
-    } else {
-      renderCollection('all'); // renderCollection handles the auth prompt when not logged in
-    }
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /* ════════════════════════════════════════
@@ -2245,12 +2231,6 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
    ORDER FLOW
 ════════════════════════════════════════ */
 function showOrderForm() {
-  const card = document.getElementById('card-order');
-  card.style.display = 'block';
-  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-}
-
-function showOrderForm() {
   if (!currentUser) { openSignIn(); return; }
 }
 
@@ -2411,12 +2391,11 @@ function removeLogo() {
   document.getElementById('logoSearch').value = '';
   document.querySelectorAll('.logo-result-item').forEach(el => el.classList.remove('selected'));
   if (window.autoPreview) window.autoPreview();
-    renderTicketPreview();
-  }
 }
 
   </script>
 
   <script src="js/auth.js"></script>
+  <script>initAuth(window.onUserChange);</script>
 </body>
 </html>
