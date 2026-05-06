@@ -1502,7 +1502,10 @@ function switchView(name) {
       <li><button onclick="switchView('collection')" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">My Collection</button></li>
     </ul>
     <div style="display:flex;align-items:center;gap:12px">
-      <button class="cart-btn" onclick="openCart()">🎟 Cart <span class="cart-badge" id="cartBadge"></span></button>
+      <button class="cart-btn" onclick="openCart()" style="position:relative;background:none;border:1px solid #2e2e2e;color:#F0EDE8;font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 14px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color 0.2s">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span id="cartBadge" style="display:none;background:#C8922A;color:#0A0A0A;font-size:11px;font-weight:700;width:20px;height:20px;border-radius:50%;align-items:center;justify-content:center;line-height:1">0</span>
+      </button>
       <div id="appNavAuth" style="display:flex;align-items:center;gap:10px"></div>
     </div>
   </nav>
@@ -2428,8 +2431,12 @@ function updateCartBadge() {
   const total = cartTotalStubs();
   const badge = document.getElementById('cartBadge');
   if (!badge) return;
-  if (total > 0) { badge.textContent = total; badge.classList.add('visible'); }
-  else { badge.classList.remove('visible'); }
+  if (total > 0) {
+    badge.textContent = total;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
 }
 
 function renderCart() {
@@ -2474,14 +2481,18 @@ function renderCart() {
 }
 
 function openCart() {
-  document.getElementById('cartDrawer').classList.add('open');
-  document.getElementById('cartOverlay').classList.add('open');
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay');
+  if (drawer) drawer.classList.add('open');
+  if (overlay) overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeCart() {
-  document.getElementById('cartDrawer').classList.remove('open');
-  document.getElementById('cartOverlay').classList.remove('open');
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay');
+  if (drawer) drawer.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
   document.body.style.overflow = '';
 }
 
@@ -2533,7 +2544,10 @@ async function cartCheckout() {
       <div class="cart-summary-line"><span id="cartTotalStubs">0 stubs</span><span id="cartPriceEach">$14.99 each</span></div>
       <div class="cart-summary-line"><span>Archival print + tracked shipping</span><span>Included</span></div>
       <div class="cart-total-line"><span>Total</span><span id="cartTotal">$0.00</span></div>
-      <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="cartCheckout()">✦ Checkout with Stripe ✦</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button onclick="closeCart()" style="background:transparent;border:1px solid #2e2e2e;color:#888880;font-family:'DM Sans',sans-serif;font-size:13px;padding:13px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.color='#F0EDE8'" onmouseout="this.style.color='#888880'">Continue Shopping</button>
+        <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="cartCheckout()">Checkout →</button>
+      </div>
     </div>
   </div>
 
