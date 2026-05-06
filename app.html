@@ -1725,6 +1725,11 @@ function switchView(name) {
     const authDiv = document.getElementById('appNavAuth');
     if (!authDiv) return;
     if (user) {
+      // Restore cart from localStorage for this user
+      try {
+        const saved = localStorage.getItem('inkstub_cart_' + user.id);
+        if (saved) { cart = JSON.parse(saved); renderCart(); updateCartBadge(); }
+      } catch(e) {}
       const initials = (getUserName()||'U').charAt(0).toUpperCase();
       authDiv.innerHTML = `
         <div style="display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#888880">
@@ -1745,7 +1750,10 @@ function switchView(name) {
         renderCollection('all');
       }
     } else {
-      // Clear collection on sign out
+      // Clear cart and collection on sign out
+      cart = [];
+      renderCart();
+      updateCartBadge();
       collection = [];
       authDiv.innerHTML = `
         <button onclick="openSignIn()" style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:#888880;background:transparent;border:1px solid #2e2e2e;padding:7px 16px;cursor:pointer">Sign in</button>
@@ -2444,8 +2452,28 @@ function addToCart() {
   });
   renderCart();
   updateCartBadge();
-  openCart();
-  showToast('Added to cart!');
+  animateCartAdd();
+}
+
+function animateCartAdd() {
+  const btn = document.querySelector('.cart-btn');
+  if (!btn) return;
+  // Flash the button gold
+  btn.style.borderColor = '#C8922A';
+  btn.style.background = 'rgba(200,146,42,0.15)';
+  // Bounce the badge
+  const badge = document.getElementById('cartBadge');
+  if (badge) {
+    badge.style.transform = 'scale(1.5)';
+    badge.style.transition = 'transform 0.15s ease';
+    setTimeout(() => {
+      badge.style.transform = 'scale(1)';
+    }, 150);
+  }
+  setTimeout(() => {
+    btn.style.borderColor = '';
+    btn.style.background = '';
+  }, 600);
 }
 
 function removeFromCart(id) {
@@ -2475,6 +2503,10 @@ function updateCartBadge() {
 }
 
 function renderCart() {
+  // Persist cart to localStorage
+  if (typeof currentUser !== 'undefined' && currentUser) {
+    try { localStorage.setItem('inkstub_cart_' + currentUser.id, JSON.stringify(cart)); } catch(e) {}
+  }
   const itemsEl = document.getElementById('cartItems');
   const footer = document.getElementById('cartFooter');
   if (!itemsEl) return;
