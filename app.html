@@ -2458,21 +2458,17 @@ function addToCart() {
 function animateCartAdd() {
   const btn = document.querySelector('.cart-btn');
   if (!btn) return;
-  // Flash the button gold
   btn.style.borderColor = '#C8922A';
   btn.style.background = 'rgba(200,146,42,0.15)';
-  // Bounce the badge
   const badge = document.getElementById('cartBadge');
   if (badge) {
     badge.style.transform = 'scale(1.5)';
     badge.style.transition = 'transform 0.15s ease';
-    setTimeout(() => {
-      badge.style.transform = 'scale(1)';
-    }, 150);
+    setTimeout(() => { badge.style.transform = 'scale(1)'; }, 150);
   }
   setTimeout(() => {
-    btn.style.borderColor = '';
-    btn.style.background = '';
+    btn.style.borderColor = '#2e2e2e';
+    btn.style.background = 'transparent';
   }, 600);
 }
 
