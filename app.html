@@ -1858,8 +1858,8 @@ function selectStyle(styleName) {
   ['eventName','eventType','venue','eventDate','seatInfo','ticketPrice'].forEach(function(id) {
     var el = document.getElementById(id);
     if (!el) return;
-    el.addEventListener('input', autoPreview);
-    el.addEventListener('change', autoPreview);
+    el.addEventListener('input', window.autoPreview);
+    el.addEventListener('change', window.autoPreview);
   });
 
   // Initial preview render on page load
@@ -2096,7 +2096,6 @@ function initStylePicker() {
 function initButtons() {
   // Preview auto-updates via input listeners
   document.getElementById('btnSave').addEventListener('click', saveToCollection);
-  document.getElementById('btnOrder').addEventListener('click', showOrderForm);
   document.getElementById('btnPlaceOrder').addEventListener('click', placeOrder);
 }
 
@@ -2105,13 +2104,13 @@ function initButtons() {
 ════════════════════════════════════════ */
 function getFormData() {
   return {
-    name:  document.getElementById('eventName').value.trim()  || 'The Event',
-    type:  document.getElementById('eventType').value         || 'Concert',
-    venue: document.getElementById('venue').value.trim()      || 'The Grand Venue',
-    date:  document.getElementById('eventDate').value.trim()  || 'TBD',
-    seat:  document.getElementById('seatInfo').value.trim()   || 'GA',
-    price: document.getElementById('ticketPrice').value.trim() || '$0.00',
-    style: selectedStyle,
+    name:  document.getElementById('eventName')?.value.trim()  || '',
+    type:  document.getElementById('eventType')?.value         || 'Concert',
+    venue: document.getElementById('venue')?.value.trim()      || '',
+    date:  document.getElementById('eventDate')?.value.trim()  || '',
+    seat:  document.getElementById('seatInfo')?.value.trim()   || '',
+    price: document.getElementById('ticketPrice')?.value.trim() || '',
+    style: selectedStyle || 'classic',
     logo:  selectedLogo || null,
     logoPlacement: selectedPlacement || 'left',
   };
