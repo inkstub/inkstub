@@ -1501,7 +1501,10 @@ function switchView(name) {
       <li><button onclick="switchView('create')" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">Print a Stub</button></li>
       <li><button onclick="switchView('collection')" class="app-nav-link" style="background:none;border:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-muted);cursor:pointer;padding:0;transition:color 0.2s">My Collection</button></li>
     </ul>
-    <div id="appNavAuth" style="display:flex;align-items:center;gap:10px"></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="cart-btn" onclick="openCart()">🎟 Cart <span class="cart-badge" id="cartBadge"></span></button>
+      <div id="appNavAuth" style="display:flex;align-items:center;gap:10px"></div>
+    </div>
   </nav>
   <!-- ═══════════════════════════════════════
        VIEW: CREATE
@@ -1524,7 +1527,6 @@ function switchView(name) {
             <div class="upload-success" id="uploadSuccess" style="display:none">
               <div class="upload-success-icon">✓</div>
               <div><div class="upload-title" id="uploadFileName"></div><button class="btn-text" id="btnReupload">Upload different ticket</button></div>
-              <button class="btn-secondary" id="btnReadTicket">✦ AI Read Ticket</button>
             </div>
           </div>
 
@@ -1627,39 +1629,10 @@ function switchView(name) {
           <div class="card" id="card-preview" style="padding-bottom:16px">
             <div class="step-label">Live Preview — 5.5" × 2"</div>
             <div id="ticketEl" style="overflow-x:auto;overflow-y:hidden;padding:8px 0 4px"></div>
-            <div style="margin-top:12px">
-              <button class="btn-secondary" id="btnSave" style="width:100%">Save to Collection</button>
+            <div style="margin-top:12px;display:flex;gap:10px">
+              <button class="btn-secondary" id="btnSave" style="flex:1">Save to Collection</button>
+              <button class="btn-primary" id="btnAddToCart" style="flex:1">Add to Cart</button>
             </div>
-          </div>
-
-          <div class="card" id="card-order">
-            <div class="step-label">Order a Print</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
-              <div id="qty-1" data-qty="1" data-price="14.99" onclick="selectQty(this)" style="cursor:pointer;border:2px solid #C8922A;background:rgba(196,134,42,0.08);padding:10px 6px;text-align:center">
-                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">1</div>
-                <div style="font-size:8px;color:#888880">stub</div>
-                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$14.99</div>
-              </div>
-              <div id="qty-3" data-qty="3" data-price="35.97" onclick="selectQty(this)" style="cursor:pointer;border:1px solid #242424;padding:10px 6px;text-align:center">
-                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">3</div>
-                <div style="font-size:8px;color:#888880">stubs</div>
-                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$35.97</div>
-                <div style="font-size:9px;color:#6ab840">$11.99 ea</div>
-              </div>
-              <div id="qty-5" data-qty="5" data-price="49.95" onclick="selectQty(this)" style="cursor:pointer;border:1px solid #242424;padding:10px 6px;text-align:center">
-                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">5</div>
-                <div style="font-size:8px;color:#888880">stubs</div>
-                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$49.95</div>
-                <div style="font-size:9px;color:#6ab840">$9.99 ea</div>
-              </div>
-            </div>
-            <div class="order-lines">
-              <div class="order-line"><span>Archival cardstock + UV gloss</span><span>Included</span></div>
-              <div class="order-line"><span>Tracked shipping (3–5 days)</span><span>Included</span></div>
-              <div class="order-line order-total"><span>Total</span><span id="orderTotal">$14.99</span></div>
-            </div>
-            <button class="btn-primary btn-full" id="btnPlaceOrder" style="margin-top:14px">✦ Checkout with Stripe ✦</button>
-            <p class="order-note">Secure payment via Stripe · Ships in 1–2 business days</p>
           </div>
 
       </div>
@@ -2113,7 +2086,7 @@ function initStylePicker() {
 function initButtons() {
   // Preview auto-updates via input listeners
   document.getElementById('btnSave').addEventListener('click', saveToCollection);
-  document.getElementById('btnPlaceOrder').addEventListener('click', placeOrder);
+  document.getElementById('btnAddToCart')?.addEventListener('click', addToCart);
 }
 
 /* ════════════════════════════════════════
@@ -2393,7 +2366,176 @@ function removeLogo() {
   if (window.autoPreview) window.autoPreview();
 }
 
+
+/* ════════════════════════════════════════
+   CART
+════════════════════════════════════════ */
+let cart = [];
+
+function cartPricePerStub(totalStubs) {
+  if (totalStubs >= 5) return 9.99;
+  if (totalStubs >= 3) return 11.99;
+  return 14.99;
+}
+
+function cartTotalStubs() {
+  return cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+function cartTotalPrice() {
+  const stubs = cartTotalStubs();
+  return (stubs * cartPricePerStub(stubs)).toFixed(2);
+}
+
+function addToCart() {
+  if (!currentTicket || !currentTicket.name) {
+    showToast('Fill in at least an event name first');
+    return;
+  }
+  cart.push({
+    id: Date.now(),
+    name: currentTicket.name || 'Event',
+    type: currentTicket.type || 'Concert',
+    venue: currentTicket.venue || '',
+    date: currentTicket.date || '',
+    seat: currentTicket.seat || '',
+    price: currentTicket.price || '',
+    style: currentTicket.style || 'classic',
+    logo: currentTicket.logo || null,
+    qty: 1,
+  });
+  renderCart();
+  updateCartBadge();
+  openCart();
+  showToast('Added to cart!');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  renderCart();
+  updateCartBadge();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  renderCart();
+  updateCartBadge();
+}
+
+function updateCartBadge() {
+  const total = cartTotalStubs();
+  const badge = document.getElementById('cartBadge');
+  if (!badge) return;
+  if (total > 0) { badge.textContent = total; badge.classList.add('visible'); }
+  else { badge.classList.remove('visible'); }
+}
+
+function renderCart() {
+  const itemsEl = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  if (!itemsEl) return;
+
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty">🎟<br><br>Your cart is empty.<br>Design a stub and press Add to Cart.</div>';
+    if (footer) footer.style.display = 'none';
+    return;
+  }
+
+  const totalStubs = cartTotalStubs();
+  const priceEach = cartPricePerStub(totalStubs);
+
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-meta">${[item.type, item.venue, item.date].filter(Boolean).join(' · ')}</div>
+      <div class="cart-item-controls">
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+        </div>
+        <div class="cart-item-price">$${(item.qty * priceEach).toFixed(2)}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕ Remove</button>
+    </div>
+  `).join('');
+
+  ['tier-1','tier-3','tier-5'].forEach(id => document.getElementById(id)?.classList.remove('active-tier'));
+  if (totalStubs >= 5) document.getElementById('tier-5')?.classList.add('active-tier');
+  else if (totalStubs >= 3) document.getElementById('tier-3')?.classList.add('active-tier');
+  else document.getElementById('tier-1')?.classList.add('active-tier');
+
+  document.getElementById('cartTotalStubs').textContent = totalStubs + ' stub' + (totalStubs !== 1 ? 's' : '');
+  document.getElementById('cartPriceEach').textContent = '$' + priceEach.toFixed(2) + ' each';
+  document.getElementById('cartTotal').textContent = '$' + cartTotalPrice();
+  if (footer) footer.style.display = 'block';
+}
+
+function openCart() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function cartCheckout() {
+  if (cart.length === 0) return;
+  if (!currentUser) { openSignIn(); return; }
+  const btn = document.getElementById('cartCheckoutBtn');
+  btn.textContent = 'Redirecting...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        quantity: cartTotalStubs(),
+        cartItems: cart,
+        userId: currentUser.id,
+        userEmail: currentUser.email,
+      }),
+    });
+    const data = await res.json();
+    if (data.url) { window.location.href = data.url; }
+    else { throw new Error(data.error || 'Checkout failed'); }
+  } catch (err) {
+    showToast('Checkout failed: ' + err.message);
+    btn.textContent = '✦ Checkout with Stripe ✦';
+    btn.disabled = false;
+  }
+}
+
   </script>
+
+
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">🎟<br><br>Your cart is empty.<br>Design a stub and press Add to Cart.</div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-pricing-tiers">
+        <div class="cart-tier" id="tier-1"><div class="cart-tier-qty">1–2 stubs</div><div class="cart-tier-price">$14.99</div><div class="cart-tier-each">each</div></div>
+        <div class="cart-tier" id="tier-3"><div class="cart-tier-qty">3–4 stubs</div><div class="cart-tier-price">$11.99</div><div class="cart-tier-each">each</div></div>
+        <div class="cart-tier" id="tier-5"><div class="cart-tier-qty">5+ stubs</div><div class="cart-tier-price">$9.99</div><div class="cart-tier-each">each</div></div>
+      </div>
+      <div class="cart-summary-line"><span id="cartTotalStubs">0 stubs</span><span id="cartPriceEach">$14.99 each</span></div>
+      <div class="cart-summary-line"><span>Archival print + tracked shipping</span><span>Included</span></div>
+      <div class="cart-total-line"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="cartCheckout()">✦ Checkout with Stripe ✦</button>
+    </div>
+  </div>
 
   <script src="js/auth.js"></script>
   <script>initAuth(window.onUserChange);</script>
