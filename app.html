@@ -1848,6 +1848,23 @@ function selectStyle(styleName) {
 }
 
 
+  // ── LIVE PREVIEW ──
+  window.autoPreview = function() {
+    currentTicket = getFormData();
+    renderTicketPreview();
+  };
+
+  // Update preview on every field change
+  ['eventName','eventType','venue','eventDate','seatInfo','ticketPrice'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', autoPreview);
+    el.addEventListener('change', autoPreview);
+  });
+
+  // Initial preview render on page load
+  autoPreview();
+
   // Attach style button clicks
   ['classic','sport','concert'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
