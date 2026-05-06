@@ -1493,208 +1493,166 @@ nav {
   ═══════════════════════════════════════ -->
   <main style="padding-top:64px">
     <section class="view active" id="view-create">
-      <div class="section-hero">
-        <h1>Turn Your Digital Ticket<br>Into a Keepsake</h1>
-        <p class="hero-sub">Upload your e-ticket — we print &amp; mail a collectible stub to your door</p>
-      </div>
+      <div style="max-width:1200px;margin:0 auto;padding:32px 32px 60px;display:grid;grid-template-columns:1fr 480px;gap:32px;align-items:start">
 
-      <!-- STEP 1: UPLOAD -->
-      <div class="card" id="card-upload">
-        <div class="step-label">Step 1 — Upload Your Ticket</div>
+        <!-- LEFT: Steps -->
+        <div style="display:flex;flex-direction:column;gap:20px">
 
-        <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
-
-        <div class="upload-zone" id="uploadZone">
-          <div class="upload-inner">
-            <div class="upload-icon">🎟</div>
-            <div class="upload-title">Click to upload your e-ticket</div>
-            <div class="upload-hint">Drag &amp; drop works too</div>
-            <div class="upload-formats">
-              <span class="upload-format-tag">PNG</span>
-              <span class="upload-format-tag">JPG</span>
-              <span class="upload-format-tag">PDF</span>
-              <span class="upload-format-tag">SCREENSHOT</span>
+          <div class="card" id="card-upload">
+            <div class="step-label">Step 1 — Upload Your Ticket</div>
+            <div class="upload-zone" id="uploadZone">
+              <div class="upload-icon">↑</div>
+              <div class="upload-title">Drop your e-ticket here</div>
+              <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer">browse files</label> — JPG, PNG, PDF</div>
+              <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
+            </div>
+            <div class="upload-success" id="uploadSuccess" style="display:none">
+              <div class="upload-success-icon">✓</div>
+              <div><div class="upload-title" id="uploadFileName"></div><button class="btn-text" id="btnReupload">Upload different ticket</button></div>
+              <button class="btn-secondary" id="btnReadTicket">✦ AI Read Ticket</button>
             </div>
           </div>
-          <div class="upload-success" id="uploadSuccess" style="display:none">
-            <div class="upload-icon">✅</div>
-            <div class="upload-title" id="uploadFileName">File uploaded</div>
-            <div class="upload-hint">Looking good — fill in details below</div>
-          </div>
-        </div>
 
-        <div class="divider"><span>or enter details manually</span></div>
-
-        <!-- FORM -->
-        <div class="form-grid">
-          <div class="field">
-            <label class="field-label" for="eventName">Event Name</label>
-            <input class="field-input" id="eventName" type="text" placeholder="e.g. Taylor Swift: Eras Tour">
-          </div>
-          <div class="field">
-            <label class="field-label" for="eventType">Event Type</label>
-            <select class="field-input field-select" id="eventType">
-              <option value="Concert">Concert</option>
-              <option value="Sports">Sports Game</option>
-              <option value="Theatre">Theatre</option>
-              <option value="Festival">Festival</option>
-              <option value="Comedy">Comedy Show</option>
-              <option value="Other">Other Event</option>
-            </select>
-          </div>
-          <div class="field">
-            <label class="field-label" for="venue">Venue</label>
-            <input class="field-input" id="venue" type="text" placeholder="e.g. Wrigley Field, Chicago, IL">
-          </div>
-          <div class="field">
-            <label class="field-label" for="eventDate">Date</label>
-            <input class="field-input" id="eventDate" type="text" placeholder="e.g. June 2, 2024">
-          </div>
-          <div class="field">
-            <label class="field-label" for="seatInfo">Section / Row / Seat</label>
-            <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
-          </div>
-          <div class="field">
-            <label class="field-label" for="ticketPrice">Original Ticket Price</label>
-            <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00 (no $ needed)">
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2: LOGO -->
-      <div class="card" id="card-logo">
-        <div class="step-label">Step 2 — Add a Team Logo (Optional)</div>
-        <div class="logo-search-row">
-          <div class="field" style="flex:1">
-            <label class="field-label" for="logoSearch">Search for a sports team</label>
-            <input class="field-input" id="logoSearch" type="text" placeholder="e.g. Chicago Bulls, New York Yankees...">
-          </div>
-          <button class="btn-search" id="btnLogoSearch">Search</button>
-        </div>
-        <div class="logo-results" id="logoResults" style="display:none">
-          <div class="logo-results-grid" id="logoResultsGrid"></div>
-        </div>
-        <div class="logo-selected" id="logoSelected" style="display:none">
-          <div class="logo-selected-inner">
-            <img id="logoSelectedImg" src="" alt="Selected logo">
-            <div>
-              <div class="logo-selected-name" id="logoSelectedName"></div>
-              <div class="logo-placement-label">Logo placement</div>
-              <div class="logo-placement-opts">
-                <button class="placement-btn active" data-placement="left">◧ Left</button>
-                <button class="placement-btn" data-placement="watermark">⬡ Watermark</button>
-                <button class="placement-btn" data-placement="top">⬆ Top center</button>
+          <div class="card" id="card-fields">
+            <div class="step-label">Step 2 — Event Details</div>
+            <div class="fields-grid">
+              <div class="field field-full">
+                <label class="field-label" for="eventName">Event Name</label>
+                <input class="field-input" id="eventName" type="text" placeholder="e.g. Taylor Swift: The Eras Tour">
+              </div>
+              <div class="field">
+                <label class="field-label" for="eventType">Event Type</label>
+                <select class="field-input" id="eventType">
+                  <option value="Concert">Concert</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Theatre">Theatre</option>
+                  <option value="Festival">Festival</option>
+                  <option value="Comedy">Comedy Show</option>
+                  <option value="Other">Other Event</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="eventDate">Date</label>
+                <input class="field-input" id="eventDate" type="text" placeholder="e.g. June 2, 2024">
+              </div>
+              <div class="field field-full">
+                <label class="field-label" for="venue">Venue</label>
+                <input class="field-input" id="venue" type="text" placeholder="e.g. Wrigley Field, Chicago, IL">
+              </div>
+              <div class="field">
+                <label class="field-label" for="seatInfo">Section / Row / Seat</label>
+                <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
+              </div>
+              <div class="field">
+                <label class="field-label" for="ticketPrice">Ticket Price</label>
+                <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00">
               </div>
             </div>
-            <button class="btn-remove-logo" id="btnRemoveLogo">✕ Remove</button>
-          </div>
-        </div>
-        <div class="logo-skip">No logo? That's fine — <button class="btn-text" id="btnSkipLogo">skip this step</button></div>
-      </div>
-
-      <!-- STEP 3: STYLE -->
-      <div class="card" id="card-style">
-        <div class="step-label">Step 3 — Choose Your Style</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;position:relative;z-index:20">
-
-          <div id="style-classic" style="cursor:pointer;padding:12px;border:2px solid #C8922A;background:rgba(196,134,42,0.08)">
-            <div style="height:72px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
-              <div><div style="font-size:6px;letter-spacing:2px;color:#7a5020;text-transform:uppercase;font-family:sans-serif">Concert</div><div style="font-family:serif;font-size:15px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:3px">Rolling<br>Stones</div></div>
-            </div>
-            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Classic</div>
-            <div style="font-size:10px;color:#888880;margin-top:2px">Aged cream · gold</div>
           </div>
 
-          <div id="style-sport" style="cursor:pointer;padding:12px;border:1px solid #242424">
-            <div style="height:72px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
-              <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase;font-family:sans-serif">Sports</div><div style="font-family:serif;font-size:15px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:3px">Chicago<br>Bulls</div></div>
+          <div class="card" id="card-logo">
+            <div class="step-label">Step 3 — Add a Team Logo (Optional)</div>
+            <div class="logo-search-row">
+              <div class="field" style="flex:1">
+                <label class="field-label" for="logoSearch">Search for a sports team</label>
+                <input class="field-input" id="logoSearch" type="text" placeholder="e.g. Chicago Bulls, New York Yankees...">
+              </div>
+              <button class="btn-search" id="btnLogoSearch">Search</button>
             </div>
-            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Gameday</div>
-            <div style="font-size:10px;color:#888880;margin-top:2px">Navy · crimson</div>
+            <div class="logo-results" id="logoResults" style="display:none"><div class="logo-results-grid" id="logoResultsGrid"></div></div>
+            <div class="logo-selected" id="logoSelected" style="display:none">
+              <div class="logo-selected-inner">
+                <img id="logoSelectedImg" src="" alt="Selected logo">
+                <div>
+                  <div class="logo-selected-name" id="logoSelectedName"></div>
+                  <div class="logo-placement-label">Logo placement</div>
+                  <div class="logo-placement-opts">
+                    <button class="placement-btn active" data-placement="left">◧ Left</button>
+                    <button class="placement-btn" data-placement="watermark">⬡ Watermark</button>
+                    <button class="placement-btn" data-placement="top">⬆ Top center</button>
+                  </div>
+                </div>
+                <button class="btn-remove-logo" id="btnRemoveLogo">✕ Remove</button>
+              </div>
+            </div>
+            <div class="logo-skip">No logo? That's fine — <button class="btn-text" id="btnSkipLogo">skip this step</button></div>
           </div>
 
-          <div id="style-concert" style="cursor:pointer;padding:12px;border:1px solid #242424">
-            <div style="height:72px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:10px;display:flex;padding:10px 12px;justify-content:space-between;box-sizing:border-box">
-              <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase;font-family:sans-serif">Concert</div><div style="font-family:serif;font-size:15px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:3px">David<br>Bowie</div></div>
-            </div>
-            <div style="font-family:serif;font-size:14px;color:#F0EDE8">Midnight</div>
-            <div style="font-size:10px;color:#888880;margin-top:2px">Dark · purple</div>
-          </div>
-
-        </div>
-      </div>
-
-            <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->      <!-- STEP 3: PREVIEW -->
-      <div class="card" id="card-preview" style="padding-bottom:20px;overflow:hidden">
-        <div class="step-label">Step 4 — Preview &amp; Order</div>
-        <button class="btn-preview" id="btnPreview">✦ Generate Preview ✦</button>
-
-        <div class="ticket-wrap" id="ticketWrap" style="display:none;overflow:visible">
-          <div class="preview-label">Your Collectible Stub — Printed Size: 5.5" × 2" (528 × 192px)</div>
-          <div id="ticketEl" style="overflow-x:auto;overflow-y:hidden;padding-bottom:4px"></div>
-
-          <div class="action-row">
-            <button class="btn-secondary" id="btnSave">Save to Collection</button>
-            <button class="btn-primary" id="btnOrder">Order Print — $14.99</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ORDER SUMMARY -->
-      <div class="card" id="card-order" style="display:none">
-        <div class="step-label">Step 4 — Complete Your Order</div>
-
-        <!-- Quantity picker -->
-        <div style="margin-bottom:24px">
-          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">How many stubs?</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-            <div class="qty-option selected" data-qty="1" data-price="14.99" onclick="selectQty(this)">
-              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">1</div>
-              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stub</div>
-              <div style="font-size:16px;font-weight:700;color:var(--gold)">$14.99</div>
-              <div style="font-size:9px;color:var(--text-muted)">$14.99 each</div>
-            </div>
-            <div class="qty-option" data-qty="3" data-price="35.97" onclick="selectQty(this)">
-              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">3</div>
-              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stubs</div>
-              <div style="font-size:16px;font-weight:700;color:var(--gold)">$35.97</div>
-              <div style="font-size:9px;color:#6ab840">$11.99 each</div>
-            </div>
-            <div class="qty-option" data-qty="5" data-price="49.95" onclick="selectQty(this)">
-              <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--cream)">5</div>
-              <div style="font-size:11px;color:var(--text-muted);margin:2px 0">stubs</div>
-              <div style="font-size:16px;font-weight:700;color:var(--gold)">$49.95</div>
-              <div style="font-size:9px;color:#6ab840">$9.99 each</div>
+          <div class="card" id="card-style">
+            <div class="step-label">Step 4 — Choose Your Style</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px">
+              <div id="style-classic" style="cursor:pointer;padding:12px;border:2px solid #C8922A;background:rgba(196,134,42,0.08)">
+                <div style="height:64px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
+                  <div><div style="font-size:6px;letter-spacing:2px;color:#7a5020;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:13px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:2px">Rolling<br>Stones</div></div>
+                  <div style="border-left:1px dashed #B8A060;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Classic</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Aged cream · gold</div>
+              </div>
+              <div id="style-sport" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
+                  <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase">Sports</div><div style="font-family:serif;font-size:13px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:2px">Chicago<br>Bulls</div></div>
+                  <div style="border-left:1px dashed #8B1A1A;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Gameday</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Navy · crimson</div>
+              </div>
+              <div id="style-concert" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
+                  <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:13px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:2px">David<br>Bowie</div></div>
+                  <div style="border-left:1px dashed #6a3a8a;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Midnight</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Dark · purple</div>
+              </div>
             </div>
           </div>
+
         </div>
 
-        <div class="order-lines">
-          <div class="order-line">
-            <span>Archival cardstock + UV gloss coating</span><span>Included</span>
+        <!-- RIGHT: Live Preview + Order -->
+        <div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:20px">
+
+          <div class="card" id="card-preview" style="padding-bottom:16px">
+            <div class="step-label">Live Preview — 5.5" × 2"</div>
+            <div id="ticketEl" style="overflow-x:auto;overflow-y:hidden;padding:8px 0 4px"></div>
+            <div style="margin-top:12px">
+              <button class="btn-secondary" id="btnSave" style="width:100%">Save to Collection</button>
+            </div>
           </div>
-          <div class="order-line">
-            <span>Tracked first-class shipping (3–5 days)</span><span>Included</span>
+
+          <div class="card" id="card-order">
+            <div class="step-label">Order a Print</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+              <div id="qty-1" data-qty="1" data-price="14.99" onclick="selectQty(this)" style="cursor:pointer;border:2px solid #C8922A;background:rgba(196,134,42,0.08);padding:10px 6px;text-align:center">
+                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">1</div>
+                <div style="font-size:8px;color:#888880">stub</div>
+                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$14.99</div>
+              </div>
+              <div id="qty-3" data-qty="3" data-price="35.97" onclick="selectQty(this)" style="cursor:pointer;border:1px solid #242424;padding:10px 6px;text-align:center">
+                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">3</div>
+                <div style="font-size:8px;color:#888880">stubs</div>
+                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$35.97</div>
+                <div style="font-size:9px;color:#6ab840">$11.99 ea</div>
+              </div>
+              <div id="qty-5" data-qty="5" data-price="49.95" onclick="selectQty(this)" style="cursor:pointer;border:1px solid #242424;padding:10px 6px;text-align:center">
+                <div style="font-family:'DM Serif Display',serif;font-size:20px;color:#F0EDE8">5</div>
+                <div style="font-size:8px;color:#888880">stubs</div>
+                <div style="font-size:13px;font-weight:700;color:#C8922A;margin-top:2px">$49.95</div>
+                <div style="font-size:9px;color:#6ab840">$9.99 ea</div>
+              </div>
+            </div>
+            <div class="order-lines">
+              <div class="order-line"><span>Archival cardstock + UV gloss</span><span>Included</span></div>
+              <div class="order-line"><span>Tracked shipping (3–5 days)</span><span>Included</span></div>
+              <div class="order-line order-total"><span>Total</span><span id="orderTotal">$14.99</span></div>
+            </div>
+            <button class="btn-primary btn-full" id="btnPlaceOrder" style="margin-top:14px">✦ Checkout with Stripe ✦</button>
+            <p class="order-note">Secure payment via Stripe · Ships in 1–2 business days</p>
           </div>
-          <div class="order-line order-total">
-            <span>Total</span><span id="orderTotal">$14.99</span>
-          </div>
+
         </div>
-
-        <button class="btn-primary btn-full" id="btnPlaceOrder">✦ Checkout with Stripe ✦</button>
-        <p class="order-note">Secure payment via Stripe &bull; Shipping address collected at checkout &bull; Ships in 1–2 business days</p>
       </div>
-
-      <!-- ORDER CONFIRM -->
-      <div class="card card-confirm" id="card-confirm" style="display:none">
-        <div class="confirm-icon">📬</div>
-        <h2 class="confirm-title">Order Confirmed!</h2>
-        <p class="confirm-sub">Your collectible stub is heading to the printer on archival cardstock.</p>
-        <div class="tracking-badge" id="trackingBadge">STUB-000000</div>
-        <p class="confirm-sub">Estimated delivery: 3–5 business days<br>We'll email you when it ships.</p>
-        <button class="btn-secondary" id="btnViewCollection">View My Collection →</button>
-      </div>
-
     </section>
 
     <!-- ═══════════════════════════════════════
@@ -2103,7 +2061,7 @@ function initStylePicker() {
    BUTTONS
 ════════════════════════════════════════ */
 function initButtons() {
-  document.getElementById('btnPreview').addEventListener('click', generatePreview);
+  // Preview auto-updates via input listeners
   document.getElementById('btnSave').addEventListener('click', saveToCollection);
   document.getElementById('btnOrder').addEventListener('click', showOrderForm);
   document.getElementById('btnPlaceOrder').addEventListener('click', placeOrder);
@@ -2247,12 +2205,31 @@ function showOrderForm() {
 let selectedQty = 1;
 
 function selectQty(el) {
-  document.querySelectorAll('.qty-option').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
+  [1,3,5].forEach(function(q) {
+    var btn = document.getElementById('qty-' + q);
+    if (!btn) return;
+    if (parseInt(el.dataset.qty) === q) {
+      btn.style.border = '2px solid #C8922A';
+      btn.style.background = 'rgba(196,134,42,0.08)';
+    } else {
+      btn.style.border = '1px solid #242424';
+      btn.style.background = 'transparent';
+    }
+  });
   selectedQty = parseInt(el.dataset.qty);
-  document.getElementById('orderTotal').textContent = '$' + el.dataset.price;
-  document.getElementById('btnPlaceOrder').textContent = '✦ Checkout with Stripe — $' + el.dataset.price + ' ✦';
+  var t = document.getElementById('orderTotal');
+  var b = document.getElementById('btnPlaceOrder');
+  if (t) t.textContent = '$' + el.dataset.price;
+  if (b) b.textContent = '✦ Checkout with Stripe — $' + el.dataset.price + ' ✦';
 }
+
+// Wire qty clicks
+document.addEventListener('DOMContentLoaded', function() {
+  [1,3,5].forEach(function(q) {
+    var el = document.getElementById('qty-' + q);
+    if (el) el.addEventListener('click', function() { selectQty(el); });
+  });
+});
 
 async function placeOrder() {
   if (!currentTicket) return;
