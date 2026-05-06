@@ -1744,7 +1744,7 @@ function switchView(name) {
       }
     }
   }
-  initAuth(onUserChange);
+  initAuth(window.onUserChange);
 
 /* tickets.js — Ticket HTML generation */
 
@@ -1952,6 +1952,7 @@ function switchView(name) {
 function initUpload() {
   const zone = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
+  if (!zone || !input) return;
 
   // Click handled via onclick on the zone element directly
 
