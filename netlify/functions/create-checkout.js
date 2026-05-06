@@ -1,10 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const PRICES = {
-  1: 'price_1TTdMA8ebfnLadN0nSvfDgWE',
-  3: 'price_1TTdLs8ebfnLadN0Q6LrW40q',
-  5: 'price_1TTdLs8ebfnLadN0CA1FTTtv',
-};
+function pricePerStub(totalStubs) {
+  if (totalStubs >= 5) return 9.99;
+  if (totalStubs >= 3) return 11.99;
+  return 14.99;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -12,29 +12,34 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { quantity, ticketData, userId, userEmail } = JSON.parse(event.body);
-
-    if (![1, 3, 5].includes(quantity)) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'Invalid quantity' }) };
-    }
+    const { quantity, cartItems, userId, userEmail } = JSON.parse(event.body);
+    const totalStubs = Math.max(1, quantity || 1);
+    const unitPrice = pricePerStub(totalStubs);
+    const unitPriceCents = Math.round(unitPrice * 100);
+    const tierLabel = `${totalStubs} stub${totalStubs > 1 ? 's' : ''} @ $${unitPrice.toFixed(2)} each`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
-        price: PRICES[quantity],
-        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'inkstub — Collectible Ticket Stubs',
+            description: tierLabel,
+          },
+          unit_amount: unitPriceCents,
+        },
+        quantity: totalStubs,
       }],
       mode: 'payment',
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA', 'GB', 'AU'],
-      },
+      shipping_address_collection: { allowed_countries: ['US', 'CA', 'GB', 'AU'] },
       success_url: `${process.env.URL || 'https://inkstub.com'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.URL || 'https://inkstub.com'}/app.html`,
       customer_email: userEmail || undefined,
       metadata: {
-        quantity: String(quantity),
+        quantity: String(totalStubs),
         user_id: userId || '',
-        ticket_data: JSON.stringify(ticketData).substring(0, 500),
+        cart_summary: JSON.stringify((cartItems || []).map(i => ({ name: i.name, qty: i.qty }))).substring(0, 500),
       },
     });
 
@@ -45,9 +50,6 @@ exports.handler = async (event) => {
     };
   } catch (err) {
     console.error('Stripe error:', err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message }),
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
