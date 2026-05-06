@@ -2151,17 +2151,6 @@ function getFormData() {
 function generatePreview() {
   currentTicket = getFormData();
   renderTicketPreview();
-
-  const wrap = document.getElementById('ticketWrap');
-  wrap.style.display = 'block';
-
-  // Hide order/confirm in case they were shown
-  document.getElementById('card-order').style.display   = 'none';
-  document.getElementById('card-confirm').style.display = 'none';
-
-  setTimeout(() => {
-    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 100);
 }
 
 function renderTicketPreview() {
@@ -2264,9 +2253,6 @@ function showOrderForm() {
 
 function showOrderForm() {
   if (!currentUser) { openSignIn(); return; }
-  const card = document.getElementById('card-order');
-  card.style.display = 'block';
-  setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
 let selectedQty = 1;
