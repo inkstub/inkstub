@@ -1500,9 +1500,11 @@ nav {
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
             <div class="upload-zone" id="uploadZone">
-              <div class="upload-icon">⬆</div>
-              <div class="upload-title">Drop your e-ticket here</div>
-              <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer">browse files</label> — JPG, PNG, PDF</div>
+              <div class="upload-inner">
+                <div class="upload-icon">⬆</div>
+                <div class="upload-title">Drop your e-ticket here</div>
+                <div class="upload-sub">or <label for="fileInput" style="color:var(--gold);cursor:pointer">browse files</label> — JPG, PNG, PDF</div>
+              </div>
               <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none">
             </div>
             <div class="upload-success" id="uploadSuccess" style="display:none">
@@ -1906,10 +1908,10 @@ function initUpload() {
   const zone = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
 
-  // Click to open file picker
+  // Click zone to open file picker
   zone.addEventListener('click', () => input.click());
 
-  // File selected
+  // File selected via picker
   input.addEventListener('change', () => {
     if (input.files && input.files[0]) handleFile(input.files[0]);
   });
@@ -1919,18 +1921,39 @@ function initUpload() {
     e.preventDefault();
     zone.classList.add('drag-over');
   });
-
   zone.addEventListener('dragleave', e => {
     if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
   });
-
   zone.addEventListener('drop', e => {
     e.preventDefault();
     zone.classList.remove('drag-over');
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0]);
-    }
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
   });
+
+  // Reupload button
+  const reuploadBtn = document.getElementById('btnReupload');
+  if (reuploadBtn) {
+    reuploadBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const success = document.getElementById('uploadSuccess');
+      const inner = zone.querySelector('.upload-inner');
+      if (success) success.style.display = 'none';
+      if (inner) inner.style.display = '';
+      zone.classList.remove('has-file');
+      input.value = '';
+      currentTicket = null;
+      autoPreview();
+    });
+  }
+
+  // AI Read Ticket button
+  const readBtn = document.getElementById('btnReadTicket');
+  if (readBtn) {
+    readBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (input.files && input.files[0]) handleFile(input.files[0]);
+    });
+  }
 }
 
 function handleFile(file) {
