@@ -71,7 +71,20 @@ function showAuthModal(mode) {
         </div>
         <div>
           <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C4862A;margin-bottom:5px">Password</div>
-          <input id="_authPassword" type="password" placeholder="••••••••" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#f0ede8;font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;box-sizing:border-box">
+          <div style="position:relative">
+            <input id="_authPassword" type="password" placeholder="••••••••" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#f0ede8;font-family:DM Sans,sans-serif;font-size:14px;padding:10px 40px 10px 12px;outline:none;box-sizing:border-box">
+            <button type="button" id="_togglePwd" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:2px;display:flex;align-items:center;color:#888880">
+              <svg id="_eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <script>
+            document.getElementById('_togglePwd').addEventListener('click', function() {
+              var input = document.getElementById('_authPassword');
+              var isPassword = input.type === 'password';
+              input.type = isPassword ? 'text' : 'password';
+              this.style.color = isPassword ? '#C8922A' : '#888880';
+            });
+          </script>
         </div>
         <button onclick="_submitAuth('${mode}')" style="width:100%;padding:12px;background:#C4862A;border:none;color:#0a0a0a;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px" id="_authSubmit">
           ${mode === 'signin' ? 'Sign In' : 'Create Account'}
