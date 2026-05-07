@@ -77,14 +77,7 @@ function showAuthModal(mode) {
               <svg id="_eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
-          <script>
-            document.getElementById('_togglePwd').addEventListener('click', function() {
-              var input = document.getElementById('_authPassword');
-              var isPassword = input.type === 'password';
-              input.type = isPassword ? 'text' : 'password';
-              this.style.color = isPassword ? '#C8922A' : '#888880';
-            });
-          </script>
+
         </div>
         <button onclick="_submitAuth('${mode}')" style="width:100%;padding:12px;background:#C4862A;border:none;color:#0a0a0a;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px" id="_authSubmit">
           ${mode === 'signin' ? 'Sign In' : 'Create Account'}
@@ -99,7 +92,18 @@ function showAuthModal(mode) {
     </div>`;
 
   document.body.appendChild(modal);
-  setTimeout(() => document.getElementById('_authEmail').focus(), 100);
+  setTimeout(() => {
+    document.getElementById('_authEmail').focus();
+    const toggleBtn = document.getElementById('_togglePwd');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function() {
+        const input = document.getElementById('_authPassword');
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        this.style.color = isPassword ? '#C8922A' : '#888880';
+      });
+    }
+  }, 100);
 }
 
 window._switchMode = function(mode) {
