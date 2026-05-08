@@ -862,7 +862,7 @@
     </ul>
     <div class="nav-auth" id="navAuth">
       <button class="btn-signin" onclick="openSignIn()">Sign in</button>
-      <button class="btn-signup" onclick="openSignUp()">Get Started</button>
+      <button class="btn-signup" onclick="openSignUp()">Sign Up</button>
     </div>
   </nav>
 
@@ -1184,7 +1184,7 @@
       } else {
         navAuth.innerHTML = `
           <button class="btn-signin" onclick="openSignIn()">Sign in</button>
-          <button class="btn-signup" onclick="openSignUp()">Get Started</button>`;
+          <button class="btn-signup" onclick="openSignUp()">Sign Up</button>`;
         if (addBtn) addBtn.style.display = 'none';
         cloudCollection = [];
         renderCollection();
@@ -1211,7 +1211,7 @@
           <div class="auth-prompt-sub">Sign in to see your collection and access it from any device.</div>
           <div class="auth-prompt-btns">
             <button class="btn-signup" onclick="openSignIn()">Sign In</button>
-            <button class="btn-signin" onclick="openSignUp()">Get Started — It's Free</button>
+            <button class="btn-signin" onclick="openSignUp()">Sign Up — It's Free</button>
           </div>
         </div>`;
         return;
