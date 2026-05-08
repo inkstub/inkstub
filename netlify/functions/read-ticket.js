@@ -57,11 +57,12 @@ Fields to extract:
 - date: Event date in readable format like "June 2, 2024" (string)
 - seat: Section, row, and/or seat number (string)
 - price: Ticket price including $ symbol if visible (string)
+- venueAddress: The full street address of the venue if visible (string)
 
 If a field is not visible or unclear, use an empty string "".
 
 Return only JSON like this example:
-{"name":"Taylor Swift","type":"Concert","venue":"Wrigley Field, Chicago","date":"June 2, 2024","seat":"Sec 205, Row C, Seat 14","price":"$189.50"}`,
+{"name":"Taylor Swift","type":"Concert","venue":"Wrigley Field, Chicago","date":"June 2, 2024","seat":"Sec 205, Row C, Seat 14","price":"$189.50","venueAddress":"1060 W Addison St, Chicago, IL 60613"}`,
               },
             ],
           },
