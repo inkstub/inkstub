@@ -2027,14 +2027,13 @@ function buildTicketHTML(data) {
     const seatN = seatParts[2] || '';
     return `<div style="${OUTER}">
     <div style="background:${sc.bg};width:100%;height:100%;display:flex;border:1.5px solid ${sc.border};box-sizing:border-box;font-family:'Barlow Condensed','DM Sans',sans-serif;position:relative">
-      <div style="position:absolute;top:0;left:0;right:57px;height:3px;background:${sc.topBar}"></div>
       <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 14px 10px 16px;min-width:0;overflow:hidden">
         ${tp ? `<div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${tp}</div>` : '<div></div>'}
         <div style="text-align:center">
           <div style="font-size:22px;font-weight:800;color:${sc.title};line-height:1;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center">${logoImg}${nm||'Event Name'}</div>
         </div>
         <div style="text-align:center">
-          ${vn ? `<div style="font-size:12px;font-weight:700;color:${sc.venue};text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn}</div>` : ''}
+          ${vn ? `<div style="font-size:12px;font-weight:700;color:${sc.venue};text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn.split(',')[0].trim()}</div>` : ''}
           ${(venueAddress||'') ? `<div style="font-size:10px;color:${sc.addr};text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${venueAddress}</div>` : ''}
         </div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end">
@@ -2085,7 +2084,7 @@ function buildTicketHTML(data) {
 
   const t = templates[s];
   if (t) {
-    const acLine = t.ac ? accent(t.ac[0], t.ac[1]) : '';
+    const acLine = '';
     return `<div style="${OUTER}"><div style="background:${t.bg};width:100%;height:100%;display:flex">
       ${darkBody(t.tC, t.tiC, t.vC, t.dC, acLine, venueAddress||'')}
       ${stub(t.sB, t.sBg)}
