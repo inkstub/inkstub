@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stub — Turn Digital Tickets Into Collectible Keepsakes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
 /* ══════════════════════════════════════════════
    STUB — MAIN STYLESHEET
@@ -1724,6 +1724,15 @@ function switchView(name) {
                 <div style="font-size:9px;color:#888880;margin-top:1px">Black · white</div>
               </div>
 
+              <div id="style-stadium" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:#fff;border:1px solid #ddd;margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
+                  <div><div style="font-size:6px;letter-spacing:2px;color:#555;text-transform:uppercase;font-family:sans-serif">Concert</div><div style="font-family:sans-serif;font-size:13px;font-weight:800;color:#111;text-transform:uppercase;line-height:1.1;margin-top:2px">Band Name</div><div style="font-size:8px;color:#444;text-transform:uppercase;font-family:sans-serif">Sec 203 · Row F</div></div>
+                  <div style="border-left:1px dashed #aaa;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Stadium</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Classic · white</div>
+              </div>
+
             </div>
           </div>
 
@@ -1856,106 +1865,83 @@ function buildTicketHTML(data) {
   const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.6);flex-shrink:0`;
 
   const logoImg = logo
-    ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;margin-right:8px;display:inline-block;vertical-align:middle" alt="">`
+    ? `<img src="${logo}" style="width:28px;height:28px;object-fit:contain;flex-shrink:0;margin-right:8px;display:inline-block;vertical-align:middle" alt="">`
     : '';
 
-  // Shared stub section
-  function stub(borderColor, lineStyle='dashed') {
-    return `<div style="width:72px;border-left:1px ${lineStyle} ${borderColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:18px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
+  // Shared stub — narrow, inkstub logo only
+  function stub(borderColor, bgColor, lineStyle='dashed') {
+    return `<div style="width:56px;border-left:1.5px ${lineStyle} ${borderColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;background:${bgColor};box-sizing:border-box">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:16px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
     </div>`;
   }
 
-  // Shared main body
-  function mainBody(typeC, titleC, venueC, detailC, pad='20px 22px') {
-    return `<div style="flex:1;padding:${pad};display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box">
+  // ── STADIUM — White/light (authentic Ticketmaster style) ──
+  if (s === 'stadium') {
+    const seatParts = st.split(/[\s,]+/);
+    const sec = seatParts[0] || 'GA';
+    const row = seatParts[1] || '';
+    const seat2 = seatParts[2] || '';
+    return `<div style="${OUTER}">
+    <div style="background:#fff;width:100%;height:100%;display:flex;font-family:'Barlow Condensed','DM Sans',sans-serif;border:1.5px solid #222;box-sizing:border-box">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:10px 14px 10px 16px;min-width:0;overflow:hidden">
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:9px;font-weight:700;letter-spacing:1.5px;color:#222;text-transform:uppercase">${tp}</span>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:24px;font-weight:800;color:#111;line-height:1;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center">${logoImg}${nm||'Event Name'}</div>
+          <div style="font-size:11px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn||'Venue'}</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <span style="font-size:10px;font-weight:700;color:#222;text-transform:uppercase">${dt||'Date &bull; Time'}</span>
+          <div style="display:flex;gap:12px">
+            ${sec ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:1px;display:block">Sec</span><span style="font-size:16px;font-weight:800;color:#111;line-height:1">${sec}</span></div>` : ''}
+            ${row ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:1px;display:block">Row</span><span style="font-size:16px;font-weight:800;color:#111;line-height:1">${row}</span></div>` : ''}
+            ${seat2 ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:1px;display:block">Seat</span><span style="font-size:16px;font-weight:800;color:#111;line-height:1">${seat2}</span></div>` : ''}
+            ${pr ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:1px;display:block">Price</span><span style="font-size:14px;font-weight:800;color:#111;line-height:1">${pr}</span></div>` : ''}
+          </div>
+        </div>
+      </div>
+      ${stub('#aaa','#f9f9f9','dashed')}
+    </div></div>`;
+  }
+
+  // Shared dark template body
+  function darkBody(typeC, titleC, venueC, detailC, accentLine='') {
+    return `<div style="flex:1;padding:${accentLine?'22px':'20px'} 22px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box;position:relative">
+      ${accentLine}
       <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${tp}</div>
-      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm || 'Event Name'}</div>
-      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn || 'Venue'}</div>
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine || 'Date &bull; Seat'}</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm||'Event Name'}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn||'Venue'}</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine||'Date &bull; Seat'}</div>
       ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
     </div>`;
   }
 
-  // ── CLASSIC — Aged cream/gold (concerts) ──
-  if (s === 'classic') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#F0E8D0,#DCCFA8);width:100%;height:100%;display:flex">
-      ${mainBody('#7a5020','#1a0a04','#6B4C2A','#9a7040')}
-      ${stub('#B8A060')}
+  function accent(c1, c2, h=3) {
+    return `<div style="position:absolute;top:0;left:0;right:0;height:${h}px;background:linear-gradient(90deg,${c1},${c2})"></div>`;
+  }
+
+  const templates = {
+    classic:  { bg:'linear-gradient(160deg,#F0E8D0,#DCCFA8)', tC:'#7a5020', tiC:'#1a0a04', vC:'#6B4C2A', dC:'#9a7040', sB:'#B8A060', sBg:'rgba(180,150,80,0.08)', ac:null },
+    sport:    { bg:'linear-gradient(160deg,#0a1828,#0d1f3c)', tC:'#e8b870', tiC:'#F5EDD8', vC:'#8a7060', dC:'#8a7060', sB:'#8B1A1A', sBg:'rgba(139,26,26,0.1)', ac:['#8B1A1A','#C8922A'] },
+    concert:  { bg:'linear-gradient(160deg,#080812,#0d0d20)', tC:'#c090e8', tiC:'#f5e8ff', vC:'#8060a0', dC:'#8060a0', sB:'#6a3a8a', sBg:'rgba(106,58,138,0.1)', ac:['#6a3a8a','#c090e8'] },
+    festival: { bg:'linear-gradient(160deg,#1a0800,#2d1200)', tC:'#ff8c00', tiC:'#fff0e0', vC:'#a06030', dC:'#806040', sB:'#c84000', sBg:'rgba(200,64,0,0.1)', ac:['#c84000','#ff8c00'] },
+    broadway: { bg:'linear-gradient(160deg,#1a0510,#2a0818)', tC:'#d4a030', tiC:'#ffe8f0', vC:'#905060', dC:'#704050', sB:'#8b0050', sBg:'rgba(139,0,80,0.1)', ac:['#8b0050','#d4a030'] },
+    arena:    { bg:'linear-gradient(160deg,#0d1520,#151d2d)', tC:'#80c0ff', tiC:'#e8f4ff', vC:'#507090', dC:'#406070', sB:'#2060a0', sBg:'rgba(32,96,160,0.1)', ac:['#2060a0','#80c0ff'] },
+    crimson:  { bg:'linear-gradient(160deg,#1a0505,#2a0808)', tC:'#dc143c', tiC:'#ffe8e8', vC:'#804040', dC:'#603030', sB:'#8b0000', sBg:'rgba(139,0,0,0.1)', ac:['#8b0000','#dc143c'] },
+    emerald:  { bg:'linear-gradient(160deg,#061410,#0a1e18)', tC:'#50c878', tiC:'#e8f5ee', vC:'#3a7050', dC:'#2a5040', sB:'#1a5a30', sBg:'rgba(26,90,48,0.1)', ac:['#1a5a30','#50c878'] },
+    noir:     { bg:'linear-gradient(160deg,#0a0a0a,#1a1a1a)', tC:'#aaaaaa', tiC:'#ffffff', vC:'#666666', dC:'#555555', sB:'#444444', sBg:'rgba(80,80,80,0.1)', ac:['#444','#999'] },
+  };
+
+  const t = templates[s];
+  if (t) {
+    const acLine = t.ac ? accent(t.ac[0], t.ac[1]) : '';
+    return `<div style="${OUTER}"><div style="background:${t.bg};width:100%;height:100%;display:flex">
+      ${darkBody(t.tC, t.tiC, t.vC, t.dC, acLine)}
+      ${stub(t.sB, t.sBg)}
     </div></div>`;
   }
 
-  // ── SPORT — Dark navy/crimson (sports) ──
-  if (s === 'sport') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0a1828,#0d1f3c);width:100%;height:100%;display:flex">
-      ${mainBody('#e8b870','#F5EDD8','#8a7060','#8a7060')}
-      ${stub('#8B1A1A')}
-    </div></div>`;
-  }
-
-  // ── CONCERT — Dark purple (midnight) ──
-  if (s === 'concert') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#080812,#0d0d20);width:100%;height:100%;display:flex">
-      ${mainBody('#c090e8','#f5e8ff','#8060a0','#8060a0')}
-      ${stub('#6a3a8a')}
-    </div></div>`;
-  }
-
-  // ── FESTIVAL — Warm orange/amber ──
-  if (s === 'festival') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0800,#2d1200);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c84000,#ff8c00)"></div>
-      ${mainBody('#ff8c00','#fff0e0','#a06030','#806040','24px 22px 20px')}
-      ${stub('#c84000')}
-    </div></div>`;
-  }
-
-  // ── BROADWAY — Deep burgundy/gold (theatre) ──
-  if (s === 'broadway') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0510,#2a0818);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b0050,#d4a030)"></div>
-      ${mainBody('#d4a030','#ffe8f0','#905060','#704050','24px 22px 20px')}
-      ${stub('#8b0050')}
-    </div></div>`;
-  }
-
-  // ── ARENA — Steel blue/silver (general sports arena) ──
-  if (s === 'arena') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0d1520,#151d2d);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2060a0,#80c0ff)"></div>
-      ${mainBody('#80c0ff','#e8f4ff','#507090','#406070','24px 22px 20px')}
-      ${stub('#2060a0')}
-    </div></div>`;
-  }
-
-  // ── NOIR — Black/white minimal ──
-  if (s === 'noir') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0a0a0a,#1a1a1a);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#888"></div>
-      ${mainBody('#aaaaaa','#ffffff','#666666','#555555')}
-      ${stub('#444','solid')}
-    </div></div>`;
-  }
-
-  // ── EMERALD — Forest green (outdoors/nature events) ──
-  if (s === 'emerald') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#061410,#0a1e18);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1a5a30,#50c878)"></div>
-      ${mainBody('#50c878','#e8f5ee','#3a7050','#2a5040','24px 22px 20px')}
-      ${stub('#1a5a30')}
-    </div></div>`;
-  }
-
-  // ── CRIMSON — Red/black (wrestling/boxing/combat) ──
-  if (s === 'crimson') {
-    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0505,#2a0808);width:100%;height:100%;display:flex;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b0000,#dc143c)"></div>
-      ${mainBody('#dc143c','#ffe8e8','#804040','#603030','24px 22px 20px')}
-      ${stub('#8b0000')}
-    </div></div>`;
-  }
-
-  // fallback to classic
   return buildTicketHTML({...data, style:'classic'});
 }
 
@@ -1998,7 +1984,7 @@ let currentTicket = null;
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 function selectStyle(styleName) {
-  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir'].forEach(function(s) {
+  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir','stadium'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
     if (!el) return;
     if (s === styleName) {
@@ -2052,7 +2038,7 @@ function selectStyle(styleName) {
   });
 
   // Attach style button clicks
-  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir'].forEach(function(s) {
+  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir','stadium'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
     if (el) el.addEventListener('click', function() { selectStyle(s); });
   });
