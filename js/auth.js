@@ -166,9 +166,7 @@ window._submitAuth = async function(mode) {
       errEl.style.color = '#80d080';
       errEl.textContent = '✓ Account created! Check your email to confirm your account, then sign in.';
       errEl.style.display = 'block';
-      btn.textContent = 'Close';
-      btn.disabled = false;
-      btn.onclick = () => document.getElementById('_authModal')?.remove();
+      btn.style.display = 'none';
     }
   } catch(e) {
     errEl.textContent = 'Something went wrong. Please try again.';
