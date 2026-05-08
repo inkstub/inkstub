@@ -1642,31 +1642,25 @@ function switchView(name) {
           </div>
 
           <div class="card" id="card-logo">
-            <div class="step-label">Step 3 — Add a Team Logo (Optional)</div>
-            <div class="logo-search-row">
-              <div class="field" style="flex:1">
-                <label class="field-label" for="logoSearch">Search for a sports team</label>
-                <input class="field-input" id="logoSearch" type="text" placeholder="e.g. Chicago Bulls, New York Yankees...">
-              </div>
-              <button class="btn-search" id="btnLogoSearch">Search</button>
+            <div class="step-label">Step 3 — Add a Photo (Optional)</div>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.6">Add a personal photo to the bottom-right corner of your ticket — a picture from the event, with friends, or any memory. Only available on Collector Series templates.</p>
+            <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+            <div id="photoUploadArea" style="border:1px dashed #2e2e2e;padding:24px;text-align:center;cursor:pointer" onclick="document.getElementById('photoInput').click()">
+              <div style="font-size:24px;margin-bottom:8px">📷</div>
+              <div style="font-size:13px;color:var(--text-muted)">Click to upload a photo</div>
+              <div style="font-size:10px;color:#444;margin-top:4px;letter-spacing:1px;text-transform:uppercase">JPG, PNG — appears bottom right of ticket</div>
             </div>
-            <div class="logo-results" id="logoResults" style="display:none"><div class="logo-results-grid" id="logoResultsGrid"></div></div>
-            <div class="logo-selected" id="logoSelected" style="display:none">
-              <div class="logo-selected-inner">
-                <img id="logoSelectedImg" src="" alt="Selected logo">
-                <div>
-                  <div class="logo-selected-name" id="logoSelectedName"></div>
-                  <div class="logo-placement-label">Logo placement</div>
-                  <div class="logo-placement-opts">
-                    <button class="placement-btn active" data-placement="left">◧ Left</button>
-                    <button class="placement-btn" data-placement="watermark">⬡ Watermark</button>
-                    <button class="placement-btn" data-placement="top">⬆ Top center</button>
-                  </div>
+            <div id="photoSelected" style="display:none;margin-top:14px">
+              <div style="display:flex;align-items:center;gap:14px;background:#111;border:1px solid #242424;padding:12px">
+                <img id="photoPreviewImg" src="" alt="Photo preview" style="width:64px;height:48px;object-fit:cover;flex-shrink:0">
+                <div style="flex:1">
+                  <div style="font-size:12px;color:var(--cream);margin-bottom:4px" id="photoFileName">photo.jpg</div>
+                  <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px">Appears bottom-right corner</div>
                 </div>
-                <button class="btn-remove-logo" id="btnRemoveLogo">✕ Remove</button>
+                <button onclick="removePhoto()" style="background:none;border:none;color:#555;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-family:'DM Sans',sans-serif">✕ Remove</button>
               </div>
             </div>
-            <div class="logo-skip">No logo? That's fine — <button class="btn-text" id="btnSkipLogo">skip this step</button></div>
+            <div style="margin-top:10px;font-size:11px;color:#444">No photo? That's fine — <button class="btn-text" onclick="document.getElementById('card-style').scrollIntoView({behavior:'smooth',block:'nearest'})">skip this step</button></div>
           </div>
 
           <div class="card" id="card-style">
@@ -1976,7 +1970,7 @@ function buildBarcode(heights, color) {
 function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
 function buildTicketHTML(data) {
-  const {name,type,venue,venueAddress,date,seat,price,style,logo} = data;
+  const {name,type,venue,venueAddress,date,seat,price,style,logo,photo} = data;
   const s = style || 'classic';
 
   const nm = (name||'').substring(0,40);
@@ -2054,7 +2048,7 @@ function buildTicketHTML(data) {
 
   // Shared dark template body
     // Shared dark template body
-  function darkBody(typeC, titleC, venueC, detailC, accentLine='', va='') {
+  function darkBody(typeC, titleC, venueC, detailC, accentLine='', va='', ph='') {
     return `<div style="flex:1;padding:${accentLine?'22px':'20px'} 22px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box;position:relative">
       ${accentLine}
       <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${tp}</div>
@@ -2063,6 +2057,7 @@ function buildTicketHTML(data) {
       ${va ? `<div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:${venueC};opacity:0.7;font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${va}</div>` : ''}
       <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine||'Date &bull; Seat'}</div>
       ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
+      ${ph ? `<img src="${ph}" style="position:absolute;bottom:10px;right:10px;width:60px;height:44px;object-fit:cover;opacity:0.9;border:1px solid rgba(255,255,255,0.2)">` : ''}
     </div>`;
   }
 
@@ -2086,7 +2081,7 @@ function buildTicketHTML(data) {
   if (t) {
     const acLine = '';
     return `<div style="${OUTER}"><div style="background:${t.bg};width:100%;height:100%;display:flex">
-      ${darkBody(t.tC, t.tiC, t.vC, t.dC, acLine, venueAddress||'')}
+      ${darkBody(t.tC, t.tiC, t.vC, t.dC, acLine, venueAddress||'', photo||'')}
       ${stub(t.sB, t.sBg)}
     </div></div>`;
   }
@@ -2170,6 +2165,7 @@ function selectStyle(styleName) {
       style: selectedStyle || 'classic',
       logo:  selectedLogo || null,
       logoPlacement: selectedPlacement || 'left',
+      photo: selectedPhoto || null,
     };
     currentTicket = data;
     renderTicketPreview();
@@ -2432,6 +2428,7 @@ function getFormData() {
     style: selectedStyle || 'classic',
     logo:  selectedLogo || null,
     logoPlacement: selectedPlacement || 'left',
+    photo: selectedPhoto || null,
   };
 }
 
@@ -2606,6 +2603,7 @@ function showToast(msg) {
    LOGO SEARCH
 ════════════════════════════════════════ */
 let selectedLogo = null;
+let selectedPhoto = null;
 let selectedPlacement = 'left';
 
 document.getElementById('btnLogoSearch')?.addEventListener('click', searchLogos);
@@ -2682,6 +2680,30 @@ function selectLogo(e, url, name) {
   document.getElementById('logoSelectedName').textContent = name;
   document.getElementById('logoSelected').style.display = 'block';
 
+  if (window.autoPreview) window.autoPreview();
+}
+
+
+function handlePhotoUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedPhoto = e.target.result;
+    document.getElementById('photoPreviewImg').src = selectedPhoto;
+    document.getElementById('photoFileName').textContent = file.name;
+    document.getElementById('photoUploadArea').style.display = 'none';
+    document.getElementById('photoSelected').style.display = 'block';
+    if (window.autoPreview) window.autoPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  selectedPhoto = null;
+  document.getElementById('photoInput').value = '';
+  document.getElementById('photoUploadArea').style.display = 'block';
+  document.getElementById('photoSelected').style.display = 'none';
   if (window.autoPreview) window.autoPreview();
 }
 
