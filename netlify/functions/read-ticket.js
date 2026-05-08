@@ -62,7 +62,7 @@ Important: For venueAddress, if the full street address is NOT printed on the ti
 If a field is not visible or determinable, use an empty string "".
 
 Return only JSON like this example:
-{"name":"Taylor Swift","type":"Concert","venue":"Wrigley Field","venueCity":"Chicago, IL","date":"June 2, 2024","seat":"Sec 205, Row C, Seat 14","price":"$189.50","venueAddress":"1060 W Addison St, Chicago, IL 60613"}`,
+{"name":"Taylor Swift","type":"Concert","venue":"Wrigley Field","venueCity":"Chicago, IL","date":"June 2, 2024","seat":"Sec 205, Row C, Seat 14","price":"$189.50","venueAddress":"1060 W Addison St, Chicago, IL 60613","eventCode":"VN0802","ticketNumber":"TK-48291"}`,
               },
             ],
           },
