@@ -160,14 +160,15 @@ window._submitAuth = async function(mode) {
       btn.textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
       btn.disabled = false;
     } else if (mode === 'signup' && !result.data?.session) {
-      // Email confirmation required
+      // Email confirmation required - show message and close button
       errEl.style.background = '#0a2a0a';
       errEl.style.borderColor = '#40a040';
       errEl.style.color = '#80d080';
-      errEl.textContent = 'Check your email to confirm your account, then sign in.';
+      errEl.textContent = '✓ Account created! Check your email to confirm your account, then sign in.';
       errEl.style.display = 'block';
-      btn.textContent = 'Check Your Email';
-      btn.disabled = true;
+      btn.textContent = 'Close';
+      btn.disabled = false;
+      btn.onclick = () => document.getElementById('_authModal')?.remove();
     }
   } catch(e) {
     errEl.textContent = 'Something went wrong. Please try again.';
