@@ -1584,17 +1584,17 @@ function switchView(name) {
 
                 <div class="field">
                   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-                    <label class="field-label" style="margin:0" for="eventType">Event Type</label>
-                    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_eventType" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
+                    <label class="field-label" style="margin:0" for="eventCode">Event Code</label>
+                    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_eventCode" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
                   </div>
-                  <select class="field-input" id="eventType">
-                    <option value="Concert">Concert</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Theatre">Theatre</option>
-                    <option value="Festival">Festival</option>
-                    <option value="Comedy">Comedy Show</option>
-                    <option value="Other">Other Event</option>
-                  </select>
+                  <input class="field-input" id="eventCode" type="text" placeholder="e.g. VN0802">
+                </div>
+                <div class="field">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+                    <label class="field-label" style="margin:0" for="ticketNumber">Ticket Number</label>
+                    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_ticketNumber" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
+                  </div>
+                  <input class="field-input" id="ticketNumber" type="text" placeholder="e.g. TK-48291">
                 </div>
 
                 <div class="field">
@@ -1970,7 +1970,7 @@ function buildBarcode(heights, color) {
 function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
 function buildTicketHTML(data) {
-  const {name,type,venue,venueAddress,date,seat,price,style,logo,photo} = data;
+  const {name,type,venue,venueAddress,date,seat,price,style,logo,photo,eventCode,ticketNumber} = data;
   const s = style || 'classic';
 
   const nm = (name||'').substring(0,40);
@@ -2022,7 +2022,10 @@ function buildTicketHTML(data) {
     return `<div style="${OUTER}">
     <div style="background:${sc.bg};width:100%;height:100%;display:flex;border:1.5px solid ${sc.border};box-sizing:border-box;font-family:'Barlow Condensed','DM Sans',sans-serif;position:relative">
       <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 14px 10px 16px;min-width:0;overflow:hidden">
-        ${tp ? `<div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${tp}</div>` : '<div></div>'}
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${eventCode||''}</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${ticketNumber||''}</div>
+        </div>
         <div style="text-align:center">
           <div style="font-size:22px;font-weight:800;color:${sc.title};line-height:1;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center">${logoImg}${nm||'Event Name'}</div>
         </div>
@@ -2049,9 +2052,11 @@ function buildTicketHTML(data) {
   // Shared dark template body
     // Shared dark template body
   function darkBody(typeC, titleC, venueC, detailC, accentLine='', va='', ph='') {
-    return `<div style="flex:1;padding:${accentLine?'22px':'20px'} 22px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box;position:relative">
-      ${accentLine}
-      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${tp}</div>
+    return `<div style="flex:1;padding:20px 22px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box;position:relative">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${eventCode||''}</div>
+        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${ticketNumber||''}</div>
+      </div>
       <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm||'Event Name'}</div>
       <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn ? vn.split(',')[0].trim() : 'Venue'}</div>
       ${va ? `<div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:${venueC};opacity:0.7;font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${va}</div>` : ''}
@@ -2156,7 +2161,8 @@ function selectStyle(styleName) {
   window.autoPreview = function() {
     const data = {
       name:         getToggle('eventName')    ? (document.getElementById('eventName')?.value || '').trim() : '',
-      type:         getToggle('eventType')    ? document.getElementById('eventType')?.value || 'Concert' : '',
+      eventCode:    getToggle('eventCode')    ? (document.getElementById('eventCode')?.value || '').trim() : '',
+      ticketNumber: getToggle('ticketNumber') ? (document.getElementById('ticketNumber')?.value || '').trim() : '',
       venue:        getToggle('venue')        ? (document.getElementById('venue')?.value || '').trim() : '',
       venueAddress: getToggle('venueAddress') ? (document.getElementById('venueAddress')?.value || '').trim() : '',
       date:         getToggle('eventDate')    ? (document.getElementById('eventDate')?.value || '').trim() : '',
@@ -2172,7 +2178,7 @@ function selectStyle(styleName) {
   };
 
   // Update preview on every field change
-  ['eventName','eventType','venue','venueAddress','eventDate','seatInfo','ticketPrice'].forEach(function(id) {
+  ['eventName','eventCode','ticketNumber','venue','venueAddress','eventDate','seatInfo','ticketPrice'].forEach(function(id) {
     var el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', window.autoPreview);
@@ -2325,7 +2331,9 @@ function handleFile(file) {
         data.date         || '',
         data.seat         || '',
         data.price        || '',
-        data.venueAddress || ''
+        data.venueAddress  || '',
+        data.eventCode     || '',
+        data.ticketNumber  || ''
       );
 
       nameEl.textContent = file.name;
@@ -2347,19 +2355,15 @@ function handleFile(file) {
   reader.readAsDataURL(file);
 }
 
-function prefillForm(name, type, venue, date, seat, price, venueAddress) {
+function prefillForm(name, type, venue, date, seat, price, venueAddress, eventCode, ticketNumber) {
   if (name)         document.getElementById('eventName').value    = name;
   if (venue)        document.getElementById('venue').value        = venue;
   if (venueAddress) document.getElementById('venueAddress').value = venueAddress;
   if (date)         document.getElementById('eventDate').value    = date;
   if (seat)         document.getElementById('seatInfo').value     = seat;
   if (price)        document.getElementById('ticketPrice').value  = price;
-
-  const select = document.getElementById('eventType');
-  for (let i = 0; i < select.options.length; i++) {
-    if (select.options[i].value === type) { select.selectedIndex = i; break; }
-  }
-
+  if (eventCode)    document.getElementById('eventCode').value    = eventCode;
+  if (ticketNumber) document.getElementById('ticketNumber').value = ticketNumber;
   if (window.autoPreview) window.autoPreview();
 }
 
@@ -2419,7 +2423,8 @@ function initButtons() {
 function getFormData() {
   return {
     name:         document.getElementById('eventName')?.value.trim()     || '',
-    type:         document.getElementById('eventType')?.value            || 'Concert',
+    eventCode:    document.getElementById('eventCode')?.value.trim()    || '',
+    ticketNumber: document.getElementById('ticketNumber')?.value.trim() || '',
     venue:        document.getElementById('venue')?.value.trim()         || '',
     venueAddress: document.getElementById('venueAddress')?.value.trim()  || '',
     date:         document.getElementById('eventDate')?.value.trim()     || '',
