@@ -1636,30 +1636,94 @@ function switchView(name) {
           <div class="card" id="card-style">
             <div class="step-label">Step 4 — Choose Your Style</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px">
+
               <div id="style-classic" style="cursor:pointer;padding:12px;border:2px solid #C8922A;background:rgba(196,134,42,0.08)">
                 <div style="height:64px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
                   <div><div style="font-size:6px;letter-spacing:2px;color:#7a5020;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:13px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:2px">Rolling<br>Stones</div></div>
                   <div style="border-left:1px dashed #B8A060;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
                 </div>
-                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Classic</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Classic</div>
                 <div style="font-size:9px;color:#888880;margin-top:1px">Aged cream · gold</div>
               </div>
+
               <div id="style-sport" style="cursor:pointer;padding:12px;border:1px solid #242424">
                 <div style="height:64px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
                   <div><div style="font-size:6px;letter-spacing:2px;color:#e8b870;text-transform:uppercase">Sports</div><div style="font-family:serif;font-size:13px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:2px">Chicago<br>Bulls</div></div>
                   <div style="border-left:1px dashed #8B1A1A;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
                 </div>
-                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Gameday</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Gameday</div>
                 <div style="font-size:9px;color:#888880;margin-top:1px">Navy · crimson</div>
               </div>
+
               <div id="style-concert" style="cursor:pointer;padding:12px;border:1px solid #242424">
                 <div style="height:64px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden">
                   <div><div style="font-size:6px;letter-spacing:2px;color:#c090e8;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:13px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:2px">David<br>Bowie</div></div>
                   <div style="border-left:1px dashed #6a3a8a;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
                 </div>
-                <div style="font-family:'DM Serif Display',serif;font-size:13px;color:#F0EDE8">Midnight</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Midnight</div>
                 <div style="font-size:9px;color:#888880;margin-top:1px">Dark · purple</div>
               </div>
+
+              <div id="style-festival" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#1a0800,#2d1200);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#c84000,#ff8c00)"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#ff8c00;text-transform:uppercase">Festival</div><div style="font-family:serif;font-size:13px;color:#fff0e0;text-transform:uppercase;line-height:1.1;margin-top:2px">Coachella</div></div>
+                  <div style="border-left:1px dashed #c84000;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Festival</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Amber · fire</div>
+              </div>
+
+              <div id="style-broadway" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#1a0510,#2a0818);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b0050,#d4a030)"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#d4a030;text-transform:uppercase">Theatre</div><div style="font-family:serif;font-size:13px;color:#ffe8f0;text-transform:uppercase;line-height:1.1;margin-top:2px">Hamilton</div></div>
+                  <div style="border-left:1px dashed #8b0050;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Broadway</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Burgundy · gold</div>
+              </div>
+
+              <div id="style-arena" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#0d1520,#151d2d);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2060a0,#80c0ff)"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#80c0ff;text-transform:uppercase">Sports</div><div style="font-family:serif;font-size:13px;color:#e8f4ff;text-transform:uppercase;line-height:1.1;margin-top:2px">NBA Finals</div></div>
+                  <div style="border-left:1px dashed #2060a0;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Arena</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Steel · blue</div>
+              </div>
+
+              <div id="style-crimson" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#1a0505,#2a0808);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b0000,#dc143c)"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#dc143c;text-transform:uppercase">Combat</div><div style="font-family:serif;font-size:13px;color:#ffe8e8;text-transform:uppercase;line-height:1.1;margin-top:2px">Wrestlemania</div></div>
+                  <div style="border-left:1px dashed #8b0000;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Crimson</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Red · black</div>
+              </div>
+
+              <div id="style-emerald" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#061410,#0a1e18);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#1a5a30,#50c878)"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#50c878;text-transform:uppercase">Outdoor</div><div style="font-family:serif;font-size:13px;color:#e8f5ee;text-transform:uppercase;line-height:1.1;margin-top:2px">Bonnaroo</div></div>
+                  <div style="border-left:1px dashed #1a5a30;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Emerald</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Forest · green</div>
+              </div>
+
+              <div id="style-noir" style="cursor:pointer;padding:12px;border:1px solid #242424">
+                <div style="height:64px;background:linear-gradient(160deg,#0a0a0a,#1a1a1a);margin-bottom:8px;display:flex;padding:8px 10px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
+                  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#888"></div>
+                  <div style="margin-top:4px"><div style="font-size:6px;letter-spacing:2px;color:#aaa;text-transform:uppercase">Jazz</div><div style="font-family:serif;font-size:13px;color:#fff;text-transform:uppercase;line-height:1.1;margin-top:2px">Miles Davis</div></div>
+                  <div style="border-left:1px solid #444;padding-left:5px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:8px;color:#C8922A">inkstub</div></div>
+                </div>
+                <div style="font-family:'DM Serif Display',serif;font-size:12px;color:#F0EDE8">Noir</div>
+                <div style="font-size:9px;color:#888880;margin-top:1px">Black · white</div>
+              </div>
+
             </div>
           </div>
 
@@ -1775,7 +1839,7 @@ function buildTicketHTML(data) {
   const {name,type,venue,date,seat,price,style,logo} = data;
   const s = style || 'classic';
 
-  const nm = (name||'Event Name').substring(0,40);
+  const nm = (name||'').substring(0,40);
   const vn = (venue||'').substring(0,36);
   const dt = date||'';
   const st = seat||'';
@@ -1783,7 +1847,6 @@ function buildTicketHTML(data) {
   const pr = (rawPrice && rawPrice !== '0' && rawPrice !== '0.00') ? '$' + rawPrice : '';
   const tp = (type||'Event');
 
-  // Detail line
   const detailParts = [];
   if (dt) detailParts.push(dt);
   if (st) detailParts.push(st);
@@ -1792,33 +1855,110 @@ function buildTicketHTML(data) {
   const W = '528px'; const H = '192px';
   const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.6);flex-shrink:0`;
 
-  const cfg = {
-    classic: { bg:'linear-gradient(160deg,#F0E8D0,#DCCFA8)', typeC:'#7a5020', titleC:'#1a0a04', venueC:'#6B4C2A', detailC:'#9a7040', stubBorder:'#B8A060', barC:'#2C1A0E' },
-    sport:   { bg:'linear-gradient(160deg,#0a1828,#0d1f3c)', typeC:'#e8b870', titleC:'#F5EDD8', venueC:'#8a7060', detailC:'#8a7060', stubBorder:'#8B1A1A', barC:'#c8a878' },
-    concert: { bg:'linear-gradient(160deg,#080812,#0d0d20)', typeC:'#c090e8', titleC:'#f5e8ff', venueC:'#8060a0', detailC:'#8060a0', stubBorder:'#6a3a8a', barC:'#b080d8' },
-  };
-  const c = cfg[s] || cfg.classic;
-  const bars = [14,18,10,16,20,12,18,14,22,16,10,18,14,20,12,16,18,10,14,20,16,12];
-
   const logoImg = logo
     ? `<img src="${logo}" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;margin-right:8px;display:inline-block;vertical-align:middle" alt="">`
     : '';
 
-  return `<div style="${OUTER}">
-    <div style="background:${c.bg};width:100%;height:100%;display:flex">
-      <div style="flex:1;padding:20px 22px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box">
-        <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${c.typeC};font-family:'DM Sans',sans-serif">${tp}</div>
-        <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${c.titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm || 'Event Name'}</div>
-        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${c.venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn || 'Venue'}</div>
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${c.detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine || 'Date &bull; Seat'}</div>
-        ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${c.detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
-      </div>
-      <div style="width:72px;border-left:1px dashed ${c.stubBorder};display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
-        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:18px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
-      </div>
-    </div>
-  </div>`;
+  // Shared stub section
+  function stub(borderColor, lineStyle='dashed') {
+    return `<div style="width:72px;border-left:1px ${lineStyle} ${borderColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;box-sizing:border-box">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:18px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
+    </div>`;
+  }
+
+  // Shared main body
+  function mainBody(typeC, titleC, venueC, detailC, pad='20px 22px') {
+    return `<div style="flex:1;padding:${pad};display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box">
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${tp}</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm || 'Event Name'}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn || 'Venue'}</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine || 'Date &bull; Seat'}</div>
+      ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
+    </div>`;
+  }
+
+  // ── CLASSIC — Aged cream/gold (concerts) ──
+  if (s === 'classic') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#F0E8D0,#DCCFA8);width:100%;height:100%;display:flex">
+      ${mainBody('#7a5020','#1a0a04','#6B4C2A','#9a7040')}
+      ${stub('#B8A060')}
+    </div></div>`;
+  }
+
+  // ── SPORT — Dark navy/crimson (sports) ──
+  if (s === 'sport') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0a1828,#0d1f3c);width:100%;height:100%;display:flex">
+      ${mainBody('#e8b870','#F5EDD8','#8a7060','#8a7060')}
+      ${stub('#8B1A1A')}
+    </div></div>`;
+  }
+
+  // ── CONCERT — Dark purple (midnight) ──
+  if (s === 'concert') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#080812,#0d0d20);width:100%;height:100%;display:flex">
+      ${mainBody('#c090e8','#f5e8ff','#8060a0','#8060a0')}
+      ${stub('#6a3a8a')}
+    </div></div>`;
+  }
+
+  // ── FESTIVAL — Warm orange/amber ──
+  if (s === 'festival') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0800,#2d1200);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#c84000,#ff8c00)"></div>
+      ${mainBody('#ff8c00','#fff0e0','#a06030','#806040','24px 22px 20px')}
+      ${stub('#c84000')}
+    </div></div>`;
+  }
+
+  // ── BROADWAY — Deep burgundy/gold (theatre) ──
+  if (s === 'broadway') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0510,#2a0818);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b0050,#d4a030)"></div>
+      ${mainBody('#d4a030','#ffe8f0','#905060','#704050','24px 22px 20px')}
+      ${stub('#8b0050')}
+    </div></div>`;
+  }
+
+  // ── ARENA — Steel blue/silver (general sports arena) ──
+  if (s === 'arena') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0d1520,#151d2d);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2060a0,#80c0ff)"></div>
+      ${mainBody('#80c0ff','#e8f4ff','#507090','#406070','24px 22px 20px')}
+      ${stub('#2060a0')}
+    </div></div>`;
+  }
+
+  // ── NOIR — Black/white minimal ──
+  if (s === 'noir') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#0a0a0a,#1a1a1a);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#888"></div>
+      ${mainBody('#aaaaaa','#ffffff','#666666','#555555')}
+      ${stub('#444','solid')}
+    </div></div>`;
+  }
+
+  // ── EMERALD — Forest green (outdoors/nature events) ──
+  if (s === 'emerald') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#061410,#0a1e18);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1a5a30,#50c878)"></div>
+      ${mainBody('#50c878','#e8f5ee','#3a7050','#2a5040','24px 22px 20px')}
+      ${stub('#1a5a30')}
+    </div></div>`;
+  }
+
+  // ── CRIMSON — Red/black (wrestling/boxing/combat) ──
+  if (s === 'crimson') {
+    return `<div style="${OUTER}"><div style="background:linear-gradient(160deg,#1a0505,#2a0808);width:100%;height:100%;display:flex;position:relative">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b0000,#dc143c)"></div>
+      ${mainBody('#dc143c','#ffe8e8','#804040','#603030','24px 22px 20px')}
+      ${stub('#8b0000')}
+    </div></div>`;
+  }
+
+  // fallback to classic
+  return buildTicketHTML({...data, style:'classic'});
 }
+
 
 function buildCollectionEntryHTML(item) {
   const badgeClass = {
@@ -1858,7 +1998,7 @@ let currentTicket = null;
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 function selectStyle(styleName) {
-  ['classic','sport','concert'].forEach(function(s) {
+  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
     if (!el) return;
     if (s === styleName) {
@@ -1912,7 +2052,7 @@ function selectStyle(styleName) {
   });
 
   // Attach style button clicks
-  ['classic','sport','concert'].forEach(function(s) {
+  ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
     if (el) el.addEventListener('click', function() { selectStyle(s); });
   });
