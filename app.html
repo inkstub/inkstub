@@ -2324,12 +2324,13 @@ function handleFile(file) {
 
       // Autofill the form
       prefillForm(
-        data.name  || '',
-        data.type  || 'Concert',
-        data.venue || '',
-        data.date  || '',
-        data.seat  || '',
-        data.price || ''
+        data.name         || '',
+        data.type         || 'Concert',
+        data.venue        || '',
+        data.date         || '',
+        data.seat         || '',
+        data.price        || '',
+        data.venueAddress || ''
       );
 
       nameEl.textContent = file.name;
