@@ -7,9 +7,7 @@ function pricePerStub(totalStubs) {
 }
 
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
+  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   try {
     const { quantity, cartItems, userId, userEmail } = JSON.parse(event.body);
@@ -17,6 +15,22 @@ exports.handler = async (event) => {
     const unitPrice = pricePerStub(totalStubs);
     const unitPriceCents = Math.round(unitPrice * 100);
     const tierLabel = `${totalStubs} stub${totalStubs > 1 ? 's' : ''} @ $${unitPrice.toFixed(2)} each`;
+
+    // Store full cart as JSON in metadata (max 500 chars per value)
+    const cartSummary = JSON.stringify(
+      (cartItems || []).map(i => ({
+        name: i.name,
+        venue: i.venue,
+        date: i.date,
+        seat: i.seat,
+        style: i.style,
+        qty: i.qty,
+        price: i.price,
+        eventCode: i.eventCode,
+        ticketNumber: i.ticketNumber,
+        venueAddress: i.venueAddress,
+      }))
+    ).substring(0, 500);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -39,7 +53,7 @@ exports.handler = async (event) => {
       metadata: {
         quantity: String(totalStubs),
         user_id: userId || '',
-        cart_summary: JSON.stringify((cartItems || []).map(i => ({ name: i.name, qty: i.qty }))).substring(0, 500),
+        cart_summary: cartSummary,
       },
     });
 
