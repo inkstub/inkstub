@@ -2128,7 +2128,6 @@ let currentTicket = null;
 /* ════════════════════════════════════════
    INIT
 ════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
 function showStyleSection(section) {
   const isCollector = section === 'collector';
   document.getElementById('section-collector').style.display = isCollector ? 'block' : 'none';
@@ -2142,6 +2141,8 @@ function showStyleSection(section) {
   document.getElementById('btn-stadium').style.color = !isCollector ? '#C8922A' : '#888880';
   document.getElementById('btn-stadium').style.borderWidth = !isCollector ? '2px' : '1px';
 }
+
+document.addEventListener('DOMContentLoaded', () => {
 
 function selectStyle(styleName) {
   ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir','stadium','stadium-red','stadium-blue','stadium-green','stadium-gold','stadium-purple','stadium-orange','stadium-teal','stadium-pink'].forEach(function(s) {
