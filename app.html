@@ -2055,7 +2055,8 @@ function buildTicketHTML(data) {
       </div>
       <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm||'Event Name'}</div>
       <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn ? vn.split(',')[0].trim() : 'Venue'}${va ? ' · '+va : ''}</div>
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${[dt,st,pr].filter(Boolean).join(' · ')}</div>
+      ${st ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${[st,pr].filter(Boolean).join(' · ')}</div>` : ''}
+      ${dt ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dt}</div>` : ''}
       ${ph ? `<img src="${ph}" style="position:absolute;bottom:8px;right:8px;width:130px;height:96px;object-fit:cover;opacity:0.9;border:1px solid rgba(255,255,255,0.2)">` : ''}
     </div>`;
   }
