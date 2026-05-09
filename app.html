@@ -2460,8 +2460,23 @@ function generatePreview() {
 function renderTicketPreview() {
   const el = document.getElementById('ticketEl');
   if (!el) return;
-  const data = currentTicket || { name:'', type:'Concert', venue:'', date:'', seat:'', price:'', style: selectedStyle || 'classic' };
-  el.innerHTML = buildTicketHTML(data);
+  const data = currentTicket || {};
+  // Use placeholder text so all fields show on blank template
+  const preview = {
+    name:         data.name         || 'Event Name',
+    type:         data.type         || 'Concert',
+    venue:        data.venue        || 'Venue',
+    venueAddress: data.venueAddress || '123 Main St, City, ST 00000',
+    date:         data.date         || 'Month DD, YYYY',
+    seat:         data.seat         || 'Sec 101, Row A, Seat 1',
+    price:        data.price        || '$00.00',
+    style:        data.style        || selectedStyle || 'classic',
+    logo:         data.logo         || null,
+    photo:        data.photo        || null,
+    eventCode:    data.eventCode    || 'EVT-0000',
+    ticketNumber: data.ticketNumber || 'TK-00000',
+  };
+  el.innerHTML = buildTicketHTML(preview);
 }
 
 /* ════════════════════════════════════════
