@@ -50,7 +50,7 @@ exports.handler = async (event) => {
 Fields to extract:
 - name: The event or artist/team name (string)
 - type: One of exactly: Concert, Sports, Theatre, Festival, Comedy, Other (string)
-- venue: Venue name only e.g. "Wrigley Field" (string)
+- venue: Venue name ONLY, no city or state e.g. "Wrigley Field" or "Ball Arena" (string)
 - venueCity: City and state e.g. "Chicago, IL" (string)
 - venueAddress: Full street address if visible on ticket e.g. "1060 W Addison St, Chicago, IL 60613" (string)
 - date: Event date in readable format like "June 2, 2024" (string)
@@ -92,10 +92,7 @@ Return only JSON like this example:
       };
     }
 
-    // Combine venue + city if venueCity provided and not already in venue
-    if (ticketData.venueCity && ticketData.venue && !ticketData.venue.includes(ticketData.venueCity)) {
-      ticketData.venue = ticketData.venue + ', ' + ticketData.venueCity;
-    }
+    // Keep venue name only - city goes in venueAddress
 
     return {
       statusCode: 200,
