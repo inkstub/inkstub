@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stub — Turn Digital Tickets Into Collectible Keepsakes</title>
+  <title>inkstub — Turn Digital Tickets Into Collectible Keepsakes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -1555,7 +1555,7 @@ function switchView(name) {
           <div class="card" id="card-upload">
             <div class="step-label">Step 1 — Upload Your Ticket</div>
             <input type="file" id="fileInput" accept="image/*,.pdf" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" onchange="if(this.files&&this.files[0])handleFile(this.files[0])">
-            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-zone" id="uploadZone" style="padding:20px" onclick="document.getElementById('fileInput').click()">
               <div class="upload-inner" id="uploadInner">
                 <div class="upload-icon">⬆</div>
                 <div class="upload-title">Click to upload your e-ticket</div>
@@ -1660,20 +1660,25 @@ function switchView(name) {
                 <button onclick="removePhoto()" style="background:none;border:none;color:#555;cursor:pointer;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-family:'DM Sans',sans-serif">✕ Remove</button>
               </div>
             </div>
-            <div style="margin-top:10px;font-size:11px;color:#444">No photo? That's fine — <button class="btn-text" onclick="document.getElementById('card-style').scrollIntoView({behavior:'smooth',block:'nearest'})">skip this step</button></div>
+
           </div>
 
           <div class="card" id="card-style">
             <div class="step-label">Step 4 — Choose Your Style</div>
 
+            <!-- Toggle buttons -->
+            <div style="display:flex;gap:10px;margin-bottom:16px">
+              <button id="btn-collector" onclick="showStyleSection('collector')" style="flex:1;background:rgba(196,134,42,0.08);border:2px solid #C8922A;color:#C8922A;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:10px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Collector Series</button>
+              <button id="btn-stadium" onclick="showStyleSection('stadium')" style="flex:1;background:transparent;border:1px solid #242424;color:#888880;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:10px;cursor:pointer;letter-spacing:1px;text-transform:uppercase">Stadium Series</button>
+            </div>
+
             <!-- SECTION A: Dark Collector Series -->
-            <div style="margin-bottom:20px">
+            <div id="section-collector" style="margin-bottom:20px">
               <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888880;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #242424">Collector Series — Dark</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
 
                 <div id="style-classic" style="cursor:pointer;padding:10px;border:2px solid #C8922A;background:rgba(196,134,42,0.08)">
                   <div style="height:56px;background:linear-gradient(160deg,#F0E8D0,#DCCFA8);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8B1A1A,#C4862A)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#7a5020;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:12px;color:#1a0a04;text-transform:uppercase;line-height:1.1;margin-top:1px">Rolling Stones</div></div>
                     <div style="border-left:1px dashed #B8A060;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1683,7 +1688,6 @@ function switchView(name) {
 
                 <div id="style-sport" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#0a1828,#0d1f3c);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8B1A1A,#C8922A)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#e8b870;text-transform:uppercase">Sports</div><div style="font-family:serif;font-size:12px;color:#F5EDD8;text-transform:uppercase;line-height:1.1;margin-top:1px">Chicago Bulls</div></div>
                     <div style="border-left:1px dashed #8B1A1A;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1693,7 +1697,6 @@ function switchView(name) {
 
                 <div id="style-concert" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#080812,#0d0d20);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#6a3a8a,#c090e8)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#c090e8;text-transform:uppercase">Concert</div><div style="font-family:serif;font-size:12px;color:#f5e8ff;text-transform:uppercase;line-height:1.1;margin-top:1px">David Bowie</div></div>
                     <div style="border-left:1px dashed #6a3a8a;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1703,7 +1706,6 @@ function switchView(name) {
 
                 <div id="style-festival" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#1a0800,#2d1200);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#c84000,#ff8c00)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#ff8c00;text-transform:uppercase">Festival</div><div style="font-family:serif;font-size:12px;color:#fff0e0;text-transform:uppercase;line-height:1.1;margin-top:1px">Coachella</div></div>
                     <div style="border-left:1px dashed #c84000;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1713,7 +1715,6 @@ function switchView(name) {
 
                 <div id="style-broadway" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#1a0510,#2a0818);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b0050,#d4a030)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#d4a030;text-transform:uppercase">Theatre</div><div style="font-family:serif;font-size:12px;color:#ffe8f0;text-transform:uppercase;line-height:1.1;margin-top:1px">Hamilton</div></div>
                     <div style="border-left:1px dashed #8b0050;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1723,7 +1724,6 @@ function switchView(name) {
 
                 <div id="style-arena" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#0d1520,#151d2d);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2060a0,#80c0ff)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#80c0ff;text-transform:uppercase">Sports</div><div style="font-family:serif;font-size:12px;color:#e8f4ff;text-transform:uppercase;line-height:1.1;margin-top:1px">NBA Finals</div></div>
                     <div style="border-left:1px dashed #2060a0;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1733,7 +1733,6 @@ function switchView(name) {
 
                 <div id="style-crimson" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#1a0505,#2a0808);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b0000,#dc143c)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#dc143c;text-transform:uppercase">Combat</div><div style="font-family:serif;font-size:12px;color:#ffe8e8;text-transform:uppercase;line-height:1.1;margin-top:1px">Wrestlemania</div></div>
                     <div style="border-left:1px dashed #8b0000;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1743,7 +1742,6 @@ function switchView(name) {
 
                 <div id="style-emerald" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#061410,#0a1e18);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#1a5a30,#50c878)"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#50c878;text-transform:uppercase">Outdoor</div><div style="font-family:serif;font-size:12px;color:#e8f5ee;text-transform:uppercase;line-height:1.1;margin-top:1px">Bonnaroo</div></div>
                     <div style="border-left:1px dashed #1a5a30;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1753,7 +1751,6 @@ function switchView(name) {
 
                 <div id="style-noir" style="cursor:pointer;padding:10px;border:1px solid #242424">
                   <div style="height:56px;background:linear-gradient(160deg,#0a0a0a,#1a1a1a);margin-bottom:7px;display:flex;padding:7px 9px;justify-content:space-between;box-sizing:border-box;overflow:hidden;position:relative">
-                    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:#888"></div>
                     <div style="margin-top:3px"><div style="font-size:6px;letter-spacing:1px;color:#aaa;text-transform:uppercase">Jazz</div><div style="font-family:serif;font-size:12px;color:#fff;text-transform:uppercase;line-height:1.1;margin-top:1px">Miles Davis</div></div>
                     <div style="border-left:1px solid #444;padding-left:4px;display:flex;align-items:center"><div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:serif;font-size:7px;color:#C8922A">inkstub</div></div>
                   </div>
@@ -1764,8 +1761,10 @@ function switchView(name) {
               </div>
             </div>
 
+            </div>
+
             <!-- SECTION B: Stadium Series -->
-            <div>
+            <div id="section-stadium" style="display:none">
               <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888880;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #242424">Stadium Series — Classic</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
 
@@ -2023,8 +2022,8 @@ function buildTicketHTML(data) {
     <div style="background:${sc.bg};width:100%;height:100%;display:flex;border:1.5px solid ${sc.border};box-sizing:border-box;font-family:'Barlow Condensed','DM Sans',sans-serif;position:relative">
       <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 14px 10px 16px;min-width:0;overflow:hidden">
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${eventCode||''}</div>
-          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${ticketNumber||''}</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${eventCode ? 'Event Code: '+eventCode : ''}</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${ticketNumber ? 'Ticket No: '+ticketNumber : ''}</div>
         </div>
         <div style="text-align:center">
           <div style="font-size:22px;font-weight:800;color:${sc.title};line-height:1;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center">${logoImg}${nm||'Event Name'}</div>
@@ -2052,16 +2051,18 @@ function buildTicketHTML(data) {
   // Shared dark template body
     // Shared dark template body
   function darkBody(typeC, titleC, venueC, detailC, accentLine='', va='', ph='') {
-    return `<div style="flex:1;padding:20px 22px 18px;display:flex;flex-direction:column;gap:6px;overflow:hidden;box-sizing:border-box;position:relative">
+    return `<div style="flex:1;padding:18px 22px 16px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-sizing:border-box;position:relative">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${eventCode||''}</div>
-        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${ticketNumber||''}</div>
+        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${eventCode ? 'Event Code: '+eventCode : ''}</div>
+        <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:'DM Sans',sans-serif">${ticketNumber ? 'Ticket No: '+ticketNumber : ''}</div>
       </div>
-      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${logoImg}${nm||'Event Name'}</div>
-      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn ? vn.split(',')[0].trim() : 'Venue'}</div>
-      ${va ? `<div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:${venueC};opacity:0.7;font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${va}</div>` : ''}
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${detailLine||'Date &bull; Seat'}</div>
-      ${pr ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif">${pr}</div>` : ''}
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center">${nm||'Event Name'}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:'DM Sans',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn ? vn.split(',')[0].trim() : 'Venue'}${va ? ' · '+va : ''}</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:nowrap;overflow:hidden">
+        ${dt ? `<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap">${dt}</span>` : ''}
+        ${st ? `<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap">${st}</span>` : ''}
+        ${pr ? `<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:'DM Sans',sans-serif;white-space:nowrap">${pr}</span>` : ''}
+      </div>
       ${ph ? `<img src="${ph}" style="position:absolute;bottom:10px;right:10px;width:130px;height:96px;object-fit:cover;opacity:0.9;border:1px solid rgba(255,255,255,0.2)">` : ''}
     </div>`;
   }
@@ -2132,6 +2133,20 @@ let currentTicket = null;
    INIT
 ════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
+function showStyleSection(section) {
+  const isCollector = section === 'collector';
+  document.getElementById('section-collector').style.display = isCollector ? 'block' : 'none';
+  document.getElementById('section-stadium').style.display = isCollector ? 'none' : 'block';
+  document.getElementById('btn-collector').style.background = isCollector ? 'rgba(196,134,42,0.08)' : 'transparent';
+  document.getElementById('btn-collector').style.borderColor = isCollector ? '#C8922A' : '#242424';
+  document.getElementById('btn-collector').style.color = isCollector ? '#C8922A' : '#888880';
+  document.getElementById('btn-collector').style.borderWidth = isCollector ? '2px' : '1px';
+  document.getElementById('btn-stadium').style.background = !isCollector ? 'rgba(196,134,42,0.08)' : 'transparent';
+  document.getElementById('btn-stadium').style.borderColor = !isCollector ? '#C8922A' : '#242424';
+  document.getElementById('btn-stadium').style.color = !isCollector ? '#C8922A' : '#888880';
+  document.getElementById('btn-stadium').style.borderWidth = !isCollector ? '2px' : '1px';
+}
+
 function selectStyle(styleName) {
   ['classic','sport','concert','festival','broadway','arena','crimson','emerald','noir','stadium','stadium-red','stadium-blue','stadium-green','stadium-gold','stadium-purple','stadium-orange','stadium-teal','stadium-pink'].forEach(function(s) {
     var el = document.getElementById('style-' + s);
@@ -2337,6 +2352,7 @@ function handleFile(file) {
       );
 
       nameEl.textContent = file.name;
+      document.getElementById('card-upload').style.display = 'none';
       showToast('✦ Ticket details filled in automatically!');
 
     } catch (err) {
