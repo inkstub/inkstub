@@ -1613,6 +1613,14 @@ function switchView(name) {
                   <input class="field-input" id="ticketPrice" type="text" placeholder="e.g. 85.00">
                 </div>
 
+                <div class="field">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+                    <label class="field-label" style="margin:0" for="seatInfo">Section / Row / Seat</label>
+                    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_seatInfo" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
+                  </div>
+                  <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
+                </div>
+
                 <div class="field" style="grid-column:span 2">
                   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
                     <label class="field-label" style="margin:0" for="venue">Venue Name</label>
@@ -1627,14 +1635,6 @@ function switchView(name) {
                     <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_venueAddress" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
                   </div>
                   <input class="field-input" id="venueAddress" type="text" placeholder="e.g. 1060 W Addison St, Chicago, IL">
-                </div>
-
-                <div class="field field-full" style="grid-column:1/-1">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-                    <label class="field-label" style="margin:0" for="seatInfo">Section / Row / Seat</label>
-                    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#555;letter-spacing:1px;text-transform:uppercase">Show</span><label class="field-toggle"><input type="checkbox" id="show_seatInfo" checked onchange="window.autoPreview()"><div class="field-toggle-track"></div></label></div>
-                  </div>
-                  <input class="field-input" id="seatInfo" type="text" placeholder="e.g. Sec 104, Row H, Seat 22">
                 </div>
 
               </div>
