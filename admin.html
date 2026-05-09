@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>inkstub — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0A0A0A; --surface: #161616; --border: #242424;
+    --gold: #C8922A; --text: #F0EDE8; --muted: #888880;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  /* LOGIN */
+  #loginScreen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 20px;
+  }
+  .login-box {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 40px; width: 100%; max-width: 360px; text-align: center;
+  }
+  .login-box h1 { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--gold); margin-bottom: 8px; }
+  .login-box p { font-size: 12px; color: var(--muted); margin-bottom: 24px; letter-spacing: 1px; text-transform: uppercase; }
+  .login-input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    padding: 12px; outline: none; margin-bottom: 12px;
+  }
+  .login-input:focus { border-color: var(--gold); }
+  .login-btn {
+    width: 100%; background: var(--gold); color: #0A0A0A; border: none;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+    padding: 13px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .login-error { color: #c84040; font-size: 12px; margin-top: 8px; display: none; }
+
+  /* DASHBOARD */
+  #dashboard { display: none; }
+  .dash-header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .dash-header h1 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--gold); }
+  .dash-header-right { display: flex; align-items: center; gap: 16px; }
+  .stat-pill {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 6px 14px; font-size: 12px; color: var(--muted); letter-spacing: 1px;
+  }
+  .stat-pill span { color: var(--gold); font-weight: 700; }
+  .logout-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 6px 14px; cursor: pointer;
+  }
+  .logout-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  .dash-body { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* FILTERS */
+  .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .filter-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px;
+    padding: 7px 16px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+
+  /* ORDERS TABLE */
+  .orders-table { width: 100%; border-collapse: collapse; }
+  .orders-table th {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border);
+  }
+  .orders-table td { padding: 14px; border-bottom: 1px solid #1a1a1a; vertical-align: top; }
+  .orders-table tr:hover td { background: #111; }
+
+  .order-id { font-size: 11px; color: var(--muted); font-family: monospace; }
+  .customer-email { font-size: 13px; color: var(--text); }
+  .order-amount { font-size: 15px; font-weight: 700; color: var(--gold); }
+  .order-date { font-size: 11px; color: var(--muted); }
+
+  .ship-address { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .ship-name { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  .ticket-list { display: flex; flex-direction: column; gap: 4px; }
+  .ticket-item { font-size: 12px; color: var(--muted); }
+  .ticket-item strong { color: var(--text); }
+
+  .status-badge {
+    display: inline-block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 10px; font-weight: 700;
+  }
+  .status-pending  { background: #1a1a0a; color: #c8a840; border: 1px solid #c8a840; }
+  .status-printing { background: #0a1a1a; color: #40a8c8; border: 1px solid #40a8c8; }
+  .status-shipped  { background: #0a1a0a; color: #40c870; border: 1px solid #40c870; }
+  .status-delivered{ background: #1a0a1a; color: #a840c8; border: 1px solid #a840c8; }
+
+  .actions { display: flex; flex-direction: column; gap: 6px; }
+  .action-btn {
+    background: var(--bg); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 6px 12px;
+    cursor: pointer; letter-spacing: 1px; text-transform: uppercase; text-align: center;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .action-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .action-btn.print { border-color: #40a8c8; color: #40a8c8; }
+  .action-btn.print:hover { background: rgba(64,168,200,0.1); }
+
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 14px; }
+  .loading { text-align: center; padding: 60px; color: var(--muted); }
+
+  /* PRINT MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 32px; max-width: 700px; width: 100%;
+  }
+  .modal h2 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 20px; }
+  .modal-ticket { margin-bottom: 20px; overflow-x: auto; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .btn-download {
+    background: var(--gold); color: #0A0A0A; border: none;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+    padding: 12px 24px; cursor: pointer; letter-spacing: 1px;
+  }
+  .btn-close-modal {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 12px 24px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>inkstub</h1>
+    <p>Admin Dashboard</p>
+    <input type="password" class="login-input" id="adminPassword" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Sign In</button>
+    <div class="login-error" id="loginError">Incorrect password</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>inkstub — Orders</h1>
+    <div class="dash-header-right">
+      <div class="stat-pill">Total Orders: <span id="statTotal">0</span></div>
+      <div class="stat-pill">Pending: <span id="statPending">0</span></div>
+      <div class="stat-pill">Revenue: <span id="statRevenue">$0</span></div>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterOrders('all', this)">All</button>
+      <button class="filter-btn" onclick="filterOrders('pending', this)">Pending</button>
+      <button class="filter-btn" onclick="filterOrders('printing', this)">Printing</button>
+      <button class="filter-btn" onclick="filterOrders('shipped', this)">Shipped</button>
+      <button class="filter-btn" onclick="filterOrders('delivered', this)">Delivered</button>
+      <button class="filter-btn" style="margin-left:auto" onclick="loadOrders()">↻ Refresh</button>
+    </div>
+
+    <div id="ordersContainer">
+      <div class="loading">Loading orders...</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT MODAL -->
+<div class="modal-overlay" id="printModal">
+  <div class="modal">
+    <h2>Print Ticket</h2>
+    <div class="modal-ticket" id="modalTicketEl"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Download as 1650×600px PNG (300 DPI, 5.5"×2" print size)</div>
+    <div class="modal-actions">
+      <button class="btn-close-modal" onclick="closePrintModal()">Close</button>
+      <button class="btn-download" id="btnDownloadPNG" onclick="downloadPNG()">⬇ Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const ADMIN_PASSWORD = 'inkstub2024admin';
+const SUPA_URL = 'https://abnaehtnlwgweaygdytr.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFibmFlaHRubHdnd2VheWdkeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MjcxNTgsImV4cCI6MjA2MjAwMzE1OH0.E91SRLtFEeBe_h8yqrKxCgJuEOqYopkN9B8ZBhSwDo';
+
+let allOrders = [];
+let currentFilter = 'all';
+let currentPrintItem = null;
+
+// ── AUTH ──
+function login() {
+  const pw = document.getElementById('adminPassword').value;
+  if (pw === ADMIN_PASSWORD) {
+    sessionStorage.setItem('inkstub_admin', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadOrders();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('inkstub_admin');
+  location.reload();
+}
+
+// Check if already logged in
+if (sessionStorage.getItem('inkstub_admin') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  loadOrders();
+}
+
+// ── LOAD ORDERS ──
+async function loadOrders() {
+  document.getElementById('ordersContainer').innerHTML = '<div class="loading">Loading orders...</div>';
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/orders?order=created_at.desc`, {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+    });
+    allOrders = await res.json();
+    updateStats();
+    renderOrders();
+  } catch (err) {
+    document.getElementById('ordersContainer').innerHTML = `<div class="empty-state">Error loading orders: ${err.message}</div>`;
+  }
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = allOrders.length;
+  document.getElementById('statPending').textContent = allOrders.filter(o => o.status === 'pending').length;
+  const revenue = allOrders.reduce((sum, o) => sum + (o.amount_total || 0), 0);
+  document.getElementById('statRevenue').textContent = '$' + (revenue / 100).toFixed(2);
+}
+
+function filterOrders(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders() {
+  const filtered = currentFilter === 'all' ? allOrders : allOrders.filter(o => o.status === currentFilter);
+  if (filtered.length === 0) {
+    document.getElementById('ordersContainer').innerHTML = '<div class="empty-state">No orders found</div>';
+    return;
+  }
+
+  document.getElementById('ordersContainer').innerHTML = `
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Ship To</th>
+          <th>Tickets</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${filtered.map(order => renderOrderRow(order)).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderOrderRow(order) {
+  const items = order.cart_items || [];
+  const date = new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const amount = order.amount_total ? '$' + (order.amount_total / 100).toFixed(2) : '—';
+
+  const ticketsHtml = items.length > 0
+    ? items.map(item => `<div class="ticket-item"><strong>${item.name || 'Ticket'}</strong>${item.venue ? ' · ' + item.venue : ''}${item.date ? ' · ' + item.date : ''} (qty: ${item.qty || 1})</div>`).join('')
+    : `<div class="ticket-item">${order.quantity || 1} stub${order.quantity > 1 ? 's' : ''}</div>`;
+
+  return `<tr>
+    <td>
+      <div class="order-id">${order.stripe_session_id?.substring(8, 24) || order.id?.substring(0, 8)}...</div>
+      <div class="order-amount">${amount}</div>
+      <div class="order-date">${date}</div>
+    </td>
+    <td>
+      <div class="customer-email">${order.user_email || '—'}</div>
+    </td>
+    <td>
+      <div class="ship-name">${order.shipping_name || '—'}</div>
+      <div class="ship-address">
+        ${order.shipping_line1 || ''}<br>
+        ${order.shipping_city || ''}${order.shipping_state ? ', ' + order.shipping_state : ''} ${order.shipping_postal || ''}<br>
+        ${order.shipping_country || ''}
+      </div>
+    </td>
+    <td><div class="ticket-list">${ticketsHtml}</div></td>
+    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+    <td>
+      <div class="actions">
+        ${items.length > 0 ? items.map((item, i) =>
+          `<button class="action-btn print" onclick="openPrintModal('${order.id}', ${i})">🖨 Print Ticket ${items.length > 1 ? (i+1) : ''}</button>`
+        ).join('') : ''}
+        ${order.status === 'pending'  ? `<button class="action-btn" onclick="updateStatus('${order.id}', 'printing')">→ Printing</button>` : ''}
+        ${order.status === 'printing' ? `<button class="action-btn" onclick="updateStatus('${order.id}', 'shipped')">→ Shipped</button>` : ''}
+        ${order.status === 'shipped'  ? `<button class="action-btn" onclick="updateStatus('${order.id}', 'delivered')">→ Delivered</button>` : ''}
+      </div>
+    </td>
+  </tr>`;
+}
+
+// ── UPDATE STATUS ──
+async function updateStatus(orderId, newStatus) {
+  await fetch(`${SUPA_URL}/rest/v1/orders?id=eq.${orderId}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': `Bearer ${SUPA_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({ status: newStatus, updated_at: new Date().toISOString() }),
+  });
+  await loadOrders();
+}
+
+// ── PRINT MODAL ──
+function openPrintModal(orderId, itemIndex) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  const item = (order.cart_items || [])[itemIndex] || {};
+  currentPrintItem = { order, item };
+
+  // Build ticket HTML at full size
+  const ticketHtml = buildTicketHTML({
+    name: item.name || '',
+    venue: item.venue || '',
+    venueAddress: item.venueAddress || '',
+    date: item.date || '',
+    seat: item.seat || '',
+    price: item.price || '',
+    style: item.style || 'classic',
+    eventCode: item.eventCode || '',
+    ticketNumber: item.ticketNumber || '',
+    photo: null,
+    logo: null,
+  });
+
+  document.getElementById('modalTicketEl').innerHTML = ticketHtml;
+  document.getElementById('printModal').classList.add('open');
+}
+
+function closePrintModal() {
+  document.getElementById('printModal').classList.remove('open');
+  currentPrintItem = null;
+}
+
+// ── DOWNLOAD PNG ──
+async function downloadPNG() {
+  if (!currentPrintItem) return;
+  const btn = document.getElementById('btnDownloadPNG');
+  btn.textContent = 'Generating...';
+  btn.disabled = true;
+
+  try {
+    // Use html2canvas to render ticket at 3x scale (1650×600 for 300dpi)
+    const ticketEl = document.querySelector('#modalTicketEl > div');
+    if (!ticketEl) throw new Error('No ticket element found');
+
+    // Load html2canvas dynamically
+    if (!window.html2canvas) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    const canvas = await html2canvas(ticketEl, {
+      scale: 3, // 528*3=1584px wide ≈ 1650 at 300dpi
+      useCORS: true,
+      backgroundColor: null,
+      logging: false,
+    });
+
+    const link = document.createElement('a');
+    const name = (currentPrintItem.item.name || 'ticket').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+    link.download = `inkstub-${name}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+
+    btn.textContent = '✓ Downloaded!';
+    setTimeout(() => { btn.textContent = '⬇ Download PNG'; btn.disabled = false; }, 2000);
+  } catch (err) {
+    alert('Download failed: ' + err.message);
+    btn.textContent = '⬇ Download PNG';
+    btn.disabled = false;
+  }
+}
+</script>
+
+<!-- Ticket rendering — inline copy of buildTicketHTML from app.html -->
+<script>
+function buildTicketHTML(data) {
+  const {name,type,venue,venueAddress,date,seat,price,style,logo,photo,eventCode,ticketNumber} = data;
+  const s = style || 'classic';
+  const nm = (name||'').substring(0,40);
+  const vn = (venue||'').substring(0,36);
+  const va = venueAddress||'';
+  const dt = date||'';
+  const st = seat||'';
+  const rawPrice = (price||'').trim().replace(/^\$+/, '');
+  const pr = (rawPrice && rawPrice !== '0' && rawPrice !== '0.00') ? '$' + rawPrice : '';
+
+  const W = '528px'; const H = '192px';
+  const OUTER = `display:block;width:${W};height:${H};overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.6);flex-shrink:0`;
+
+  function stub(borderColor, bgColor, lineStyle='dashed') {
+    return `<div style="width:56px;border-left:1.5px ${lineStyle} ${borderColor};display:flex;align-items:center;justify-content:center;flex-shrink:0;background:${bgColor};box-sizing:border-box">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:16px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
+    </div>`;
+  }
+
+  function darkBody(typeC, titleC, venueC, detailC) {
+    const seatLine = [st,pr].filter(Boolean).join(' · ');
+    return `<div style="flex:1;padding:20px 22px 18px;display:flex;flex-direction:column;gap:5px;overflow:hidden;box-sizing:border-box;position:relative">
+      <div style="display:flex;justify-content:space-between;align-items:center;min-height:14px">
+        ${eventCode ? `<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:sans-serif">Event Code: ${eventCode}</div>` : '<div></div>'}
+        ${ticketNumber ? `<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:${typeC};font-family:sans-serif">Ticket No: ${ticketNumber}</div>` : '<div></div>'}
+      </div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.1;text-transform:uppercase;color:${titleC};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm||'Event Name'}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:${venueC};font-family:sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${vn ? vn.split(',')[0].trim() : ''}${va ? ' · '+va : ''}</div>
+      ${seatLine ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:sans-serif">${seatLine}</div>` : ''}
+      ${dt ? `<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${detailC};font-family:sans-serif">${dt}</div>` : ''}
+    </div>`;
+  }
+
+  const templates = {
+    classic:  { bg:'linear-gradient(160deg,#F0E8D0,#DCCFA8)', tC:'#7a5020', tiC:'#1a0a04', vC:'#6B4C2A', dC:'#9a7040', sB:'#B8A060', sBg:'rgba(180,150,80,0.08)' },
+    sport:    { bg:'linear-gradient(160deg,#0a1828,#0d1f3c)', tC:'#e8b870', tiC:'#F5EDD8', vC:'#8a7060', dC:'#8a7060', sB:'#8B1A1A', sBg:'rgba(139,26,26,0.1)' },
+    concert:  { bg:'linear-gradient(160deg,#080812,#0d0d20)', tC:'#c090e8', tiC:'#f5e8ff', vC:'#8060a0', dC:'#8060a0', sB:'#6a3a8a', sBg:'rgba(106,58,138,0.1)' },
+    festival: { bg:'linear-gradient(160deg,#1a0800,#2d1200)', tC:'#ff8c00', tiC:'#fff0e0', vC:'#a06030', dC:'#806040', sB:'#c84000', sBg:'rgba(200,64,0,0.1)' },
+    broadway: { bg:'linear-gradient(160deg,#1a0510,#2a0818)', tC:'#d4a030', tiC:'#ffe8f0', vC:'#905060', dC:'#704050', sB:'#8b0050', sBg:'rgba(139,0,80,0.1)' },
+    arena:    { bg:'linear-gradient(160deg,#0d1520,#151d2d)', tC:'#80c0ff', tiC:'#e8f4ff', vC:'#507090', dC:'#406070', sB:'#2060a0', sBg:'rgba(32,96,160,0.1)' },
+    crimson:  { bg:'linear-gradient(160deg,#1a0505,#2a0808)', tC:'#dc143c', tiC:'#ffe8e8', vC:'#804040', dC:'#603030', sB:'#8b0000', sBg:'rgba(139,0,0,0.1)' },
+    emerald:  { bg:'linear-gradient(160deg,#061410,#0a1e18)', tC:'#50c878', tiC:'#e8f5ee', vC:'#3a7050', dC:'#2a5040', sB:'#1a5a30', sBg:'rgba(26,90,48,0.1)' },
+    noir:     { bg:'linear-gradient(160deg,#0a0a0a,#1a1a1a)', tC:'#aaaaaa', tiC:'#ffffff', vC:'#666666', dC:'#555555', sB:'#444444', sBg:'rgba(80,80,80,0.1)' },
+  };
+
+  const t = templates[s];
+  if (t) {
+    return `<div style="${OUTER}"><div style="background:${t.bg};width:100%;height:100%;display:flex">
+      ${darkBody(t.tC, t.tiC, t.vC, t.dC)}
+      ${stub(t.sB, t.sBg)}
+    </div></div>`;
+  }
+
+  // Stadium series
+  const stadiumColors = {
+    stadium:         { bg:'#ffffff', border:'#222222', type:'#555555', title:'#111111', venue:'#333333', addr:'#666666', detail:'#222222', seatC:'#111111', seatL:'#888888', stubBorder:'#aaaaaa', stubBg:'#f9f9f9' },
+    'stadium-red':   { bg:'#fff5f5', border:'#8b0000', type:'#8b0000', title:'#1a0000', venue:'#5a2020', addr:'#7a3030', detail:'#3a0000', seatC:'#1a0000', seatL:'#8b0000', stubBorder:'#8b0000', stubBg:'#fff0f0' },
+    'stadium-blue':  { bg:'#f5f8ff', border:'#003580', type:'#003580', title:'#001040', venue:'#204070', addr:'#305090', detail:'#002060', seatC:'#001040', seatL:'#003580', stubBorder:'#003580', stubBg:'#f0f4ff' },
+    'stadium-green': { bg:'#f5fff7', border:'#1a5a30', type:'#1a5a30', title:'#061408', venue:'#2a5a30', addr:'#3a6a40', detail:'#0a3010', seatC:'#061408', seatL:'#1a5a30', stubBorder:'#1a5a30', stubBg:'#f0fff2' },
+    'stadium-gold':  { bg:'#fffbf0', border:'#8a6000', type:'#8a6000', title:'#2a1800', venue:'#6a4a00', addr:'#7a5a00', detail:'#4a2800', seatC:'#2a1800', seatL:'#8a6000', stubBorder:'#8a6000', stubBg:'#fff8e8' },
+    'stadium-purple':{ bg:'#faf5ff', border:'#4a1a8a', type:'#4a1a8a', title:'#1a0530', venue:'#4a2a7a', addr:'#5a3a8a', detail:'#2a0a50', seatC:'#1a0530', seatL:'#4a1a8a', stubBorder:'#4a1a8a', stubBg:'#f5f0ff' },
+    'stadium-orange':{ bg:'#fff8f0', border:'#8a3000', type:'#8a3000', title:'#2a0800', venue:'#6a3a00', addr:'#7a4a00', detail:'#4a1800', seatC:'#2a0800', seatL:'#8a3000', stubBorder:'#8a3000', stubBg:'#fff4ec' },
+    'stadium-teal':  { bg:'#f0fffe', border:'#006060', type:'#006060', title:'#001a1a', venue:'#205050', addr:'#306060', detail:'#003030', seatC:'#001a1a', seatL:'#006060', stubBorder:'#006060', stubBg:'#ecffff' },
+    'stadium-pink':  { bg:'#fff5fb', border:'#8a0050', type:'#8a0050', title:'#2a0018', venue:'#6a2050', addr:'#7a3060', detail:'#4a0030', seatC:'#2a0018', seatL:'#8a0050', stubBorder:'#8a0050', stubBg:'#fff0f8' },
+  };
+
+  const sc = stadiumColors[s];
+  if (sc) {
+    const seatParts = (st||'').split(/[\s,]+/).filter(Boolean);
+    const secMatch = (st||'').match(/(?:sec(?:tion)?[\s:]*)(\w+)/i);
+    const rowMatch = (st||'').match(/(?:row[\s:]*)(\w+)/i);
+    const seatMatch = (st||'').match(/(?:seat[\s:]*)(\w+)/i);
+    const sec2  = secMatch  ? secMatch[1]  : seatParts[0] || '';
+    const row2  = rowMatch  ? rowMatch[1]  : seatParts[1] || '';
+    const seatN = seatMatch ? seatMatch[1] : seatParts[2] || '';
+
+    return `<div style="${OUTER}">
+    <div style="background:${sc.bg};width:100%;height:100%;display:flex;border:1.5px solid ${sc.border};box-sizing:border-box;font-family:'Barlow Condensed','DM Sans',sans-serif;position:relative">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 14px 10px 16px;min-width:0;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${eventCode ? 'Event Code: '+eventCode : ''}</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;color:${sc.type};text-transform:uppercase">${ticketNumber ? 'Ticket No: '+ticketNumber : ''}</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;font-weight:800;color:${sc.title};line-height:1;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${nm||'Event Name'}</div>
+        </div>
+        <div style="text-align:center">
+          ${vn ? `<div style="font-size:12px;font-weight:700;color:${sc.venue};text-transform:uppercase;letter-spacing:1px">${vn.split(',')[0].trim()}</div>` : ''}
+          ${va ? `<div style="font-size:10px;color:${sc.addr};text-transform:uppercase;letter-spacing:0.8px">${va}</div>` : ''}
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <span style="font-size:10px;font-weight:700;color:${sc.detail};text-transform:uppercase">${dt||''}</span>
+          <div style="display:flex;gap:10px;flex-shrink:0">
+            ${sec2  ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:${sc.seatL};text-transform:uppercase;letter-spacing:1px;display:block">Sec</span><span style="font-size:15px;font-weight:800;color:${sc.seatC};line-height:1">${sec2}</span></div>` : ''}
+            ${row2  ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:${sc.seatL};text-transform:uppercase;letter-spacing:1px;display:block">Row</span><span style="font-size:15px;font-weight:800;color:${sc.seatC};line-height:1">${row2}</span></div>` : ''}
+            ${seatN ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:${sc.seatL};text-transform:uppercase;letter-spacing:1px;display:block">Seat</span><span style="font-size:15px;font-weight:800;color:${sc.seatC};line-height:1">${seatN}</span></div>` : ''}
+            ${pr    ? `<div style="text-align:center"><span style="font-size:7px;font-weight:600;color:${sc.seatL};text-transform:uppercase;letter-spacing:1px;display:block">Price</span><span style="font-size:13px;font-weight:800;color:${sc.seatC};line-height:1">${pr}</span></div>` : ''}
+          </div>
+        </div>
+      </div>
+      <div style="width:56px;border-left:1.5px dashed ${sc.stubBorder};display:flex;align-items:center;justify-content:center;flex-shrink:0;background:${sc.stubBg};box-sizing:border-box">
+        <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'DM Serif Display',serif;font-size:16px;color:#C8922A;letter-spacing:-0.5px;white-space:nowrap">inkstub</div>
+      </div>
+    </div></div>`;
+  }
+
+  return buildTicketHTML({...data, style:'classic'});
+}
+</script>
+
+</body>
+</html>
