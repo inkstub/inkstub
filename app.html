@@ -2167,19 +2167,24 @@ function selectStyle(styleName) {
     return el ? el.checked : true;
   }
 
+  function getField(id, placeholder) {
+    if (!getToggle(id)) return ''; // toggled off = hide from ticket
+    const v = (document.getElementById(id)?.value || '').trim();
+    return v || placeholder; // empty but on = show placeholder
+  }
+
   window.autoPreview = function() {
     const data = {
-      name:         getToggle('eventName')    ? (document.getElementById('eventName')?.value || '').trim() : '',
-      eventCode:    getToggle('eventCode')    ? (document.getElementById('eventCode')?.value || '').trim() : '',
-      ticketNumber: getToggle('ticketNumber') ? (document.getElementById('ticketNumber')?.value || '').trim() : '',
-      venue:        getToggle('venue')        ? (document.getElementById('venue')?.value || '').trim() : '',
-      venueAddress: getToggle('venueAddress') ? (document.getElementById('venueAddress')?.value || '').trim() : '',
-      date:         getToggle('eventDate')    ? (document.getElementById('eventDate')?.value || '').trim() : '',
-      seat:         getToggle('seatInfo')     ? (document.getElementById('seatInfo')?.value || '').trim() : '',
-      price:        getToggle('ticketPrice')  ? (document.getElementById('ticketPrice')?.value || '').trim() : '',
+      name:         getField('eventName',    'Event Name'),
+      eventCode:    getField('eventCode',    'EVT-0000'),
+      ticketNumber: getField('ticketNumber', 'TK-00000'),
+      venue:        getField('venue',        'Venue'),
+      venueAddress: getField('venueAddress', '123 Main St, City, ST 00000'),
+      date:         getField('eventDate',    'Month DD, YYYY'),
+      seat:         getField('seatInfo',     'Sec 101, Row A, Seat 1'),
+      price:        getField('ticketPrice',  '$00.00'),
       style: selectedStyle || 'classic',
       logo:  selectedLogo || null,
-      logoPlacement: selectedPlacement || 'left',
       photo: selectedPhoto || null,
     };
     currentTicket = data;
