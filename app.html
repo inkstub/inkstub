@@ -1761,8 +1761,6 @@ function switchView(name) {
               </div>
             </div>
 
-            </div>
-
             <!-- SECTION B: Stadium Series -->
             <div id="section-stadium" style="display:none">
               <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888880;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #242424">Stadium Series — Classic</div>
@@ -2352,7 +2350,12 @@ function handleFile(file) {
       );
 
       nameEl.textContent = file.name;
-      document.getElementById('card-upload').style.display = 'none';
+      // Shrink upload card to a compact success bar
+      const uploadCard = document.getElementById('card-upload');
+      if (uploadCard) {
+        uploadCard.style.padding = '10px 20px';
+        uploadCard.style.transition = 'all 0.3s';
+      }
       showToast('✦ Ticket details filled in automatically!');
 
     } catch (err) {
